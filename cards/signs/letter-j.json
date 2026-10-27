@@ -1,0 +1,281 @@
+{
+  "version": 1,
+  "term": "J",
+  "category": "letter",
+  "notes": "Start with the I handshape and draw a J in the air with the pinky, turning the palm toward you.",
+  "card": {
+    "uppercase": true,
+    "label_size": 0.07500000298023224,
+    "show_label": true
+  },
+  "framing": {
+    "x": -0.1661599725484848,
+    "z": 0.4947919249534607,
+    "zoom": 0.6200000047683716,
+    "view_angle": 0.0
+  },
+  "arrow_style": {
+    "color": [
+      0.8500000238418579,
+      0.10000000149011612,
+      0.11999999731779099
+    ],
+    "width": 0.006000000052154064
+  },
+  "figures": [
+    {
+      "ghost": true,
+      "opacity": 0.3,
+      "show": {
+        "head": false,
+        "torso": false,
+        "arm_R": true,
+        "arm_L": false,
+        "hand_R": true,
+        "hand_L": false
+      },
+      "pose": {
+        "torso_lean": 0.0,
+        "torso_turn": 0.0,
+        "head_nod": 0.0,
+        "head_turn": 0.0,
+        "head_tilt": 0.0,
+        "R_shoulder_forward": 0.0,
+        "R_shoulder_out": 22.0,
+        "R_shoulder_twist": 0.0,
+        "R_elbow_bend": 150.0,
+        "R_forearm_turn": 90.0,
+        "R_wrist_bend": -10.0,
+        "R_wrist_side": 0.0,
+        "R_index_base": 90.0,
+        "R_index_mid": 105.0,
+        "R_index_tip": 60.0,
+        "R_index_side": 0.0,
+        "R_middle_base": 90.0,
+        "R_middle_mid": 105.0,
+        "R_middle_tip": 60.0,
+        "R_middle_side": 0.0,
+        "R_ring_base": 90.0,
+        "R_ring_mid": 105.0,
+        "R_ring_tip": 60.0,
+        "R_ring_side": 0.0,
+        "R_pinky_base": 0.0,
+        "R_pinky_mid": 0.0,
+        "R_pinky_tip": 0.0,
+        "R_pinky_side": 0.0,
+        "R_thumb_across": 60.0,
+        "R_thumb_out": 20.0,
+        "R_thumb_roll": 30.0,
+        "R_thumb_mid": 30.0,
+        "R_thumb_tip": 25.0,
+        "L_shoulder_forward": 5.0,
+        "L_shoulder_out": 8.0,
+        "L_shoulder_twist": 10.0,
+        "L_elbow_bend": 15.0,
+        "L_forearm_turn": 0.0,
+        "L_wrist_bend": 0.0,
+        "L_wrist_side": 0.0,
+        "L_index_base": 12.0,
+        "L_index_mid": 18.0,
+        "L_index_tip": 10.0,
+        "L_index_side": 4.0,
+        "L_middle_base": 12.0,
+        "L_middle_mid": 18.0,
+        "L_middle_tip": 10.0,
+        "L_middle_side": 0.0,
+        "L_ring_base": 12.0,
+        "L_ring_mid": 18.0,
+        "L_ring_tip": 10.0,
+        "L_ring_side": -6.0,
+        "L_pinky_base": 12.0,
+        "L_pinky_mid": 18.0,
+        "L_pinky_tip": 10.0,
+        "L_pinky_side": -12.0,
+        "L_thumb_across": 10.0,
+        "L_thumb_out": 0.0,
+        "L_thumb_roll": 0.0,
+        "L_thumb_mid": 10.0,
+        "L_thumb_tip": 8.0,
+        "brows": 0.0
+      }
+    },
+    {
+      "ghost": false,
+      "opacity": 1.0,
+      "show": {
+        "head": true,
+        "torso": true,
+        "arm_R": true,
+        "arm_L": true,
+        "hand_R": true,
+        "hand_L": true
+      },
+      "pose": {
+        "torso_lean": 0.0,
+        "torso_turn": 0.0,
+        "head_nod": 0.0,
+        "head_turn": 0.0,
+        "head_tilt": 0.0,
+        "R_shoulder_forward": 0.0,
+        "R_shoulder_out": 30.0,
+        "R_shoulder_twist": 0.0,
+        "R_elbow_bend": 140.0,
+        "R_forearm_turn": -15.0,
+        "R_wrist_bend": -5.0,
+        "R_wrist_side": 0.0,
+        "R_index_base": 90.0,
+        "R_index_mid": 105.0,
+        "R_index_tip": 60.0,
+        "R_index_side": 0.0,
+        "R_middle_base": 90.0,
+        "R_middle_mid": 105.0,
+        "R_middle_tip": 60.0,
+        "R_middle_side": 0.0,
+        "R_ring_base": 90.0,
+        "R_ring_mid": 105.0,
+        "R_ring_tip": 60.0,
+        "R_ring_side": 0.0,
+        "R_pinky_base": 0.0,
+        "R_pinky_mid": 0.0,
+        "R_pinky_tip": 0.0,
+        "R_pinky_side": 0.0,
+        "R_thumb_across": 60.0,
+        "R_thumb_out": 20.0,
+        "R_thumb_roll": 30.0,
+        "R_thumb_mid": 30.0,
+        "R_thumb_tip": 25.0,
+        "L_shoulder_forward": 5.0,
+        "L_shoulder_out": 8.0,
+        "L_shoulder_twist": 10.0,
+        "L_elbow_bend": 15.0,
+        "L_forearm_turn": 0.0,
+        "L_wrist_bend": 0.0,
+        "L_wrist_side": 0.0,
+        "L_index_base": 12.0,
+        "L_index_mid": 18.0,
+        "L_index_tip": 10.0,
+        "L_index_side": 4.0,
+        "L_middle_base": 12.0,
+        "L_middle_mid": 18.0,
+        "L_middle_tip": 10.0,
+        "L_middle_side": 0.0,
+        "L_ring_base": 12.0,
+        "L_ring_mid": 18.0,
+        "L_ring_tip": 10.0,
+        "L_ring_side": -6.0,
+        "L_pinky_base": 12.0,
+        "L_pinky_mid": 18.0,
+        "L_pinky_tip": 10.0,
+        "L_pinky_side": -12.0,
+        "L_thumb_across": 10.0,
+        "L_thumb_out": 0.0,
+        "L_thumb_roll": 0.0,
+        "L_thumb_mid": 10.0,
+        "L_thumb_tip": 8.0,
+        "brows": 0.0
+      }
+    }
+  ],
+  "arrows": [
+    {
+      "kind": "custom",
+      "double": false,
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.18412789702415466
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.75
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.5592789649963379
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "points": [
+        {
+          "co": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "hl": [
+            0.0,
+            0.0,
+            0.02732880599796772
+          ],
+          "hr": [
+            0.0,
+            0.0,
+            -0.02732880599796772
+          ]
+        },
+        {
+          "co": [
+            0.0,
+            0.0,
+            -0.07000000029802322
+          ],
+          "hl": [
+            -0.010458282195031643,
+            0.0,
+            -0.044751472771167755
+          ],
+          "hr": [
+            0.007395121268928051,
+            0.0,
+            -0.08785340189933777
+          ]
+        },
+        {
+          "co": [
+            0.03500000014901161,
+            0.0,
+            -0.10499999672174454
+          ],
+          "hl": [
+            0.015689851716160774,
+            0.0,
+            -0.10425839573144913
+          ],
+          "hr": [
+            0.05298382043838501,
+            0.0,
+            -0.10569066554307938
+          ]
+        },
+        {
+          "co": [
+            0.07000000029802322,
+            0.0,
+            -0.07500000298023224
+          ],
+          "hl": [
+            0.05633559823036194,
+            0.0,
+            -0.08671234548091888
+          ],
+          "hr": [
+            0.08366440236568451,
+            0.0,
+            -0.0632876604795456
+          ]
+        }
+      ]
+    }
+  ]
+}

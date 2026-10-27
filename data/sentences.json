@@ -1,0 +1,30 @@
+{
+  "sentences": [
+    {
+      "id": "hello-jay",
+      "english": "Hello, Jay.",
+      "gloss": "HELLO J-A-Y",
+      "cards": ["word-hello", "letter-j", "letter-a", "letter-y"],
+      "note": "J-A-Y is fingerspelled because it is a name."
+    },
+    {
+      "id": "hello-my-name",
+      "english": "Hello, my name is Jay.",
+      "gloss": "HELLO MY NAME J-A-Y",
+      "cards": ["word-hello", "word-my", "word-name", "letter-j", "letter-a", "letter-y"]
+    },
+    {
+      "id": "your-name-what",
+      "english": "What is your name?",
+      "gloss": "YOUR NAME WHAT?",
+      "cards": ["word-your", "word-name", "word-what"],
+      "note": "Eyebrows lowered for the wh-question."
+    },
+    {
+      "id": "nice-meet-you",
+      "english": "Nice to meet you.",
+      "gloss": "NICE MEET YOU",
+      "cards": ["word-nice", "word-meet", "word-you"]
+    }
+  ]
+}

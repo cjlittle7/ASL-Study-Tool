@@ -1,0 +1,126 @@
+{
+  "terms": [
+    {
+      "id": "noun", "term": "Noun", "kind": "English grammar",
+      "definition": "A word that names a person, place, thing or idea: teacher, school, book, freedom.",
+      "asl": "Some ASL nouns and verbs share a handshape but differ in movement. The noun often uses a short, repeated movement (CHAIR) while the verb uses one longer movement (SIT)."
+    },
+    {
+      "id": "verb", "term": "Verb", "kind": "English grammar",
+      "definition": "A word for an action or state: run, eat, think, be.",
+      "asl": "Many ASL verbs move between locations in space to show who does what to whom. These are called directional or indicating verbs (for example GIVE or HELP)."
+    },
+    {
+      "id": "adjective", "term": "Adjective", "kind": "English grammar",
+      "definition": "A word that describes a noun: big, red, happy.",
+      "asl": "Adjectives can come before or after the noun in ASL, and facial expression often shows how much (a little big versus very big)."
+    },
+    {
+      "id": "adverb", "term": "Adverb", "kind": "English grammar",
+      "definition": "A word that describes a verb, an adjective or another adverb, often telling how, when or how much: quickly, yesterday, very.",
+      "asl": "ASL often shows manner by changing the verb's movement and the signer's face instead of adding a separate sign. Signing WORK with a tense, repeated movement can mean working hard."
+    },
+    {
+      "id": "article", "term": "Article", "kind": "English grammar",
+      "definition": "The small words a, an and the, which come before nouns.",
+      "asl": "ASL has no signs for a, an or the. To point out a specific person or thing, signers point to it or to a place in space (an index point)."
+    },
+    {
+      "id": "pronoun", "term": "Pronoun", "kind": "English grammar",
+      "definition": "A word that stands in for a noun: I, you, she, they, it.",
+      "asl": "ASL pronouns are made by pointing: at yourself for I or ME, at the other person for YOU, or at a spot in space that you have set up for someone who is not present."
+    },
+    {
+      "id": "preposition", "term": "Preposition", "kind": "English grammar",
+      "definition": "A word that shows position or relationship: in, on, under, with, to.",
+      "asl": "ASL has signs like IN and ON, but location is often shown directly by placing classifier handshapes in space."
+    },
+    {
+      "id": "conjunction", "term": "Conjunction", "kind": "English grammar",
+      "definition": "A word that joins words or ideas: and, but, or, because.",
+      "asl": "\"And\" is usually not signed. Ideas are joined by pauses, body shifts or listing on the fingers of the non-dominant hand."
+    },
+    {
+      "id": "subject", "term": "Subject", "kind": "English grammar",
+      "definition": "The person or thing doing the action in a sentence. In \"Maria reads,\" Maria is the subject.",
+      "asl": "Subjects are often set up first or understood from context, and pronoun subjects may be dropped once it is clear who is being talked about."
+    },
+    {
+      "id": "object", "term": "Object", "kind": "English grammar",
+      "definition": "The person or thing that receives the action. In \"Maria reads a book,\" book is the object.",
+      "asl": "Objects are often moved to the front of the sentence as the topic, marked with raised eyebrows."
+    },
+    {
+      "id": "tense", "term": "Tense", "kind": "English grammar",
+      "definition": "The verb form that shows when something happens: walk, walked, will walk.",
+      "asl": "ASL verbs do not change for tense. A time sign such as YESTERDAY or TOMORROW, usually at the start of the sentence, sets the time until it changes."
+    },
+    {
+      "id": "sentence", "term": "Sentence", "kind": "English grammar",
+      "definition": "A complete thought with a subject and a verb.",
+      "asl": "A common ASL order is time first, then the topic, then the comment: YESTERDAY STORE I GO."
+    },
+    {
+      "id": "gloss", "term": "Gloss", "kind": "ASL term",
+      "definition": "A way of writing signs with English words in capital letters, such as STORE I GO. A gloss names the sign; it is not a translation.",
+      "asl": "Hyphens between letters (J-A-Y) mean the word is fingerspelled."
+    },
+    {
+      "id": "fingerspelling", "term": "Fingerspelling", "kind": "ASL term",
+      "definition": "Spelling a word letter by letter with the manual alphabet.",
+      "asl": "Used for names, places, brand names and words without a common sign. Keep the hand steady in one spot, usually near the shoulder of your dominant side."
+    },
+    {
+      "id": "handshape", "term": "Handshape", "kind": "ASL term",
+      "definition": "The shape the hand makes during a sign, such as a flat B hand or a fist A hand.",
+      "asl": "Handshape is one of the parameters of a sign. Changing only the handshape can turn one sign into another."
+    },
+    {
+      "id": "palm-orientation", "term": "Palm orientation", "kind": "ASL term",
+      "definition": "Which way the palm faces: out, in toward you, up, down or to the side.",
+      "asl": "Fingerspelled letters usually face out toward the person watching."
+    },
+    {
+      "id": "location", "term": "Location", "kind": "ASL term",
+      "definition": "Where a sign is made: at the forehead, chin, chest, in neutral space in front of the body, and so on."
+    },
+    {
+      "id": "movement", "term": "Movement", "kind": "ASL term",
+      "definition": "How the hands move during a sign. On the cards, red arrows show movement and faded hands show where the movement starts."
+    },
+    {
+      "id": "parameters", "term": "Parameters", "kind": "ASL term",
+      "definition": "The building blocks of a sign: handshape, palm orientation, location, movement and non-manual markers. Change any one and you can get a different sign."
+    },
+    {
+      "id": "non-manual-marker", "term": "Non-manual marker", "kind": "ASL term",
+      "definition": "Grammar shown with the face, head and body instead of the hands: eyebrows, mouth shape, head tilt or shake.",
+      "asl": "Raised eyebrows mark yes/no questions and topics. Lowered, furrowed eyebrows mark wh-questions. A head shake can make a sentence negative."
+    },
+    {
+      "id": "topic-comment", "term": "Topic-comment", "kind": "ASL term",
+      "definition": "A sentence structure where you name the topic first, then say something about it.",
+      "asl": "BOOK (eyebrows raised), I READ FINISH. means \"I already read the book.\""
+    },
+    {
+      "id": "wh-question", "term": "Wh-question", "kind": "ASL term",
+      "definition": "A question asking who, what, where, when, why, which or how.",
+      "asl": "The question sign often comes at the end, with eyebrows lowered: YOUR NAME WHAT?"
+    },
+    {
+      "id": "yes-no-question", "term": "Yes/no question", "kind": "ASL term",
+      "definition": "A question that can be answered with yes or no.",
+      "asl": "Shown by raising the eyebrows and tilting the head slightly forward, often through the whole question: YOU DEAF?"
+    },
+    {
+      "id": "classifier", "term": "Classifier", "kind": "ASL term",
+      "definition": "A handshape that stands for a type of object (a car, a person, a flat surface) and shows how it moves or where it is.",
+      "asl": "A 3 handshape lying on its side can show a car driving uphill, parking or swerving."
+    },
+    {
+      "id": "dominant-hand", "term": "Dominant hand", "kind": "ASL term",
+      "definition": "The hand you sign with most, usually your writing hand. It does the movement in one-handed signs.",
+      "asl": "The figure on these cards signs with the right hand. Left-handed signers mirror everything."
+    }
+  ]
+}

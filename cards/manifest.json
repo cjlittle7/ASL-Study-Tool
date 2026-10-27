@@ -1,0 +1,114 @@
+{
+  "cards": [
+    {
+      "id": "letter-a",
+      "term": "A",
+      "category": "letter",
+      "notes": "Fist with the thumb resting against the side of the index finger. Palm faces forward.",
+      "image": "letter-a.png",
+      "quizImage": "quiz/letter-a.png",
+      "recipe": "signs/letter-a.json",
+      "updated": "2026-10-27T00:01:11Z"
+    },
+    {
+      "id": "letter-b",
+      "term": "B",
+      "category": "letter",
+      "notes": "Fingers straight up and together, thumb folded across the palm. Palm faces forward.",
+      "image": "letter-b.png",
+      "quizImage": "quiz/letter-b.png",
+      "recipe": "signs/letter-b.json",
+      "updated": "2026-10-27T00:02:03Z"
+    },
+    {
+      "id": "letter-c",
+      "term": "C",
+      "category": "letter",
+      "notes": "Curve the fingers and thumb into a C shape, as if holding a cup. Palm faces to the side.",
+      "image": "letter-c.png",
+      "quizImage": "quiz/letter-c.png",
+      "recipe": "signs/letter-c.json",
+      "updated": "2026-10-27T00:02:55Z"
+    },
+    {
+      "id": "letter-i",
+      "term": "I",
+      "category": "letter",
+      "notes": "Fist with only the pinky finger pointing up. Thumb rests over the curled fingers.",
+      "image": "letter-i.png",
+      "quizImage": "quiz/letter-i.png",
+      "recipe": "signs/letter-i.json",
+      "updated": "2026-10-27T00:03:46Z"
+    },
+    {
+      "id": "letter-j",
+      "term": "J",
+      "category": "letter",
+      "notes": "Start with the I handshape and draw a J in the air with the pinky, turning the palm toward you.",
+      "image": "letter-j.png",
+      "quizImage": "quiz/letter-j.png",
+      "recipe": "signs/letter-j.json",
+      "updated": "2026-10-27T00:09:11Z"
+    },
+    {
+      "id": "letter-l",
+      "term": "L",
+      "category": "letter",
+      "notes": "Index finger points up and the thumb points out to the side, making an L.",
+      "image": "letter-l.png",
+      "quizImage": "quiz/letter-l.png",
+      "recipe": "signs/letter-l.json",
+      "updated": "2026-10-27T00:04:39Z"
+    },
+    {
+      "id": "letter-v",
+      "term": "V",
+      "category": "letter",
+      "notes": "Index and middle fingers up and spread apart. Thumb holds down the other fingers.",
+      "image": "letter-v.png",
+      "quizImage": "quiz/letter-v.png",
+      "recipe": "signs/letter-v.json",
+      "updated": "2026-10-27T00:05:30Z"
+    },
+    {
+      "id": "letter-w",
+      "term": "W",
+      "category": "letter",
+      "notes": "Index, middle and ring fingers up and spread. Thumb holds down the pinky.",
+      "image": "letter-w.png",
+      "quizImage": "quiz/letter-w.png",
+      "recipe": "signs/letter-w.json",
+      "updated": "2026-10-27T00:06:22Z"
+    },
+    {
+      "id": "letter-y",
+      "term": "Y",
+      "category": "letter",
+      "notes": "Thumb and pinky stretch out; the other fingers are curled into the palm.",
+      "image": "letter-y.png",
+      "quizImage": "quiz/letter-y.png",
+      "recipe": "signs/letter-y.json",
+      "updated": "2026-10-27T00:07:13Z"
+    },
+    {
+      "id": "number-5",
+      "term": "5",
+      "category": "number",
+      "notes": "Open hand with all five fingers spread. Palm faces forward.",
+      "image": "number-5.png",
+      "quizImage": "quiz/number-5.png",
+      "recipe": "signs/number-5.json",
+      "updated": "2026-10-27T00:08:05Z"
+    },
+    {
+      "id": "word-hello",
+      "term": "Hello",
+      "category": "word",
+      "notes": "Flat hand starts at the side of the forehead, like a salute, and moves outward.",
+      "image": "word-hello.png",
+      "quizImage": "quiz/word-hello.png",
+      "recipe": "signs/word-hello.json",
+      "updated": "2026-10-27T00:10:16Z"
+    }
+  ]
+}
