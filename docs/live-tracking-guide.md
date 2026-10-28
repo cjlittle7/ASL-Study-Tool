@@ -1,8 +1,8 @@
 # Live tracking and recording signs
 
 Your webcam can move the Blender figure in real time: fingers, hands, arms, head, eyebrows,
-mouth, cheeks and eyes. You can record a sign, trim it, describe it, and save it as an animated
-GIF card that shows up in the web app.
+mouth, cheeks and eyes. You can record a sign, trim it, describe it, add arrows, and save it as
+an animated GIF card that shows up in the web app.
 
 ```
 webcam -> web app, Record tab (MediaPipe tracking, in your browser)
@@ -14,7 +14,7 @@ No video leaves your computer. The browser sends Blender only numbers (about 4 K
 
 ## What you need
 
-- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.5 or newer**.
+- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.6 or newer**.
 - Chrome, Edge or Firefox, and a webcam.
 - The web app opened from `http://localhost:8000` (see the README) or from GitHub Pages.
   Browsers only allow the camera on `localhost` or `https` addresses.
@@ -36,6 +36,44 @@ Tips for good tracking:
 - Sit so your head, shoulders and both hands fit in the picture, about an arm's length away.
 - Plain clothes that contrast with your skin help the hand tracker.
 - In Blender, use **Solid** viewport shading while tracking. It redraws fastest.
+
+## Hands near the face and body
+
+When your hand touches your nose, the figure's hand should touch the figure's nose. A webcam
+can't see depth directly, and MediaPipe's own depth for the arms is rough, so the add-on works
+out where each hand really is:
+
+1. **How far away things are.** Your face's distance follows from how far apart your eye
+   corners are in the picture. Each hand's distance follows from its size in the picture. This
+   uses the camera's **field of view** (see Settings).
+2. **Touching.** When a hand overlaps your face in the picture and is about as far away as your
+   face, it is touching. The part of the hand that reaches furthest toward the face (usually a
+   fingertip) is put exactly on the skin. A hand just in front of the chest is treated the same way.
+3. **Your body onto the figure's body.** Near the face, points are carried over using about 40
+   spots on the face (nose tip, chin, lips, cheeks, eyebrows, temples...). These spots are found
+   on the figure's own head, so this still works after you resize or sculpt the head. Elsewhere,
+   points are carried over relative to the shoulders and scaled to the figure's size, so someone
+   with longer arms than the figure still reaches the same places.
+4. **Arms.** The wrist goes where the figure's hand best covers your hand, with the touching
+   fingertip counting most. The shoulder and elbow follow, and the elbow points the way yours does.
+   Hands are kept out of the head and chest.
+
+The Status box shows **Touching** when a hand is taken as touching the face or chest. If hands
+still land a little in front of the face, choose a wider **Camera field of view**; if they
+sink into it, a narrower one. Turn **Place hands by position** off to go back to copying
+only the arm directions.
+
+When a hand touches the face, the add-on also learns how far off MediaPipe's hand size is for
+you, which makes hand distance more accurate for the rest of the session.
+
+## Eyebrows
+
+Each eyebrow has three points that move on their own: the inner end, the middle and the outer
+end, plus a **squeeze** that pulls the inner ends together. That covers raised brows (yes/no
+questions), furrowed brows (wh-questions), worried brows (inner ends up), one raised brow, and
+so on. They're measured from the eyebrow points MediaPipe finds, compared with your relaxed face
+from calibration, so calibrate with a relaxed face. The same controls are sliders in Blender's
+**Body & Face** panel.
 
 ## Speed
 
@@ -74,6 +112,24 @@ What the app does to keep the delay low:
      slower).
    - **Frame rate** and **Size**.
 7. The GIF appears on the page with a **Download GIF** button.
+
+### Arrows on the GIF
+
+In the Review panel, **Arrows on the GIF** adds movement arrows that are drawn into every frame.
+Pick a kind and click **Add arrow**. Click an arrow's name to open its settings.
+
+| Kind | What it does |
+| --- | --- |
+| Path of the movement | Traces where a body part (for example the index fingertip) moved, between the two times you choose. **Cut from the start / end** keeps it clear of the hand; **Draw the arrow as the hand moves** grows it along with the sign |
+| Straight, on a body part | Points along an arm, hand or finger and moves with it |
+| Circling a body part | Goes around a body part (for example the wrist, for a twist) and moves with it |
+| Straight, arc, circle, back and forth, zigzag (fixed) | A shape placed near a body part. It stays put |
+
+Every arrow can be moved left/right, up/down and back/front, shown for only part of the GIF
+(**Show the arrow from / to**; **now** uses the moment shown in Blender), reversed, given
+arrowheads at both ends, made thicker or thinner, and colored. A preview picture, rendered by
+Blender at the current moment, updates after each change. The arrows also show in Blender's
+viewport while you review, and **Retry** or **Discard** removes them.
 8. Not happy? **Retry** (or **R**) throws the take away and starts a new countdown.
    **Discard** goes back to live tracking.
 
@@ -102,6 +158,8 @@ The old files stay on disk.
 | Countdown | 0, 2, 3 or 5 seconds before recording starts |
 | Smoothing | Off, light, medium or strong jitter removal |
 | Face tracking | Automatic, every frame, every other frame, or off |
+| Place hands by position | Hands are placed relative to your face and body (see above). Off: only arm directions are copied |
+| Camera field of view | How wide your webcam sees. Most are about 60°, wide ones about 78° |
 | Blender port | Must match the Port in Blender's panel (default 8766) |
 
 In Blender you can also switch tracking of **Arms, Hands, Head, Face and Body** on or off.
@@ -109,6 +167,18 @@ For example, to pose the arms with sliders while your hands drive the fingers.
 
 **Copy Pose to Sliders** freezes the current live pose into the figure's sliders, so you can
 fine-tune it and export a still card with **Export Card PNG**.
+
+## Changing the figure's body
+
+The **Body Shape & Sculpting** panel in Blender changes the figure: head size, body width,
+height and depth, upper arm and forearm length, arm thickness and hand size. You can also
+sculpt any part (a bigger nose, a rounder head, a different chest) with Blender's sculpt
+brushes. Live tracking follows these changes within a second: arm lengths, shoulder positions
+and the face spots used for touching are read from the figure itself.
+
+A take you have already recorded follows them too. Blender keeps the tracking data of the take,
+and when the body has changed it solves the take again for the new body before playing it or
+making the GIF, so a fingertip that touched the nose still touches the (new) nose.
 
 ## Troubleshooting
 
@@ -120,6 +190,9 @@ fine-tune it and export a still card with **Export Card PNG**.
 - **Hands swap or flicker**: make sure your shoulders are visible. Hands are matched to the
   body's wrists.
 - **The head is tilted when you're not**: click **Calibrate** while facing the camera.
+- **Eyebrows look raised or furrowed when relaxed**: click **Calibrate** with a relaxed face.
+- **A hand near the face lands in front of or inside the figure's face**: change **Camera field
+  of view** in the Record tab's Settings (or in Blender's panel).
 - **High delay**: the Status box shows whether tracking or Blender is slow. Close other
   camera apps, set Face tracking to Automatic, and use Solid shading in Blender.
 
@@ -133,5 +206,8 @@ fine-tune it and export a still card with **Export Card PNG**.
     tracked bone directions and the figure's own rest pose, so it is exact for the figure.
     It also covers the tricky cases: fists, where the knuckles bend to 90°; thumbs bent
     slightly backwards; and forearm twists past 180°.
+  - `DepthPlacer` and `ModelSkeleton`: hand placement by position (pinhole camera, face and
+    chest contact, face anchors found by ray casts on the figure's head, two-bone arm solve).
+  - Take arrows: `clean_take_arrow`, `build_take_arrows`, `update_take_arrows`.
   - `Take`: a recording. `render_take` and `encode_gif` render the trimmed take and write
     the animated GIF in pure Python.

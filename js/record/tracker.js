@@ -7,7 +7,15 @@
 
 import { FilterGroup } from "./oneeuro.js";
 
-const FACE_POINTS = ["33", "263", "10", "152", "1"];          // eye corners, forehead, chin, nose tip
+// Face points sent to Blender, in pixels. They give the head's rotation, the eyebrows, and
+// "anchors" on the face (nose, chin, cheeks, temples...) so a hand that touches the face lands
+// on the same spot on the figure's face. Keep in sync with FACE_ANCHORS in the add-on.
+const FACE_POINTS = [
+  "1", "4", "6", "168", "151", "10", "152", "199", "17", "14", "13", "0", "61", "291",
+  "33", "133", "263", "362", "159", "145", "386", "374",
+  "70", "105", "107", "300", "334", "336",
+  "98", "327", "50", "280", "234", "454", "127", "356", "172", "397", "58", "288",
+];
 const BLEND_KEYS = [
   "browInnerUp", "browOuterUpLeft", "browOuterUpRight", "browDownLeft", "browDownRight",
   "jawOpen", "mouthSmileLeft", "mouthSmileRight", "mouthFrownLeft", "mouthFrownRight",
@@ -34,6 +42,7 @@ export class Tracker {
       pose: new FilterGroup(1.8, 8),        // meters
       hand: new FilterGroup(1.8, 8),        // meters
       face: new FilterGroup(1.8, 0.03),     // pixels
+      img: new FilterGroup(1.8, 0.03),      // pixels (body and hand points in the picture)
       blend: new FilterGroup(1.8, 2),       // 0..1
     };
     this._tick = this._tick.bind(this);
@@ -110,7 +119,8 @@ export class Tracker {
     const t = capture / 1000;
     const F = this.filters;
     const msg = { type: "frame", id: ++this.id, t: Math.round(capture * 100) / 100, dt: Math.round(ms * 10) / 10,
-                  pose: null, hands: [], face: null };
+                  img: [W, H], pose: null, pose2d: null, hands: [], face: null };
+    const px = (v) => Math.round(v * 10) / 10;
 
     let poseImg = null;
     if (poseRes && poseRes.worldLandmarks && poseRes.worldLandmarks.length) {
@@ -121,8 +131,11 @@ export class Tracker {
         const f = F.pose.filter(i, [p.x, p.y, p.z], t);
         return [round(f[0]), round(f[1]), round(f[2]), Math.round(vis * 100) / 100];
       });
+      // where each body point is in the picture: used to work out how far away things are
+      msg.pose2d = poseImg.map((p, i) => F.img.filter("p" + i, [p.x * W, p.y * H], t).map(px));
     } else {
       F.pose.reset();
+      F.img.reset("p");
     }
 
     if (handRes && handRes.worldLandmarks) {
@@ -132,12 +145,17 @@ export class Tracker {
         const side = sides[i];
         if (!side || present[side]) return;
         present[side] = true;
-        if (performance.now() - this.handSeen[side] > 250) F.hand.reset(side);   // reappeared: start fresh
+        if (performance.now() - this.handSeen[side] > 250) {      // reappeared: start fresh
+          F.hand.reset(side);
+          F.img.reset(side);
+        }
         this.handSeen[side] = performance.now();
+        const img = handRes.landmarks[i];
         msg.hands.push({
           side,
           score: Math.round((handRes.handedness?.[i]?.[0]?.score ?? 1) * 100) / 100,
           world: world.map((p, j) => F.hand.filter(side + j, [p.x, p.y, p.z], t).map(round)),
+          img: img.map((p, j) => F.img.filter(side + j, [p.x * W, p.y * H], t).map(px)),
         });
       });
     }
@@ -245,9 +263,9 @@ export function drawOverlay(canvas, video, res, sides) {
   const face = res.faceRes?.faceLandmarks?.[0];
   if (face) {
     g.fillStyle = "rgba(255,255,255,0.9)";
-    for (const k of [33, 263, 10, 152, 1, 13, 14, 61, 291, 105, 334]) {
+    for (const k of FACE_POINTS) {
       g.beginPath();
-      g.arc(face[k].x * W, face[k].y * H, Math.max(1.5, W / 320), 0, Math.PI * 2);
+      g.arc(face[+k].x * W, face[+k].y * H, Math.max(1.5, W / 320), 0, Math.PI * 2);
       g.fill();
     }
   }

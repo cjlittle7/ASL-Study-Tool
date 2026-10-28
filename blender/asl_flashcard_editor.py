@@ -27,7 +27,7 @@ How the figure works (worth reading if you want to change the code):
 bl_info = {
     "name": "ASL Flashcard Editor",
     "author": "ASL Study Tool",
-    "version": (0, 5, 0),
+    "version": (0, 6, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > Sidebar (N) > ASL Cards",
     "description": "Pose a signer figure, export ASL flashcards, and record signs with live webcam tracking",
@@ -64,7 +64,7 @@ CARD_COLLECTION = "ASL Card"
 OUTLINE_COLLECTION = "ASL Outlined (internal)"
 RECIPE_VERSION = 2
 # Bump when the way figures are built changes; older figures are rebuilt automatically.
-BUILD_VERSION = 5
+BUILD_VERSION = 6
 
 
 # ---------------------------------------------------------------------------
@@ -515,12 +515,19 @@ class _Builder:
         return o
 
 
-# --- Face: mouth shapes, cheeks and eyelids (used by the Face sliders and live tracking) ---
+# --- Face: eyebrows, mouth shapes, cheeks and eyelids (Face sliders and live tracking) ---
 MOUTH_POS = (0.0, -0.088, 0.064)
 MOUTH_RX, MOUTH_RZ = 0.016, 0.0042
 CHEEK_R = 0.017
 FACE_PARAMS = [
     # key, label, default, min, max
+    ("brow_inner_R", "Right brow, inner end (up +)", 0.0, -1.0, 1.0),
+    ("brow_mid_R", "Right brow, middle (up +)", 0.0, -1.0, 1.0),
+    ("brow_outer_R", "Right brow, outer end (up +)", 0.0, -1.0, 1.0),
+    ("brow_inner_L", "Left brow, inner end (up +)", 0.0, -1.0, 1.0),
+    ("brow_mid_L", "Left brow, middle (up +)", 0.0, -1.0, 1.0),
+    ("brow_outer_L", "Left brow, outer end (up +)", 0.0, -1.0, 1.0),
+    ("brow_squeeze", "Squeeze brows together", 0.0, 0.0, 1.0),
     ("mouth_open", "Mouth open", 0.0, 0.0, 1.0),
     ("smile", "Smile (+) / frown (-)", 0.0, -1.0, 1.0),
     ("pucker", "Pucker (OO)", 0.0, 0.0, 1.0),
@@ -529,6 +536,108 @@ FACE_PARAMS = [
     ("eye_close_L", "Close left eye", 0.0, 0.0, 1.0),
 ]
 FACE_KEYS = ["brows"] + [p[0] for p in FACE_PARAMS]
+BROW_NODES = ("inner", "mid", "outer")
+BROW_KEYS = ["brows", "brow_squeeze"] + [f"brow_{n}_{s}" for s in SIDES for n in BROW_NODES]
+
+# Skull ellipsoid (head space) that the eyebrows follow.
+SKULL_C, SKULL_R = Vector((0, 0, 0.11)), Vector((0.082, 0.095, 0.112))
+BROW_X = (0.015, 0.051)                 # inner and outer end, distance from the middle of the face
+BROW_UP = {"inner": 0.010, "mid": 0.011, "outer": 0.009}
+BROW_DOWN = {"inner": 0.0065, "mid": 0.0055, "outer": 0.005}
+
+
+def _smooth(t):
+    t = min(1.0, max(0.0, t))
+    return t * t * (3 - 2 * t)
+
+
+def brow_weights(s):
+    """How much each of the 3 brow nodes moves the point at s (0 = inner end, 1 = outer end).
+    The weights always add up to 1, so the brow stays one smooth curve."""
+    if s < 0.5:
+        return {"inner": _smooth(1 - 2 * s), "mid": _smooth(2 * s), "outer": 0.0}
+    return {"inner": 0.0, "mid": _smooth(2 - 2 * s), "outer": _smooth(2 * s - 1)}
+
+
+def skull_front_y(x, z, proud=0.0025):
+    """y of the front of the skull at (x, z), plus a small gap so features sit on top."""
+    q = 1 - (x / SKULL_R.x) ** 2 - ((z - SKULL_C.z) / SKULL_R.z) ** 2
+    return -SKULL_R.y * math.sqrt(max(0.04, q)) - proud
+
+
+def brow_vertices(sx, dz=None, dx=None, rings=18, around=8):
+    """Vertices of one eyebrow (a tapered tube lying on the forehead), in head space.
+    dz(s), dx(s): extra up and inward movement along the brow (for the shape keys)."""
+    pts = []
+    for i in range(rings):
+        s = i / (rings - 1)
+        x = BROW_X[0] + (BROW_X[1] - BROW_X[0]) * s
+        z = 0.157 + 0.007 * math.sin(math.pi * (0.15 + 0.85 * s))
+        if dx:
+            x -= dx(s)
+        if dz:
+            z += dz(s)
+        pts.append(Vector((x * sx, skull_front_y(x, z), z)))
+    verts = []
+    for i, c in enumerate(pts):
+        s = i / (rings - 1)
+        t = (pts[min(i + 1, rings - 1)] - pts[max(i - 1, 0)]).normalized()
+        up = Vector((0, 0, 1))
+        n = (up - t * up.dot(t)).normalized()           # "up" across the brow
+        f = t.cross(n).normalized()
+        if f.y > 0:
+            f = -f
+        r = 0.0041 - 0.0021 * s ** 0.8                     # thick at the inner end
+        if i in (0, rings - 1):
+            r *= 0.55                                      # rounded ends
+        for k in range(around):
+            a = 2 * math.pi * k / around
+            verts.append(c + n * (r * math.cos(a)) + f * (0.65 * r * math.sin(a)))
+    verts.append(pts[0] - (pts[1] - pts[0]).normalized() * 0.0012)
+    verts.append(pts[-1] + (pts[-1] - pts[-2]).normalized() * 0.0010)
+    return verts
+
+
+def brow_mesh(name, sx, rings=18, around=8):
+    """A brow with shape keys for each node: inner/mid/outer up and down, and squeeze."""
+    verts = brow_vertices(sx, rings=rings, around=around)
+    faces = []
+    for i in range(rings - 1):
+        for k in range(around):
+            a, b = i * around + k, i * around + (k + 1) % around
+            faces.append((a, b, b + around, a + around))
+    c0, c1 = len(verts) - 2, len(verts) - 1
+    last = (rings - 1) * around
+    for k in range(around):
+        faces.append((c0, (k + 1) % around, k))
+        faces.append((c1, last + k, last + (k + 1) % around))
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([tuple(v) for v in verts], [], faces)
+    me.validate()
+    me.update()
+    # outward normals: flip if a side face points into the tube
+    p0 = me.polygons[0]
+    ring_c = sum((Vector(verts[k]) for k in range(around)), Vector()) / around
+    if p0.normal.dot(Vector(p0.center) - ring_c) < 0:
+        me.flip_normals()
+    for p in me.polygons:
+        p.use_smooth = True
+    return me
+
+
+def add_brow_shapes(obj, sx):
+    obj.shape_key_add(name="Basis", from_mix=False)
+
+    def key(name, dz=None, dx=None):
+        kb = obj.shape_key_add(name=name, from_mix=False)
+        for i, co in enumerate(brow_vertices(sx, dz, dx)):
+            kb.data[i].co = co
+
+    for n in BROW_NODES:
+        key(f"{n}_up", dz=lambda s, n=n: BROW_UP[n] * brow_weights(s)[n])
+        key(f"{n}_down", dz=lambda s, n=n: -BROW_DOWN[n] * brow_weights(s)[n])
+    # squeeze (corrugator): inner ends slide toward each other and a little down
+    key("squeeze", dz=lambda s: -0.0025 * _smooth(1 - 1.6 * s), dx=lambda s: 0.0045 * _smooth(1 - 1.4 * s))
 
 
 def add_mouth_shapes(obj):
@@ -550,7 +659,8 @@ def add_mouth_shapes(obj):
 
 def face_rig(root):
     """Objects that make up the face of one figure."""
-    rig = {"brows": [], "eyes": [], "cheeks": [], "mouth": None}
+    rig = {"brows": [], "eyes": [], "cheeks": [], "mouth": None,
+           "brow_state": {k: 0.0 for k in BROW_KEYS}}
     for o in root.children_recursive:
         if "asl_brow" in o:
             rig["brows"].append((o, o["asl_brow"]))
@@ -563,14 +673,36 @@ def face_rig(root):
     return rig
 
 
+def brow_node_values(v, side):
+    """Final (inner, mid, outer, squeeze) for one brow: its own nodes plus the overall
+    Eyebrows slider (raise lifts the middle most; furrow pulls the inner end down most)."""
+    b = v.get("brows", 0.0)
+    if b >= 0:
+        add = (0.9 * b, b, 0.8 * b)
+        sq = 0.0
+    else:
+        add = (b, 0.6 * b, 0.3 * b)
+        sq = -0.8 * b
+    vals = [max(-1.0, min(1.0, v.get(f"brow_{n}_{side}", 0.0) + a)) for n, a in zip(BROW_NODES, add)]
+    return vals + [max(0.0, min(1.0, v.get("brow_squeeze", 0.0) + sq))]
+
+
 def set_face(rig, v):
     """v: dict with any of FACE_KEYS. Missing keys are left as they are."""
-    r = math.radians
-    if "brows" in v:
-        b = v["brows"]
+    if any(k in v for k in BROW_KEYS):
+        st = rig.setdefault("brow_state", {k: 0.0 for k in BROW_KEYS})
+        st.update({k: v[k] for k in BROW_KEYS if k in v})
         for o, sx in rig["brows"]:
-            o.location = (0.032 * sx, -0.084 + 0.003 * b, 0.163 + 0.012 * b)
-            o.rotation_euler = (0, sx * r(5 - 16 * b if b < 0 else 5 + 4 * b), 0)
+            side = "L" if sx > 0 else "R"                    # +X is the signer's left
+            keys = o.data.shape_keys
+            if keys is None:
+                continue
+            kb = keys.key_blocks
+            vals = brow_node_values(st, side)
+            for n, val in zip(BROW_NODES, vals):
+                kb[f"{n}_up"].value = max(0.0, val)
+                kb[f"{n}_down"].value = max(0.0, -val)
+            kb["squeeze"].value = vals[3]
     m = rig["mouth"]
     if m is not None and m.data.shape_keys:
         kb = m.data.shape_keys.key_blocks
@@ -649,11 +781,9 @@ def build_figure(scene, ghost=False, name=None):
         b.part(f"ear_{sx}", ellipsoid_mesh("ear", 0.012, 0.022, 0.03,
                                              center=(0.081 * sx, 0.0, 0.11), segments=12),
                head, "head", "skin")
-        brow = capsule_mesh("brow", 0.028, 0.0034, segments=10)
-        brow.transform(Matrix.Rotation(math.radians(-90), 4, 'Y'))
-        brow.transform(Matrix.Translation((-0.014, 0, 0)))
-        bo = b.part(f"brow_{sx}", brow, head, "head", "feature")
+        bo = b.part(f"brow_{sx}", brow_mesh("brow", sx), head, "head", "feature")
         bo["asl_brow"] = sx
+        add_brow_shapes(bo, sx)
     mo = b.part("mouth", ellipsoid_mesh("mouth", MOUTH_RX, 0.006, MOUTH_RZ, segments=24),
                 head, "head", "feature", offset=MOUTH_POS)
     mo["asl_mouth"] = True
@@ -662,11 +792,13 @@ def build_figure(scene, ghost=False, name=None):
     # arms and hands -----------------------------------------------------
     for side in SIDES:
         sh = b.joint(f"{side}_shoulder", torso, mirror_x(SHOULDER_POS, side), order='ZXY')
-        b.part(f"{side}_upper_arm", capsule_mesh("upper_arm", UPPER_ARM_LEN, 0.047, 0.041),
-               sh, f"arm_{side}", "shirt")
+        ua = b.part(f"{side}_upper_arm", capsule_mesh("upper_arm", UPPER_ARM_LEN, 0.047, 0.041),
+                    sh, f"arm_{side}", "shirt")
+        _tag_segment(ua, "upper_arm", UPPER_ARM_LEN, 0.047, 0.041, 20)
         el = b.joint(f"{side}_elbow", sh, (0, 0, -UPPER_ARM_LEN), order='ZXY')
-        b.part(f"{side}_forearm", capsule_mesh("forearm", FOREARM_LEN, 0.041, 0.031),
-               el, f"arm_{side}", "shirt")
+        fa = b.part(f"{side}_forearm", capsule_mesh("forearm", FOREARM_LEN, 0.041, 0.031),
+                    el, f"arm_{side}", "shirt")
+        _tag_segment(fa, "forearm", FOREARM_LEN, 0.041, 0.031, 20)
         # wrist rest: palm faces the body, so "forearm turn 0" = palm in, thumb forward
         m = 1 if side == "R" else -1
         wr = b.joint(f"{side}_wrist", el, (0, 0, -FOREARM_LEN),
@@ -720,6 +852,10 @@ def build_figure(scene, ghost=False, name=None):
     for side in SIDES:
         apply_handshape(fig, side, HANDSHAPES["relaxed"][1])
     root.rotation_euler.z = math.radians(s.view_angle)
+    for other in all_figures():
+        if other is not root and custom_parts(other):
+            copy_custom_parts(other, root)
+            break
     apply_figure(root)
     return root
 
@@ -798,26 +934,43 @@ def apply_figure(root):
         update_tethers(root)
 
 
+def _rebuild_capsule(o, length, r1, r2, segs):
+    old = o.data
+    me = capsule_mesh(old.name, length, r1, r2, segments=int(segs))
+    for m in old.materials:
+        me.materials.append(m)
+    o.data = me
+    if old.users == 0:
+        bpy.data.meshes.remove(old)
+
+
 def apply_proportions(root, joints=None):
-    """Resize finger sections and the neck to match the Proportions sliders."""
+    """Resize body parts to match the Proportions and Body Shape sliders."""
     body = bpy.context.scene.asl_body
+    shp = body_shape(body)
     if joints is None:
         joints = {o["asl_joint"]: o for o in root.children_recursive if "asl_joint" in o}
     for o in root.children_recursive:
         key = o.get("asl_seg")
         if key is None:
             continue
-        length = getattr(body, key) / 1000.0
-        if abs(o.get("asl_len", 0.0) - length) > 1e-6:
+        thick = 1.0
+        if key in ("upper_arm", "forearm"):
+            length = shp["L1"] if key == "upper_arm" else shp["L2"]
+            thick = shp["thick"]
+        else:
+            length = getattr(body, key) / 1000.0
+        if o.get("asl_custom"):
+            # a sculpted part keeps its shape and is stretched instead of rebuilt
+            base = o.get("asl_custom_len", o.get("asl_len", length)) or length
+            bt = o.get("asl_custom_thick", 1.0) or 1.0
+            o.scale = (thick / bt, thick / bt, length / base)
+            continue
+        if abs(o.get("asl_len", 0.0) - length) > 1e-6 or abs(o.get("asl_thick", 1.0) - thick) > 1e-6:
             r1, r2, segs = o["asl_r"]
-            old = o.data
-            me = capsule_mesh(old.name, length, r1, r2, segments=int(segs))
-            for m in old.materials:
-                me.materials.append(m)
-            o.data = me
-            if old.users == 0:
-                bpy.data.meshes.remove(old)
+            _rebuild_capsule(o, length, r1 * thick, r2 * thick, segs)
             o["asl_len"] = length
+            o["asl_thick"] = thick
     # each joint sits at the end of the section before it
     for side in SIDES:
         for f in ("thumb",) + FINGERS:
@@ -825,7 +978,15 @@ def apply_proportions(root, joints=None):
                 j = joints.get(f"{side}_{f}_{nxt}")
                 if j:
                     j.matrix_parent_inverse = Matrix.Translation((0, 0, -getattr(body, f"{side}_{f}_{seg}") / 1000.0))
-    # joint position sliders (millimeters, in each joint's parent space)
+        m = 1 if side == "R" else -1
+        el, wr = joints.get(f"{side}_elbow"), joints.get(f"{side}_wrist")
+        if el:
+            el.matrix_parent_inverse = Matrix.Translation((0, 0, -shp["L1"]))
+        if wr:
+            wr.matrix_parent_inverse = (Matrix.Translation((0, 0, -shp["L2"]))
+                                        @ Matrix.Rotation(math.radians(90 * m), 4, 'Z'))
+            wr.scale = (shp["hand"],) * 3
+    # joint position sliders (millimeters, in each joint's parent space) + body width/height
     for side in SIDES:
         m = 1.0 if side == "R" else -1.0
         g = lambda k: getattr(body, f"{side}_{k}") / 1000.0
@@ -834,12 +995,21 @@ def apply_proportions(root, joints=None):
             cmc.location = (m * g("thumbpos_across"), -g("thumbpos_out"), -g("thumbpos_along"))
         sh = joints.get(f"{side}_shoulder")
         if sh:    # torso space: +Z up, -X is the right side, -Y forward
-            sh.location = (-m * g("shoulderpos_out"), -g("shoulderpos_forward"), g("shoulderpos_up"))
+            sh.location = (-m * g("shoulderpos_out") - m * abs(SHOULDER_POS.x) * (shp["w"] - 1),
+                           -g("shoulderpos_forward"),
+                           g("shoulderpos_up") + SHOULDER_POS.z * (shp["h"] - 1))
+    for o in root.children_recursive:
+        if o.get("asl_part") == "torso" and o.parent is not None and o.parent.get("asl_joint") == "torso":
+            o.scale = (shp["w"], shp["d"], shp["h"])
+    neck = joints.get("neck")
+    if neck:
+        neck.location = (0, 0, 0.47 * (shp["h"] - 1))
 
     neck_len = body.neck / 1000.0
     head = joints.get("head")
     if head:
         head.matrix_parent_inverse = Matrix.Translation((0, 0, neck_len + 0.01))
+        head.scale = (shp["head"],) * 3
     for o in root.children_recursive:
         if o.get("asl_seg") == "neck":
             o.matrix_parent_inverse = Matrix.Translation((0, 0.006, neck_len + 0.005))
@@ -944,8 +1114,30 @@ def position_specs():
             yield (f"{side}_{key}", label, lim)
 
 
+# Body shape (shared by every figure). Percentages scale a body part; arm lengths are in mm.
+SHAPE_SPECS = [
+    ("head_size", "Head size (%)", 100, 70, 140),
+    ("torso_width", "Body width (%)", 100, 70, 140),
+    ("torso_height", "Body height (%)", 100, 75, 130),
+    ("torso_depth", "Body depth, front to back (%)", 100, 70, 150),
+    ("upper_arm", "Upper arm length (mm)", round(UPPER_ARM_LEN * 1000), 200, 380),
+    ("forearm", "Forearm length (mm)", round(FOREARM_LEN * 1000), 180, 340),
+    ("arm_thickness", "Arm thickness (%)", 100, 60, 170),
+    ("hand_size", "Hand size (%)", 100, 75, 130),
+]
+SHAPE_DEFAULTS = {k: d for k, _, d, _, _ in SHAPE_SPECS}
+
+
 def all_body_keys():
     return [k for k, _, _ in length_specs()] + [k for k, _, _ in position_specs()]
+
+
+def body_shape(body):
+    """Body shape values as plain numbers (factors and meters)."""
+    g = lambda k: getattr(body, k, SHAPE_DEFAULTS[k])
+    return {"head": g("head_size") / 100, "w": g("torso_width") / 100, "h": g("torso_height") / 100,
+            "d": g("torso_depth") / 100, "L1": g("upper_arm") / 1000, "L2": g("forearm") / 1000,
+            "thick": g("arm_thickness") / 100, "hand": g("hand_size") / 100}
 
 
 _mirroring = False
@@ -953,6 +1145,100 @@ _mirroring = False
 
 def outdated_figures():
     return [r for r in all_figures() if r.get("asl_build", 1) < BUILD_VERSION]
+
+
+# --- Sculpted (custom-shaped) body parts ---------------------------------------
+# A sculpted part keeps its mesh when the figure is rebuilt, is shared by every figure in the
+# scene (ghosts are the same person), and is stretched rather than rebuilt by length sliders.
+
+def part_suffix(o):
+    return o.name.split(".", 1)[1] if "." in o.name else o.name
+
+
+def figure_of(obj):
+    o = obj
+    while o is not None:
+        if o.asl_fig.is_figure:
+            return o
+        o = o.parent
+    return None
+
+
+def custom_parts(root):
+    return {part_suffix(o): o for o in root.children_recursive if o.type == 'MESH' and o.get("asl_custom")}
+
+
+CUSTOM_PROPS = ("asl_custom", "asl_custom_len", "asl_custom_thick", "asl_orig_mesh")
+
+
+def make_custom(o):
+    """Mark a part as sculpted, keeping a copy of its original shape for Reset Part."""
+    if o.get("asl_custom"):
+        return
+    orig = o.data.copy()
+    orig.name = "ASL_original_" + part_suffix(o)
+    orig.use_fake_user = True
+    o["asl_orig_mesh"] = orig.name
+    if "asl_len" in o:
+        o["asl_custom_len"] = o["asl_len"] / max(1e-6, o.scale.z)
+        o["asl_custom_thick"] = o.get("asl_thick", 1.0)
+    o["asl_custom"] = True
+
+
+def _assign_mesh(target, mesh_src):
+    """Give target a copy of mesh_src, keeping target's own (per-figure) materials."""
+    mats = list(target.data.materials)
+    old = target.data
+    me = mesh_src.copy()
+    me.materials.clear()
+    for m in mats:
+        me.materials.append(m)
+    target.data = me
+    if old.users == 0:
+        bpy.data.meshes.remove(old)
+
+
+def copy_custom_parts(src_root, dst_root):
+    for suffix, o in custom_parts(src_root).items():
+        t = bpy.data.objects.get(f"{dst_root.name}.{suffix}")
+        if t is None or t is o:
+            continue
+        _assign_mesh(t, o.data)
+        for k in CUSTOM_PROPS:
+            if k in o:
+                t[k] = o[k]
+            elif k in t:
+                del t[k]
+        t.scale = o.scale
+
+
+def share_custom_parts(src_root):
+    for root in all_figures():
+        if root is not src_root:
+            copy_custom_parts(src_root, root)
+
+
+def mirror_mesh_x(me):
+    for v in me.vertices:
+        v.co.x = -v.co.x
+    if me.shape_keys:
+        for kb in me.shape_keys.key_blocks:
+            for d in kb.data:
+                d.co.x = -d.co.x
+    me.flip_normals()
+    me.update()
+
+
+def mirror_suffix(suffix):
+    """Name of the same part on the other side of the body, or None for a middle part."""
+    if suffix.startswith("R_"):
+        return "L_" + suffix[2:]
+    if suffix.startswith("L_"):
+        return "R_" + suffix[2:]
+    m = re.match(r"^(.*_)(-?1)$", suffix)
+    if m:
+        return m.group(1) + ("1" if m.group(2) == "-1" else "-1")
+    return None
 
 
 def upgrade_figure(scene, root):
@@ -965,6 +1251,10 @@ def upgrade_figure(scene, root):
     opacity, angle = f.opacity, root.rotation_euler.z
     tethered = [a for a in all_arrows() if a.asl_tether.figure == root]
     was_active = scene.asl.active_figure == root
+    custom = {sfx: (o.data, {k: o[k] for k in CUSTOM_PROPS if k in o}, tuple(o.scale))
+              for sfx, o in custom_parts(root).items()}
+    for me, _, _ in custom.values():
+        me.use_fake_user = True          # keep the sculpted mesh while the old figure is removed
 
     coll = root.users_collection[0] if root.users_collection else None
     for o in figure_objects(root):
@@ -973,6 +1263,14 @@ def upgrade_figure(scene, root):
         bpy.data.collections.remove(coll)
 
     new = build_figure(scene, ghost=ghost, name=name)
+    for sfx, (me, props, scale) in custom.items():
+        t = bpy.data.objects.get(f"{new.name}.{sfx}")
+        if t is not None:
+            _assign_mesh(t, me)
+            for k, v in props.items():
+                t[k] = v
+            t.scale = scale
+        me.use_fake_user = False
     if role:
         new["asl_role"] = role
     _suspend_updates = True
@@ -1046,6 +1344,9 @@ def _make_body_group():
     for key, label, lim in position_specs():
         ann[key] = FloatProperty(name=label, default=0.0, min=-lim, max=lim,
                                  step=50, precision=1, update=_length_updater(key))
+    for key, label, d, lo, hi in SHAPE_SPECS:
+        ann[key] = FloatProperty(name=label, default=d, min=lo, max=hi, step=50, precision=0,
+                                 update=_length_updater(key))
     return type("ASLBody", (PropertyGroup,), {"__annotations__": ann})
 
 
@@ -1054,6 +1355,10 @@ ASLBody = _make_body_group()
 
 def body_to_dict(body):
     d = {key: round(getattr(body, key), 2) for key in all_body_keys()}
+    for key, _, dflt, _, _ in SHAPE_SPECS:
+        v = round(getattr(body, key), 2)
+        if v != dflt:
+            d[key] = v
     d["mirror"] = body.mirror
     return d
 
@@ -1067,6 +1372,8 @@ def body_from_dict(body, d):
             setattr(body, key, d.get(key, mm))
         for key, label, lim in position_specs():
             setattr(body, key, d.get(key, 0.0))
+        for key, _, dflt, _, _ in SHAPE_SPECS:
+            setattr(body, key, d.get(key, dflt))
     finally:
         _mirroring = False
 
@@ -1508,9 +1815,9 @@ def part_matrix(root, side, part, joints=None):
         key, off = f"{side}_{finger}_tip", (0, 0, -getattr(body, f"{side}_{finger}_tip") / 1000.0)
     else:
         key, off = {
-            "wrist": (f"{side}_elbow", (0, 0, -FOREARM_LEN)),
+            "wrist": (f"{side}_elbow", (0, 0, -getattr(body, "forearm", FOREARM_LEN * 1000) / 1000.0)),
             "palm": (f"{side}_wrist", (0, 0, -0.05)),
-            "forearm": (f"{side}_elbow", (0, 0, -FOREARM_LEN / 2)),
+            "forearm": (f"{side}_elbow", (0, 0, -getattr(body, "forearm", FOREARM_LEN * 1000) / 2000.0)),
             "elbow": (f"{side}_elbow", (0, 0, 0)),
             "shoulder": (f"{side}_shoulder", (0, 0, 0)),
             "head": ("head", (0, -0.1, 0.13)),
@@ -1519,7 +1826,10 @@ def part_matrix(root, side, part, joints=None):
     j = joints.get(key)
     if j is None:
         return Matrix.Identity(4)
-    return j.matrix_world.normalized() @ Matrix.Translation(off)
+    mw = j.matrix_world
+    m = mw.normalized()                   # orientation without the joint's scale...
+    m.translation = mw @ Vector(off)      # ...but the position follows scaled body parts
+    return m
 
 
 def _axis_basis(d):
@@ -2656,6 +2966,691 @@ def _pick_angle(a, limits, ref=0.0):
 def _frame(x, y, z):
     return Matrix((x, y, z)).transposed()     # columns are the axes
 
+# --- Depth: where the hands really are relative to the face and body -----------------
+#
+# MediaPipe's 3D body points are good at directions but poor at depth: a hand touching the nose
+# can come out 20 cm in front of the face, which pulls the figure's arms forward and down. So
+# instead of copying arm directions, the hands are placed by position:
+#   1. Pinhole camera: how far away the face, body and each hand are follows from their size in
+#      the picture (eye corners ~89 mm apart; MediaPipe's hand and body points are in meters).
+#   2. A hand that overlaps the face in the picture and is about as far away as the face is
+#      touching it, so its distance is snapped onto the face.
+#   3. Each tracked point is carried onto the figure: near the face through "anchors" (nose tip,
+#      chin, cheeks, temples... found on the figure's own head, so it works with any head shape),
+#      elsewhere through the shoulders, scaled to the figure's size.
+#   4. The wrist goes where the figure's own hand best covers those points (a touching fingertip
+#      counts most), then a two-bone solve finds shoulder and elbow, bending the elbow the way
+#      the person's elbow points. Hands are kept out of the head and chest.
+
+IOD_M = 0.089          # distance between the outer eye corners of an average adult (m)
+
+# MediaPipe face point -> where it is on the figure's head (head space, default figure):
+#   ("F", x, z): first surface hit by a ray from the front at (x, z)
+#   ("S", side, y, z): first surface hit by a ray from the side (side -1 = signer's right)
+FACE_ANCHORS = {
+    1: ("F", 0.0, 0.105), 4: ("F", 0.0, 0.116), 6: ("F", 0.0, 0.135), 168: ("F", 0.0, 0.148),
+    151: ("F", 0.0, 0.185), 10: ("F", 0.0, 0.212), 152: ("F", 0.0, 0.014), 199: ("F", 0.0, 0.03),
+    17: ("F", 0.0, 0.049), 14: ("F", 0.0, 0.061), 13: ("F", 0.0, 0.067), 0: ("F", 0.0, 0.074),
+    61: ("F", -0.017, 0.064), 291: ("F", 0.017, 0.064),
+    33: ("F", -0.043, 0.128), 133: ("F", -0.019, 0.128), 263: ("F", 0.043, 0.128), 362: ("F", 0.019, 0.128),
+    159: ("F", -0.031, 0.141), 145: ("F", -0.031, 0.116), 386: ("F", 0.031, 0.141), 374: ("F", 0.031, 0.116),
+    70: ("F", -0.05, 0.157), 105: ("F", -0.033, 0.164), 107: ("F", -0.016, 0.160),
+    300: ("F", 0.05, 0.157), 334: ("F", 0.033, 0.164), 336: ("F", 0.016, 0.160),
+    98: ("F", -0.012, 0.094), 327: ("F", 0.012, 0.094),
+    50: ("F", -0.049, 0.085), 280: ("F", 0.049, 0.085), 58: ("F", -0.042, 0.05), 288: ("F", 0.042, 0.05),
+    234: ("S", -1, -0.035, 0.11), 454: ("S", 1, -0.035, 0.11),
+    127: ("S", -1, -0.05, 0.145), 356: ("S", 1, -0.05, 0.145),
+    172: ("S", -1, -0.02, 0.04), 397: ("S", 1, -0.02, 0.04),
+}
+FACE_PAIRS = [(98, 327), (61, 291), (33, 263), (133, 362), (159, 386), (145, 374), (70, 300), (105, 334), (107, 336),
+              (50, 280), (58, 288), (234, 454), (127, 356), (172, 397)]
+FACE_MIRROR = {a: b for a, b in FACE_PAIRS}
+FACE_MIRROR.update({b: a for a, b in FACE_PAIRS})
+
+
+def _delaunay(pts):
+    """Bowyer-Watson triangulation of 2D points {key: (x, y)}. Returns [(k1, k2, k3)]."""
+    keys = list(pts)
+    P = {k: pts[k] for k in keys}
+    big = 10.0
+    P["_a"], P["_b"], P["_c"] = (-big, -big), (big, -big), (0.0, big)
+    tris = [("_a", "_b", "_c")]
+
+    def circ(t):
+        (ax, ay), (bx, by), (cx, cy) = P[t[0]], P[t[1]], P[t[2]]
+        d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
+        if abs(d) < 1e-12:
+            return (0.0, 0.0, float("inf"))
+        ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d
+        uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
+        return (ux, uy, (ax - ux) ** 2 + (ay - uy) ** 2)
+
+    for k in keys:
+        x, y = P[k]
+        bad = []
+        for t in tris:
+            ux, uy, r2 = circ(t)
+            if (x - ux) ** 2 + (y - uy) ** 2 < r2:
+                bad.append(t)
+        edges = {}
+        for t in bad:
+            for e in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0])):
+                key = frozenset(e)
+                edges[key] = None if key in edges else e
+        tris = [t for t in tris if t not in bad]
+        for e in edges.values():
+            if e is not None:
+                tris.append((e[0], e[1], k))
+    return [t for t in tris if not any(str(v).startswith("_") for v in t)]
+
+
+def _face_layout():
+    out = {}
+    for k, sp in FACE_ANCHORS.items():
+        out[k] = (sp[1], sp[2]) if sp[0] == "F" else (sp[1] * 0.075, sp[3])
+    return out
+
+
+FACE_TRIS = _delaunay(_face_layout())
+# eyebrow nodes (inner, middle, outer) and eye corners (outer, inner), by the person's side
+BROW_POINTS = {"R": ((107, 105, 70), (33, 133)), "L": ((336, 334, 300), (263, 362))}
+
+
+class EuroFilter:
+    """One Euro filter for a vector (same idea as js/record/oneeuro.js)."""
+
+    def __init__(self, min_cutoff=1.5, beta=0.5, d_cutoff=1.0):
+        self.min_cutoff, self.beta, self.d_cutoff = min_cutoff, beta, d_cutoff
+        self.x = None
+        self.t = None
+        self.speed = 0.0
+
+    @staticmethod
+    def _alpha(cutoff, dt):
+        tau = 1.0 / (2 * math.pi * cutoff)
+        return 1.0 / (1.0 + tau / dt)
+
+    def __call__(self, v, t):
+        v = Vector(v)
+        if self.x is None or t is None or self.t is None or t - self.t > 0.5:
+            self.x, self.t, self.speed = v.copy(), t, 0.0
+            return v
+        dt = max(1e-3, t - self.t)
+        self.t = t
+        raw = (v - self.x).length / dt
+        self.speed += self._alpha(self.d_cutoff, dt) * (raw - self.speed)
+        a = self._alpha(self.min_cutoff + self.beta * self.speed, dt)
+        self.x = self.x + (v - self.x) * a
+        return self.x.copy()
+
+
+def fit_camera_translation(Q, uv, cam, weights=None):
+    """Q: 3D points in camera axes (x right, y down, z away; meters, any origin).
+    uv: where they are in the picture (pixels). Returns t such that Q + t projects onto uv
+    (linear least squares), or None."""
+    f, cx, cy = cam
+    a11 = a13 = a23 = a33 = b1 = b2 = b3 = 0.0
+    n = 0
+    for i, (q, p) in enumerate(zip(Q, uv)):
+        if q is None or p is None:
+            continue
+        w = weights[i] if weights else 1.0
+        du, dv = p[0] - cx, p[1] - cy
+        r1 = du * q[2] - f * q[0]          # row (f, 0, -du) . t = r1
+        r2 = dv * q[2] - f * q[1]          # row (0, f, -dv) . t = r2
+        a11 += w * f * f
+        a13 -= w * f * du
+        a23 -= w * f * dv
+        a33 += w * (du * du + dv * dv)
+        b1 += w * f * r1
+        b2 += w * f * r2
+        b3 -= w * (du * r1 + dv * r2)
+        n += 1
+    if n < 3:
+        return None
+    A = Matrix(((a11, 0.0, a13), (0.0, a11, a23), (a13, a23, a33)))
+    try:
+        t = A.inverted() @ Vector((b1, b2, b3))
+    except ValueError:
+        return None
+    return t if t.z > 0.05 else None
+
+
+def _back_project(uv, Z, cam):
+    f, cx, cy = cam
+    return Vector(((uv[0] - cx) * Z / f, (uv[1] - cy) * Z / f, Z))
+
+
+class ModelSkeleton:
+    """The figure's joints as plain numbers, so the solver can do forward kinematics (where each
+    joint ends up for given rotations) without asking Blender to update the scene. Also finds the
+    face anchors on the figure's head. Call refresh() after the body shape changes."""
+
+    def __init__(self, root):
+        self.root = root
+        self.refresh()
+
+    def refresh(self):
+        from mathutils.bvhtree import BVHTree
+        root = self.root
+        objs = {o["asl_joint"]: o for o in root.children_recursive if "asl_joint" in o}
+        self.objs = objs
+        self.parent = {}
+        for k, o in objs.items():
+            p = o.parent
+            self.parent[k] = p["asl_joint"] if (p is not None and "asl_joint" in p) else None
+        order, seen = [], set()
+
+        def visit(k):
+            if k in seen:
+                return
+            if self.parent[k] is not None:
+                visit(self.parent[k])
+            seen.add(k)
+            order.append(k)
+
+        for k in objs:
+            visit(k)
+        self.order = order
+        self.mpi = {k: o.matrix_parent_inverse.copy() for k, o in objs.items()}
+        self.loc = {k: Matrix.Translation(o.location) for k, o in objs.items()}
+        self.scl = {k: Matrix.Diagonal(o.scale).to_4x4() for k, o in objs.items()}
+        self.mode = {k: o.rotation_mode for k, o in objs.items()}
+        self.pose = {k: tuple(o.rotation_euler) for k, o in objs.items()}
+        self.root_m = root.matrix_world.copy()
+        segs = {o["asl_seg"]: o for o in root.children_recursive if "asl_seg" in o}
+        self.tip_len = {}
+        for side in SIDES:
+            for f in ("thumb",) + FINGERS:
+                o = segs.get(f"{side}_{f}_tip")
+                self.tip_len[f"{side}_{f}"] = (o["asl_len"] * o.scale.z) if o else 0.02
+        self.hand_keys = {}
+        for side in SIDES:
+            wk = f"{side}_wrist"
+            keys = []
+            for k in order:
+                p = self.parent[k]
+                while p is not None and p != wk:
+                    p = self.parent[p]
+                if p == wk:
+                    keys.append(k)
+            self.hand_keys[side] = keys
+        rest = self.fk({k: (0.0, 0.0, 0.0) for k in objs}, [f"{s}_wrist" for s in SIDES])
+        self.L1, self.L2 = {}, {}
+        for side in SIDES:
+            S = rest[f"{side}_shoulder"].translation
+            E = rest[f"{side}_elbow"].translation
+            W = rest[f"{side}_wrist"].translation
+            self.L1[side], self.L2[side] = (E - S).length, (W - E).length
+        # the head's surface, in head space, for anchors, touching and keeping hands out of it
+        self.bvh, self.anchors, self.head_center, self.head_radius = None, {}, Vector((0, 0, 0.11)), 0.12
+        head = objs.get("head")
+        sig = []
+        if head is not None:
+            verts, polys = [], []
+            for o in head.children:
+                if o.type != 'MESH' or "asl_joint" in o:
+                    continue
+                M = o.matrix_parent_inverse.copy()
+                if "asl_cheek" not in o and "asl_eye" not in o:
+                    M = M @ o.matrix_basis      # puffed cheeks and blinks are expressions, not shape
+                base = len(verts)
+                verts += [M @ v.co for v in o.data.vertices]
+                polys += [[base + i for i in p.vertices] for p in o.data.polygons]
+            if polys:
+                self.bvh = BVHTree.FromPolygons(verts, polys)
+                lo = Vector([min(v[i] for v in verts) for i in range(3)])
+                hi = Vector([max(v[i] for v in verts) for i in range(3)])
+                self.head_center = (lo + hi) / 2
+                self.head_radius = (hi - lo).length / 2
+                sig.append(round(sum(v.x * v.x + 2 * v.y * v.y + 3 * v.z * v.z + v.y for v in verts), 6))
+            for k, spec in FACE_ANCHORS.items():
+                if spec[0] == "F":
+                    origin, d = Vector((spec[1], -0.5, spec[2])), Vector((0, 1, 0))
+                else:
+                    origin, d = Vector((0.5 * spec[1], spec[2], spec[3])), Vector((-spec[1], 0, 0))
+                hit = self.bvh.ray_cast(origin, d, 1.0) if self.bvh else (None,)
+                if hit[0] is not None:
+                    self.anchors[k] = hit[0].copy()
+        # chest box in torso space (follows the Body Shape sliders and sculpting)
+        self.chest = None
+        torso = objs.get("torso")
+        if torso is not None:
+            for o in torso.children:
+                if o.type == 'MESH' and o.name.endswith(".chest"):
+                    M = o.matrix_parent_inverse @ o.matrix_basis
+                    pts = [M @ Vector(c) for c in o.bound_box]
+                    lo = Vector([min(p[i] for p in pts) for i in range(3)])
+                    hi = Vector([max(p[i] for p in pts) for i in range(3)])
+                    self.chest = (lo, hi)
+        for k in order:
+            sig.append(tuple(round(x, 5) for row in (self.mpi[k] @ self.loc[k] @ self.scl[k]) for x in row))
+        sig.append(tuple(round(v, 5) for v in self.tip_len.values()))
+        self.sig = hashlib.md5(repr(sig).encode()).hexdigest()[:12]
+        self.refreshed = time.perf_counter()
+
+    def local(self, k, rot):
+        e = Euler(rot, self.mode[k]).to_matrix().to_4x4()
+        return self.mpi[k] @ self.loc[k] @ e @ self.scl[k]
+
+    def fk(self, rots, keys=None):
+        """World matrices of the given joints (and their parents) for these rotations.
+        Joints without a rotation in `rots` keep their current pose."""
+        W = {}
+
+        def get(k):
+            m = W.get(k)
+            if m is None:
+                p = self.parent[k]
+                base = get(p) if p is not None else self.root_m
+                m = base @ self.local(k, rots.get(k, self.pose[k]))
+                W[k] = m
+            return m
+
+        for k in (keys if keys is not None else self.order):
+            if k in self.parent:
+                get(k)
+        return W
+
+    def hand_points(self, side, rots):
+        """The 21 MediaPipe hand points on the figure's hand, in the wrist joint's own frame."""
+        wk = f"{side}_wrist"
+        rel = {wk: self.scl[wk]}
+        for k in self.hand_keys[side]:
+            rel[k] = rel[self.parent[k]] @ self.local(k, rots.get(k, self.pose[k]))
+        P = [Vector((0, 0, 0))] * 21
+
+        def at(k, extra=0.0):
+            m = rel.get(f"{side}_{k}")
+            return (m @ Vector((0, 0, -extra))) if m is not None else Vector((0, 0, 0))
+
+        P[1], P[2], P[3] = at("thumb_base"), at("thumb_mid"), at("thumb_tip")
+        P[4] = at("thumb_tip", self.tip_len[f"{side}_thumb"])
+        for fn, (a, b, c, d) in HAND_CHAINS.items():
+            P[a], P[b], P[c] = at(f"{fn}_base"), at(f"{fn}_mid"), at(f"{fn}_tip")
+            P[d] = at(f"{fn}_tip", self.tip_len[f"{side}_{fn}"])
+        return P
+
+
+class DepthPlacer:
+    """Steps 1-4 above for one frame. Used by Retargeter.solve when the browser sends picture
+    coordinates and a figure skeleton is known."""
+
+    FACE_NEAR, FACE_FAR = 0.15, 0.27     # hand points this close to the face use the face anchors
+    TOUCH_FULL, TOUCH_FADE = 0.025, 0.035
+    SKIN = 0.008                         # finger joint centers sit this far from the skin
+    TIP_BONUS = {4: 0.008, 8: 0.008, 12: 0.008, 16: 0.008, 20: 0.008, 3: 0.003, 7: 0.003, 11: 0.003,
+                 15: 0.003, 19: 0.003}
+
+    def __init__(self, rt):
+        self.rt = rt
+        self.reset()
+
+    def reset(self):
+        self.t_filter = {s: EuroFilter(2.0, 1.0) for s in SIDES}
+        self.prev_pole = {}
+        self.info = {}
+        self.hand_k = 1.0          # learned correction of MediaPipe's hand size
+
+    # --- 1. the person in camera space (camera axes, meters) --------------------
+    @staticmethod
+    def face_cam(face, cam):
+        pts = (face or {}).get("pts") or {}
+        a, b = pts.get("33"), pts.get("263")
+        if a is None or b is None:
+            return None
+        f = cam[0]
+        iod_px = math.dist(a, b)
+        if iod_px < 4:
+            return None
+        Ze = f * IOD_M / iod_px                       # how far the eyes are
+        zr = Ze - (a[2] + b[2]) / 2 * Ze / f          # distance of the face's own z = 0
+        out = {}
+        for k, p in pts.items():
+            Z = zr + p[2] * Ze / f
+            out[int(k)] = (_back_project(p, Z, cam), (p[0], p[1]))
+        return {"pts": out, "iod_px": iod_px, "Z": Ze}
+
+    def body_cam(self, pose, pose2d, cam, fc):
+        rt = self.rt
+        idx = [i for i in (0, 2, 5, 7, 8, 11, 12) if i < len(pose) and (len(pose[i]) < 4 or pose[i][3] > 0.5)]
+        if 11 not in idx or 12 not in idx:
+            return None
+        t = fit_camera_translation([pose[i] for i in idx], [pose2d[i] for i in idx], cam)
+        if t is None:
+            return None
+        if fc is not None and 1 in fc["pts"] and 0 in idx:
+            t.z = fc["pts"][1][0].z - pose[0][2] + 0.01   # the face knows its distance better
+        out = {}
+        for side in SIDES:
+            ps = rt._side(side)
+            si, ei = POSE_IDX[ps]["sh"], POSE_IDX[ps]["el"]
+            S = _back_project(pose2d[si], pose[si][2] + t.z, cam)
+            out[side + "_sh"] = S
+            if ei < len(pose) and (len(pose[ei]) < 4 or pose[ei][3] > 0.3):
+                L1 = math.dist(pose[si][:3], pose[ei][:3])
+                d = _back_project(pose2d[ei], 1.0, cam)    # ray through the elbow's pixel
+                guess = pose[ei][2] + t.z
+                a, bq, c = d.dot(d), -2 * d.dot(S), S.dot(S) - L1 * L1
+                disc = bq * bq - 4 * a * c
+                if disc >= 0:
+                    r1 = (-bq - math.sqrt(disc)) / (2 * a)
+                    r2 = (-bq + math.sqrt(disc)) / (2 * a)
+                    lam = r1 if abs(r1 - guess) < abs(r2 - guess) else r2
+                else:
+                    lam = d.dot(S) / a
+                out[side + "_el"] = d * lam
+        return out
+
+    def hand_cam(self, side, h, cam, t_sec):
+        Q, uv = h.get("world"), h.get("img")
+        if not Q or not uv or len(Q) != 21 or len(uv) != 21:
+            return None
+        t = fit_camera_translation(Q, uv, cam)
+        if t is None:
+            return None
+        t = t * self.hand_k
+        z = self.t_filter[side](Vector((0, 0, t.z)), t_sec).z
+        t = t * (z / t.z)                           # filtered distance, same spot in the picture
+        return [Vector(q) + t for q in Q], t
+
+    # --- 2. touching the face ---------------------------------------------------------
+    def face_gaps(self, P, uv, fc):
+        """For each hand point that overlaps the face in the picture: how far it is from the skin
+        along the camera's view (> 0 means it would be inside the head), and how surely it is over
+        the face (0..1). Points beside the face get None. The skin's distance is interpolated
+        across triangles between the face points."""
+        fp = fc["pts"]
+        A = [(p[1][0], p[1][1], p[0].z) for p in fp.values()]
+        tris = []
+        for a, b, c in FACE_TRIS:
+            if a in fp and b in fp and c in fp:
+                tris.append((fp[a], fp[b], fp[c]))
+        sig2 = (0.3 * fc["iod_px"]) ** 2
+        reach2 = (0.45 * fc["iod_px"]) ** 2
+        out = [None] * 21
+        for i in range(21):
+            u, v = uv[i]
+            d2s = [((u - au) ** 2 + (v - av) ** 2, Z) for au, av, Z in A]
+            dmin2 = min(d for d, _ in d2s)
+            g = math.exp(-dmin2 / reach2)
+            if g < 0.05:
+                continue
+            Zs = None
+            for (pa, ua), (pb, ub), (pc, uc) in tris:
+                den = (ub[1] - uc[1]) * (ua[0] - uc[0]) + (uc[0] - ub[0]) * (ua[1] - uc[1])
+                if abs(den) < 1e-9:
+                    continue
+                l1 = ((ub[1] - uc[1]) * (u - uc[0]) + (uc[0] - ub[0]) * (v - uc[1])) / den
+                l2 = ((uc[1] - ua[1]) * (u - uc[0]) + (ua[0] - uc[0]) * (v - uc[1])) / den
+                l3 = 1 - l1 - l2
+                if l1 >= -1e-6 and l2 >= -1e-6 and l3 >= -1e-6:
+                    Zs = l1 * pa.z + l2 * pb.z + l3 * pc.z
+                    g = 1.0
+                    break
+            if Zs is None:
+                num = den = 0.0
+                for d2, Z in d2s:
+                    w = math.exp(-(d2 - dmin2) / sig2) / (d2 + 1.0)
+                    num += w * Z
+                    den += w
+                Zs = num / den
+            out[i] = (P[i].z - Zs + self.SKIN, g)
+        return out
+
+    def face_contact(self, P, uv, fc):
+        """Change in the hand's distance that puts the hand point nearest the face onto the skin
+        (when it is close enough to count as touching), and how strongly each point touches."""
+        gaps = self.face_gaps(P, uv, fc)
+        cand = [(gp[0] + self.TIP_BONUS.get(i, 0.0), gp[0], gp[1], i)
+                for i, gp in enumerate(gaps) if gp is not None and gp[0] < 0.15]
+        if not cand:
+            return [0.0] * 21, 0.0, 0.0
+        # the point that reaches furthest toward the face (fingertips win close calls:
+        # they are what touches the face in most signs)
+        _, gap, g, _ = max(cand)
+        if gap >= 0:
+            c = g
+        else:
+            c = g * math.exp(-(max(0.0, -gap - self.TOUCH_FULL) / self.TOUCH_FADE) ** 2)
+        dz = -gap * c
+        strengths = [0.0] * 21
+        for i, gp in enumerate(gaps):
+            if gp is not None:
+                after = gp[0] + dz
+                strengths[i] = gp[1] * c * math.exp(-(min(0.0, after) / 0.012) ** 2) if after < 0.15 else 0.0
+        return strengths, dz, c
+
+    def chest_contact(self, M, Wt_inv, Wtorso):
+        """Hand points just in front of the figure's chest are taken as touching it: they move
+        onto its surface. Returns the strengths."""
+        skel = self.rt.skel
+        st = [0.0] * 21
+        if skel.chest is None:
+            return st
+        lo, hi = skel.chest
+        front = lo.y - self.SKIN
+        best = (0.0, 0.0, -1)
+        for i, p in enumerate(M):
+            tl = Wt_inv @ p
+            if not (lo.x + 0.02 < tl.x < hi.x - 0.02 and lo.z + 0.03 < tl.z < hi.z - 0.04):
+                continue
+            gap = tl.y - front                     # > 0: inside the chest
+            if gap > (hi.y - lo.y) * 0.5:
+                continue
+            c = 1.0 if gap > -0.03 else math.exp(-((-gap - 0.03) / 0.025) ** 2)
+            if c > 0.05 and (best[2] < 0 or gap > best[1]):    # the point reaching furthest in
+                best = (c, gap, i)
+        c, gap, i = best
+        if i < 0:
+            return st
+        shift = Wtorso.to_3x3() @ Vector((0, -gap * c, 0))
+        for k in range(21):
+            M[k] = M[k] + shift
+        for k, p in enumerate(M):
+            tl = Wt_inv @ p
+            st[k] = c * math.exp(-((tl.y - front) / 0.012) ** 2)
+        return st
+
+    # --- 3 and 4 ---------------------------------------------------------------------
+    def place(self, msg, pose, hands_raw, T, hand_frames, rots):
+        """Returns {side: (shoulder, elbow, wrist) in world space} for every arm it could place."""
+        rt, skel = self.rt, self.rt.skel
+        img, pose2d = msg.get("img"), msg.get("pose2d")
+        self.info = {}
+        if skel is None or not img or not pose2d or not pose or len(pose2d) < 17:
+            return {}
+        W_, H_ = img
+        f = W_ / (2 * math.tan(math.radians(rt.fov) / 2))
+        cam = (f, W_ / 2, H_ / 2)
+        t_sec = float(msg.get("t", 0.0)) / 1000.0
+        face = msg.get("face") or rt.recent_face(t_sec)
+        fc = self.face_cam(face, cam) if face else None
+        body = self.body_cam(pose, pose2d, cam, fc)
+        if body is None:
+            return {}
+        conv = rt.conv
+
+        # the figure's torso and head for this frame's rotations
+        use = rt.tracked
+        frots = {k: v for k, v in rots.items() if use(k)}
+        Wm = skel.fk(frots, ["head"] + [f"{s}_shoulder" for s in SIDES])
+        Rt = Wm["torso"].to_3x3().normalized()
+        Wt_inv = Wm["torso"].inverted()
+        Wh = Wm["head"]
+        Wh_inv = Wh.inverted()
+
+        # body map: shoulders onto shoulders, scaled
+        Su = {s: conv(body[s + "_sh"]) for s in SIDES}
+        Sm = {s: Wm[f"{s}_shoulder"].translation.copy() for s in SIDES}
+        Ou, Om = (Su["R"] + Su["L"]) / 2, (Sm["R"] + Sm["L"]) / 2
+        wu = (Su["R"] - Su["L"]).length
+        s_b = (Sm["R"] - Sm["L"]).length / wu if wu > 1e-3 else 1.0
+        R_b = Rt @ T.transposed()
+
+        # face map: user face anchors onto the figure's, plus an exact fit at every anchor
+        fmap = None
+        if fc is not None and skel.anchors:
+            pairs = []
+            for k, (p, _) in fc["pts"].items():
+                mk = FACE_MIRROR.get(k, k) if rt.mirror else k
+                a = skel.anchors.get(mk)
+                if a is not None:
+                    pairs.append((conv(p), Wh @ a))
+            Rh = rt.head_frame(face)
+            if len(pairs) >= 6 and Rh is not None:
+                off = (rt.calib or {}).get("head")
+                Ruser = Rh @ off if off is not None else Rh
+                R_f = Wh.to_3x3().normalized() @ Ruser.transposed()
+                Uc = sum((u for u, _ in pairs), Vector()) / len(pairs)
+                Mc = sum((m for _, m in pairs), Vector()) / len(pairs)
+                su = sum((R_f @ (u - Uc)).length_squared for u, _ in pairs)
+                sm = sum((m - Mc).length_squared for _, m in pairs)
+                s_f = math.sqrt(sm / su) if su > 1e-9 else 1.0
+                res = [(u, m - (Mc + (R_f @ (u - Uc)) * s_f)) for u, m in pairs]
+                fmap = (Uc, Mc, R_f, s_f, res)
+
+        def to_model(p):
+            pb = Om + (R_b @ (p - Ou)) * s_b
+            if fmap is None:
+                return pb
+            Uc, Mc, R_f, s_f, res = fmap
+            d = (p - Uc).length
+            wf = _smooth((self.FACE_FAR - d) / (self.FACE_FAR - self.FACE_NEAR))
+            if wf <= 0:
+                return pb
+            pf = Mc + (R_f @ (p - Uc)) * s_f
+            d2s = [((p - u).length_squared, r) for u, r in res]
+            dmin2 = min(d for d, _ in d2s)
+            fade = math.exp(-dmin2 / 0.04 ** 2)
+            if fade > 1e-3:
+                num, den = Vector(), 0.0
+                for d2, r in d2s:
+                    w = math.exp(-(d2 - dmin2) / 0.02 ** 2) / (d2 + 1e-8)
+                    num += r * w
+                    den += w
+                pf = pf + num * (fade / den)
+            return pf * wf + pb * (1 - wf)
+
+        placed = {}
+        for side in SIDES:
+            h = hands_raw.get(side)
+            if h is None or side not in hand_frames:
+                continue
+            hc = self.hand_cam(side, h, cam, t_sec)
+            if hc is None:
+                continue
+            P, t = hc
+            strengths = [0.0] * 21
+            if fc is not None:
+                strengths, dz, c = self.face_contact(P, h["img"], fc)
+                if abs(dz) > 1e-4:
+                    k = (t.z + dz) / t.z
+                    P = [q + t * (k - 1) for q in P]
+                    t = t * k
+                    if c > 0.9 and abs(k - 1) < 0.2:
+                        # touching the face tells how far off the hand-size estimate is: learn it
+                        self.hand_k = _clamp(self.hand_k * (1 + 0.05 * (k - 1)), 0.8, 1.25)
+            Pc = [conv(p) for p in P]
+            M = [to_model(p) for p in Pc]
+
+            # points touching the face go exactly onto the figure's skin
+            if skel.bvh is not None:
+                for i, c in enumerate(strengths):
+                    if c > 0.3:
+                        loc, nrm, _, _ = skel.bvh.find_nearest(Wh_inv @ M[i])
+                        if loc is not None:
+                            M[i] = M[i].lerp(Wh @ (loc + nrm * self.SKIN), c)
+            if max(strengths) < 0.3:
+                cs = self.chest_contact(M, Wt_inv, Wm["torso"])
+                strengths = [max(a, b) for a, b in zip(strengths, cs)]
+
+            # where the wrist must be so the figure's hand covers the points best
+            R_hand = Rt @ (T.transposed() @ hand_frames[side])
+            q = skel.hand_points(side, frots)
+            num, den = Vector(), 0.0
+            for i in range(21):
+                w = 1.0 + 8.0 * strengths[i]
+                num += (M[i] - R_hand @ q[i]) * w
+                den += w
+            Wt = num / den
+            # the point that touches lands exactly on its spot
+            k = max(range(21), key=lambda i: strengths[i])
+            if strengths[k] > 0.05:
+                Wt = Wt + (M[k] - (Wt + R_hand @ q[k])) * strengths[k]
+            Wt = self.keep_out(Wt, R_hand, q, Wh, Wh_inv, Wm["torso"], Wt_inv)
+
+            # two-bone solve; the elbow bends the way the person's elbow points
+            S = Sm[side]
+            L1, L2 = skel.L1[side], skel.L2[side]
+            D = Wt - S
+            dist = D.length
+            lo, hi = abs(L1 - L2) + 1e-3, (L1 + L2) * 0.9995
+            if dist < 1e-6:
+                continue
+            dhat = D / dist
+            if dist > hi or dist < lo:
+                dist = _clamp(dist, lo, hi)
+                Wt = S + dhat * dist
+            pole = None
+            Eu = body.get(side + "_el")
+            if Eu is not None:
+                Eu, Wu = conv(Eu), Pc[0]
+                a = Eu - Su[side]
+                ax = Wu - Su[side]
+                if ax.length > 1e-6:
+                    ax.normalize()
+                    pu = a - ax * a.dot(ax)
+                    if pu.length > 0.025:
+                        pole = R_b @ pu
+            if pole is None:
+                pole = self.prev_pole.get(side)
+            if pole is None:
+                sx = -1.0 if side == "R" else 1.0
+                pole = Rt @ Vector((0.5 * sx, 0.25, -1.0))
+            perp = pole - dhat * pole.dot(dhat)
+            if perp.length < 1e-6:
+                perp = dhat.orthogonal()
+            perp.normalize()
+            self.prev_pole[side] = perp.copy()
+            cosA = _clamp((L1 * L1 + dist * dist - L2 * L2) / (2 * L1 * dist), -1.0, 1.0)
+            E = S + (dhat * cosA + perp * math.sqrt(max(0.0, 1 - cosA * cosA))) * L1
+            placed[side] = (S, E, Wt, Rt)
+            self.info[side] = {"touch": max(strengths), "depth": round(t.z, 3),
+                               "targets": M, "wrist": Wt, "hand_rot": R_hand, "strengths": strengths,
+                               "model_hand": [R_hand @ v for v in q]}
+        return placed
+
+    def keep_out(self, Wt, R_hand, q, Wh, Wh_inv, Wtorso, Wt_inv):
+        """Move the wrist so no hand point is inside the head or the chest."""
+        skel = self.rt.skel
+        if skel.bvh is not None:
+            push, best = Vector(), 0.0
+            for p in q:
+                hl = Wh_inv @ (Wt + R_hand @ p)
+                if (hl - skel.head_center).length > skel.head_radius + 0.02:
+                    continue
+                loc, nrm, _, _ = skel.bvh.find_nearest(hl)
+                if loc is None:
+                    continue
+                depth = self.SKIN * 0.7 - (hl - loc).dot(nrm)
+                if depth > best:
+                    best, push = depth, nrm * depth
+            if best > 0:
+                Wt = Wt + (Wh.to_3x3() @ push)
+        if skel.chest is not None:
+            lo, hi = skel.chest
+            worst = 0.0
+            for p in q:
+                tl = Wt_inv @ (Wt + R_hand @ p)
+                if lo.x < tl.x < hi.x and lo.z < tl.z < hi.z * 0.95:
+                    d = tl.y - (lo.y - self.SKIN)
+                    if 0 < d < (hi.y - lo.y) * 0.6:      # in the front part of the chest
+                        worst = max(worst, d)
+            if worst > 0:
+                Wt = Wt + Wtorso.to_3x3() @ Vector((0, -worst, 0))
+        return Wt
+
 
 class Retargeter:
     """Turns one frame of MediaPipe landmarks into joint rotations for a figure."""
@@ -2672,6 +3667,11 @@ class Retargeter:
 
     def __init__(self):
         self.mirror = False
+        self.skel = None          # ModelSkeleton of the figure (for depth-aware hand placement)
+        self.use_depth = True
+        self.fov = 60.0           # camera's horizontal field of view (degrees)
+        self.groups = None        # tracked groups (None = all), see TRACK_GROUPS
+        self.depth = DepthPlacer(self)
         self.reset()
 
     def reset(self):
@@ -2683,6 +3683,8 @@ class Retargeter:
         self._calib_acc = []
         self.thumb_rest = {}      # side -> 3x3 rest rotation of the thumb base joint
         self.wrist_rest_z = {}    # side -> rest turn of the wrist joint (radians)
+        self.last_face = None     # (t seconds, face) of the last frame that had a face
+        self.depth.reset()
 
     def start_calibration(self, frames=20):
         self.calib_left = frames
@@ -2712,6 +3714,15 @@ class Retargeter:
             return None
         return self.conv(p)
 
+    def tracked(self, key):
+        g = self.groups
+        return g is None or any(TRACK_GROUPS[n](key) for n in g)
+
+    def recent_face(self, t):
+        """The face from a recent frame (the browser may run the face model every 2nd-3rd frame)."""
+        lf = self.last_face
+        return lf[1] if lf is not None and 0 <= t - lf[0] < 0.3 else None
+
     def _euler(self, key, m, order='XYZ'):
         prev = self.prev.get(key)
         e = m.to_euler(order, prev) if prev is not None and prev.order == order else m.to_euler(order)
@@ -2733,16 +3744,20 @@ class Retargeter:
         return yaw, lean
 
     def arm(self, side, pose, T, out):
-        """Shoulder rotation and elbow bend. Returns the elbow frame before twist (torso space)."""
+        """Shoulder rotation and elbow bend from the tracked arm directions (used when the arm
+        can't be placed by position). Returns the elbow frame before twist (torso space)."""
         S, E, W = (self._pose_pt(pose, side, k) for k in ("sh", "el", "wr"))
         if S is None or E is None or W is None:
             return None, None
         Ti = T.transposed()
-        u, f = Ti @ (E - S), Ti @ (W - E)
+        return self.arm_from_dirs(side, Ti @ (E - S), Ti @ (W - E), out)
+
+    def arm_from_dirs(self, side, u, f, out):
+        """u: shoulder->elbow, f: elbow->wrist, both in torso space."""
         if u.length < 1e-6 or f.length < 1e-6:
             return None, None
-        u.normalize()
-        f.normalize()
+        u = u.normalized()
+        f = f.normalized()
         bend = min(u.angle(f), math.radians(150))
         perp = f - u * f.dot(u)
         if perp.length > 0.17:                       # elbow clearly bent: hinge from the arm itself
@@ -2936,7 +3951,51 @@ class Retargeter:
         Z = (U - X * U.dot(X)).normalized()
         return _frame(X, Z.cross(X), Z)
 
-    def face_values(self, blend):
+    def brow_measure(self, face, cam=None):
+        """Height of each eyebrow node above its eye, and the gap between the inner ends,
+        in head space and in units of the eye-corner distance (so camera distance doesn't matter).
+        With the camera known (cam), the points are first put back in 3D with perspective, so a
+        turned head doesn't look like a raised brow."""
+        pts = (face or {}).get("pts") or {}
+        need = [k for side in BROW_POINTS.values() for grp in side for k in grp]
+        if any(str(k) not in pts for k in need + [10, 152]):
+            return None
+        if cam is not None:
+            fc = DepthPlacer.face_cam(face, cam)
+            if fc is None:
+                return None
+            Q = {k: self.conv(fc["pts"][k][0]) for k in need + [10, 152]}
+        else:
+            Q = {k: self.conv(pts[str(k)]) for k in need + [10, 152]}
+        le, re_ = Q[263], Q[33]
+        if self.mirror:
+            le, re_ = re_, le
+        X, U = le - re_, Q[10] - Q[152]
+        if X.length < 1e-9 or U.length < 1e-9:
+            return None
+        X.normalize()
+        Z = (U - X * U.dot(X)).normalized()
+        Ri = _frame(X, Z.cross(X), Z).transposed()
+        P = {k: Ri @ v for k, v in Q.items()}
+        iod = (P[33] - P[263]).length
+        if iod < 1e-9:
+            return None
+        out = {}
+        for ps, (nodes, eye) in BROW_POINTS.items():
+            ez = (P[eye[0]].z + P[eye[1]].z) / 2
+            out[ps] = [(P[k].z - ez) / iod for k in nodes]
+        out["gap"] = (P[107] - P[336]).length / iod
+        return out
+
+    def camera(self, msg):
+        img = msg.get("img")
+        if not img:
+            return None
+        f = img[0] / (2 * math.tan(math.radians(self.fov) / 2))
+        return (f, img[0] / 2, img[1] / 2)
+
+    def face_values(self, face, cam=None):
+        blend = (face or {}).get("blend") or {}
         base = (self.calib or {}).get("blend", {})
 
         def g(k):
@@ -2946,15 +4005,14 @@ class Retargeter:
             b = base.get(k2, 0.0)
             return max(0.0, blend.get(k2, 0.0) - b) / max(0.25, 1.0 - b)
 
-        raise_ = max(g("browInnerUp"), (g("browOuterUpLeft") + g("browOuterUpRight")) / 2)
-        down = (g("browDownLeft") + g("browDownRight")) / 2
         smile = (g("mouthSmileLeft") + g("mouthSmileRight")) / 2
         frown = (g("mouthFrownLeft") + g("mouthFrownRight")) / 2
+
         def dz(v, d):          # small dead zone so a relaxed face stays still
             return 0.0 if abs(v) < d else (v - math.copysign(d, v)) / (1 - d)
 
-        return {
-            "brows": _clamp(dz(1.8 * raise_ - 2.2 * down, 0.15), -1.0, 1.0),
+        out = {
+            "brows": 0.0,       # the three nodes per brow below carry the eyebrows
             "mouth_open": _clamp(dz(1.6 * g("jawOpen"), 0.08), 0.0, 1.0),
             "smile": _clamp(dz(1.6 * smile - 1.8 * frown, 0.12), -1.0, 1.0),
             "pucker": _clamp(dz(1.4 * max(g("mouthPucker"), g("mouthFunnel")), 0.12), 0.0, 1.0),
@@ -2964,61 +4022,104 @@ class Retargeter:
             "eye_close_R": _clamp(dz(1.25 * max(g("eyeBlinkRight"), 0.6 * g("eyeSquintRight")), 0.25), 0.0, 1.0),
         }
 
+        # eyebrows: measured from the brow points once there is a neutral face to compare with,
+        # otherwise estimated from MediaPipe's expression scores
+        m = self.brow_measure(face, cam)
+        neutral = (self.calib or {}).get("brow")
+        down_avg = (g("browDownLeft") + g("browDownRight")) / 2
+        for side in SIDES:
+            suf = "Left" if side == "L" else "Right"
+            if m is not None and neutral is not None:
+                ps = self._side(side)
+                vals = []
+                for v, n0 in zip(m[ps], neutral[ps]):
+                    d = v - n0
+                    vals.append(d / 0.075 if d > 0 else d / 0.05)
+            else:
+                inner = 1.8 * g("browInnerUp") - 2.0 * g("browDown" + suf)
+                outer = 1.8 * g("browOuterUp" + suf) - 1.0 * g("browDown" + suf)
+                vals = [inner, (inner + outer) / 2, outer]
+            for n, v in zip(BROW_NODES, vals):
+                out[f"brow_{n}_{side}"] = _clamp(dz(v, 0.12), -1.0, 1.0)
+        sq = 1.5 * down_avg
+        if m is not None and neutral is not None:
+            sq = max(sq * 0.5, (neutral["gap"] - m["gap"]) / 0.06)
+        out["brow_squeeze"] = _clamp(dz(sq, 0.15), 0.0, 1.0)
+        return out
+
     # --- one frame --------------------------------------------------------
     def solve(self, msg):
         """Returns (rotations {joint: Euler}, face values {key: float} or None, hands_seen)."""
         out = {}
         pose = msg.get("pose")
-        hands = {}
+        hands, hands_raw = {}, {}
         for h in msg.get("hands") or []:
             side = h.get("side")
             if side in ("R", "L") and len(h.get("world") or []) == 21:
                 if self.mirror:
                     side = "L" if side == "R" else "R"
                 hands[side] = [self.conv(p) for p in h["world"]]
+                hands_raw[side] = h
+        t_sec = float(msg.get("t", 0.0)) / 1000.0
 
         tl = self.torso(pose) if pose else None
         calib = self.calib or {}
+        L = self.LIMITS
         if tl is not None:
             yaw, lean = tl
             T = _rot('Z', yaw) @ _rot('X', lean)
-            L = self.LIMITS
             out["torso"] = Euler((_clamp(lean - calib.get("lean", 0.0), *L["lean"]), 0.0,
                                   _clamp(yaw - calib.get("yaw", 0.0), *L["turn"])))
         else:
             T = Matrix.Identity(3)
 
-        for side in SIDES:
-            elbow_pre, bend = (None, None)
-            if tl is not None:
-                elbow_pre, bend = self.arm(side, pose, T, out)
-            P = hands.get(side)
-            if P is None:
-                continue
-            H = self.hand_frame(side, P)
-            if elbow_pre is not None:
-                self.wrist(side, elbow_pre, bend, T.transposed() @ H, out)
-            self.fingers(side, P, H, out)
-            self.thumb(side, P, H, out)
-
+        # head and face first: the hands are placed relative to the head
         face = msg.get("face")
         face_vals = None
         if face:
+            self.last_face = (t_sec, face)
             Rh = self.head_frame(face)
             if Rh is not None:
                 local = T.transposed() @ Rh
                 if self.calibrating:
-                    self._calib_acc.append((tl, local.to_quaternion(), dict(face.get("blend") or {})))
+                    self._calib_acc.append((tl, local.to_quaternion(), dict(face.get("blend") or {}),
+                                            self.brow_measure(face, self.camera(msg))))
                 off = calib.get("head")
                 if off is not None:
                     local = local @ off
                 e = self._euler("head", local, 'XYZ')
-                L = self.LIMITS
                 out["head"] = Euler((_clamp(e.x, *L["nod"]), _clamp(e.y, *L["tilt"]), _clamp(e.z, *L["hturn"])))
-            if face.get("blend"):
-                face_vals = self.face_values(face["blend"])
+            face_vals = self.face_values(face, self.camera(msg))
         elif self.calibrating and tl is not None:
-            self._calib_acc.append((tl, None, {}))
+            self._calib_acc.append((tl, None, {}, None))
+
+        # hand shapes
+        frames = {}
+        for side, P in hands.items():
+            H = self.hand_frame(side, P)
+            frames[side] = H
+            self.fingers(side, P, H, out)
+            self.thumb(side, P, H, out)
+
+        # arms: by position when possible, otherwise by direction
+        placed = {}
+        if tl is not None and self.use_depth and self.skel is not None and hands:
+            try:
+                placed = self.depth.place(msg, pose, hands_raw, T, frames, out)
+            except Exception:
+                traceback.print_exc()
+                placed = {}
+        for side in SIDES:
+            if side in placed:
+                S, E, W, Rt = placed[side]
+                Ti = Rt.transposed()
+                elbow_pre, bend = self.arm_from_dirs(side, Ti @ (E - S), Ti @ (W - E), out)
+            elif tl is not None:
+                elbow_pre, bend = self.arm(side, pose, T, out)
+            else:
+                elbow_pre = None
+            if elbow_pre is not None and side in frames:
+                self.wrist(side, elbow_pre, bend, T.transposed() @ frames[side], out)
 
         if self.calibrating:
             self.calib_left -= 1
@@ -3051,6 +4152,10 @@ class Retargeter:
         if blends:
             keys = set().union(*blends)
             calib["blend"] = {k: sum(b.get(k, 0.0) for b in blends) / len(blends) for k in keys}
+        brows = [a[3] for a in acc if len(a) > 3 and a[3]]
+        if brows:
+            calib["brow"] = {ps: [sum(b[ps][i] for b in brows) / len(brows) for i in range(3)] for ps in SIDES}
+            calib["brow"]["gap"] = sum(b["gap"] for b in brows) / len(brows)
         self.calib = calib
 
 
@@ -3150,8 +4255,12 @@ class Take:
     def __init__(self):
         self.samples = []        # (t seconds, rotations {joint: (x,y,z)}, face {key: v}, hands_seen)
         self.times = []
+        self.msgs = []           # the tracking messages, so the take can be re-solved for a new body shape
         self.start = 0.0         # trim, in seconds from the first sample
         self.end = 0.0
+        self.setup = None        # retargeter settings and calibration used while recording
+        self.body_sig = None     # body shape the rotations were solved for
+        self.arrows = []         # arrows drawn on the GIF (see TAKE_ARROW_DEFAULTS)
 
     @property
     def t0(self):
@@ -3161,11 +4270,36 @@ class Take:
     def duration(self):
         return self.times[-1] - self.times[0] if len(self.times) > 1 else 0.0
 
-    def add(self, t, rots, face, seen):
+    def add(self, t, rots, face, seen, msg=None):
         if self.times and t <= self.times[-1]:
             return
         self.samples.append((t, rots, face, seen))
         self.times.append(t)
+        self.msgs.append(msg)
+
+    def resolve(self, skel):
+        """Solve every recorded frame again for the figure's current body shape (after the Body
+        Shape sliders, proportions or sculpting changed), so hands still land on the face etc."""
+        st = self.setup
+        if not st or not self.msgs or any(m is None for m in self.msgs):
+            return False
+        rt = Retargeter()
+        rt.mirror, rt.use_depth, rt.fov, rt.groups = st["mirror"], st["use_depth"], st["fov"], st["groups"]
+        rt.calib = st["calib"]
+        rt.thumb_rest, rt.wrist_rest_z = dict(st["thumb_rest"]), dict(st["wrist_rest_z"])
+        rt.skel = skel
+        rt.depth.hand_k = st.get("hand_k", 1.0)
+        new = []
+        for (t, rots, face, seen), msg in zip(self.samples, self.msgs):
+            out, _, _ = rt.solve(msg)
+            r = dict(rots)
+            for k, e in out.items():
+                if k in r and rt.tracked(k):
+                    r[k] = tuple(round(a, 5) for a in e)
+            new.append((t, r, face, seen))
+        self.samples = new
+        self.body_sig = skel.sig
+        return True
 
     def pose_at(self, t):
         """Interpolated (rotations, face) at t seconds from the start of the take."""
@@ -3209,7 +4343,298 @@ class Take:
                             "r": {k: [round(a, 4) for a in v] for k, v in r.items()},
                             "f": {k: round(v, 3) for k, v in f.items()}})
         return {"version": 1, "kind": "recorded-sign", "term": text, "category": category,
-                "fps": fps, "duration": round(self.end - self.start, 3), "samples": out}
+                "fps": fps, "duration": round(self.end - self.start, 3), "samples": out,
+                "arrows": [dict(a) for a in self.arrows]}
+
+
+# --- Arrows on a recorded GIF ----------------------------------------------------------
+# Each arrow is a small dict (set from the web app's Review panel or Blender). Kinds:
+#   path     traces where a body part moved during part of the take
+#   along    straight arrow attached to a body part (moves with it)
+#   around   circular arrow around a body part (moves with it)
+#   straight / arc / circle / double / zigzag   a fixed shape placed near a body part
+# Times are seconds from the start of the trimmed take; None means "start" / "end".
+# Offsets are in millimeters as seen from the front: x right, y up, z toward the viewer.
+
+TAKE_ARROW_KINDS = ("path", "along", "around", "straight", "arc", "circle", "double", "zigzag")
+TAKE_ARROW_PARTS = [p[0] for p in TETHER_PARTS]
+TAKE_ARROW_DEFAULTS = {
+    "kind": "path", "side": "R", "part": "index_tip",
+    "from": None, "to": None,                 # path: the part of the take it traces
+    "show_from": None, "show_to": None,       # when the arrow is visible in the GIF
+    "x": 0.0, "y": 0.0, "z": 0.0,             # offset (mm)
+    "size": 100.0, "rotate": 0.0,             # fixed shapes: size (%) and turn (degrees)
+    "axis": "BONE", "length": 80.0, "radius": 45.0, "sweep": 270.0, "spin": 0.0, "tilt": 0.0,
+    "trim_start": 15.0, "trim_end": 10.0,     # path: % cut off each end so it clears the hand
+    "smooth": 50.0, "grow": False,            # path: smoothing (%), draw it as the hand moves
+    "reverse": False, "double": False, "on_top": True,
+    "color": "", "thickness": 100.0,
+}
+_ARROW_LIMITS = {"x": (-400, 400), "y": (-400, 400), "z": (-400, 400), "size": (20, 400), "rotate": (-180, 180),
+                 "length": (10, 600), "radius": (10, 300), "sweep": (30, 350), "spin": (-180, 180),
+                 "tilt": (-90, 90), "trim_start": (0, 45), "trim_end": (0, 45), "smooth": (0, 100),
+                 "thickness": (30, 300)}
+
+
+def clean_take_arrow(d, prev=None):
+    """A complete, safe arrow spec from (partial) input."""
+    out = dict(prev or TAKE_ARROW_DEFAULTS)
+    for k, v in (d or {}).items():
+        if k not in TAKE_ARROW_DEFAULTS or k == "id":
+            continue
+        dv = TAKE_ARROW_DEFAULTS[k]
+        try:
+            if k == "kind":
+                v = v if v in TAKE_ARROW_KINDS else out[k]
+            elif k == "part":
+                v = v if v in TAKE_ARROW_PARTS else out[k]
+            elif k == "side":
+                v = v if v in SIDES else out[k]
+            elif k == "axis":
+                v = v if v in TETHER_AXES else out[k]
+            elif k == "color":
+                v = v if isinstance(v, str) and re.fullmatch(r"#?[0-9a-fA-F]{6}", v or "") else ""
+            elif k in ("from", "to", "show_from", "show_to"):
+                v = None if v in (None, "") else max(0.0, float(v))
+            elif isinstance(dv, bool):
+                v = bool(v)
+            else:
+                lo, hi = _ARROW_LIMITS.get(k, (-1e9, 1e9))
+                v = _clamp(float(v), lo, hi)
+        except (TypeError, ValueError):
+            continue
+        out[k] = v
+    if prev and "id" in prev:
+        out["id"] = prev["id"]
+    return out
+
+
+def _hex_color(h, fallback):
+    if not h:
+        return fallback
+    h = h.lstrip("#")
+    srgb = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    return tuple(c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in srgb)
+
+
+def _screen_offset(a):
+    return Vector((a["x"], -a["z"], a["y"])) / 1000.0
+
+
+def take_arrow_objects():
+    return [o for o in bpy.data.objects if "asl_take_arrow" in o]
+
+
+def clear_take_arrows():
+    for name in [o.name for o in take_arrow_objects() if o.type == 'CURVE']:
+        o = bpy.data.objects.get(name)
+        if o is not None:
+            remove_arrow(o)
+    for o in take_arrow_objects():
+        bpy.data.objects.remove(o, do_unlink=True)
+
+
+def _window(a, take, key_from, key_to):
+    length = take.end - take.start
+    t0 = a.get(key_from)
+    t1 = a.get(key_to)
+    t0 = 0.0 if t0 is None else min(t0, length)
+    t1 = length if t1 is None else min(t1, length)
+    if t1 < t0:
+        t0, t1 = t1, t0
+    return t0, t1
+
+
+def _part_pos(fig, side, part):
+    return part_matrix(fig.root, side, part, fig.joints).translation.copy()
+
+
+def _path_points(fig, take, a):
+    """Where the body part was over the arrow's time window, smoothed and trimmed."""
+    t0, t1 = _window(a, take, "from", "to")
+    n = max(8, min(60, int((t1 - t0) * 30) + 2))
+    pts = []
+    for i in range(n):
+        t = take.start + t0 + (t1 - t0) * i / (n - 1)
+        fig.apply(*take.pose_at(t))
+        bpy.context.view_layer.update()
+        pts.append(_part_pos(fig, a["side"], a["part"]))
+    # smooth with a moving average (ends pinned)
+    win = int(round(a["smooth"] / 100 * n / 4))
+    if win > 0:
+        sm = []
+        for i in range(n):
+            lo, hi = max(0, i - win), min(n, i + win + 1)
+            sm.append(sum(pts[lo:hi], Vector()) / (hi - lo))
+        sm[0], sm[-1] = pts[0], pts[-1]
+        pts = sm
+    # cut a share of the length off each end so the arrow doesn't sit on the hand
+    seg = [(pts[i + 1] - pts[i]).length for i in range(n - 1)]
+    total = sum(seg)
+    if total < 0.01:
+        return None
+    cut0, cut1 = total * a["trim_start"] / 100, total * (1 - a["trim_end"] / 100)
+
+    def at(dist):
+        acc = 0.0
+        for i, sl in enumerate(seg):
+            if acc + sl >= dist or i == len(seg) - 1:
+                w = 0.0 if sl < 1e-9 else _clamp((dist - acc) / sl, 0.0, 1.0)
+                return pts[i].lerp(pts[i + 1], w)
+            acc += sl
+        return pts[-1]
+
+    k = 10                                        # resample evenly: smooth curve, few points
+    out = [at(cut0 + (cut1 - cut0) * i / (k - 1)) for i in range(k)]
+    off = _screen_offset(a)
+    out = [p + off for p in out]
+    if a["reverse"]:
+        out.reverse()
+    return out
+
+
+def _fixed_points(a):
+    shape = ARROW_SHAPES.get(a["kind"])
+    if shape is None:
+        return None, False
+    s = a["size"] / 100
+    rot = Matrix.Rotation(math.radians(-a["rotate"]), 3, 'Y')
+    pts = [{"co": rot @ (Vector(co) * s), "hl_type": ht, "hr_type": ht} for co, ht in shape[1]]
+    if a["reverse"]:
+        pts.reverse()
+    return pts, shape[2]
+
+
+def build_take_arrows(scene, fig, take):
+    """Create the Blender objects for the take's arrows (static shapes are computed here)."""
+    clear_take_arrows()
+    if take is None or not take.arrows:
+        return
+    saved = fig.snapshot()
+    s = scene.asl
+    try:
+        for a in take.arrows:
+            kind = a["kind"]
+            double = a["double"] or kind == "double"
+            if kind == "path":
+                pts = _path_points(fig, take, a)
+                if not pts:
+                    continue
+                if a["on_top"]:
+                    pts = [Vector((p.x, ARROW_DEPTH, p.z)) for p in pts]
+                obj = create_arrow(scene, [{"co": p} for p in pts], double=double, location=(0, 0, 0), kind="take")
+            elif kind in ("along", "around"):
+                obj = create_arrow(scene, [{"co": (0, 0, 0)}, {"co": (0, 0, 0.05)}], double=double,
+                                   location=(0, 0, 0), kind="take")
+            else:
+                pts, dbl = _fixed_points(a)
+                if not pts:
+                    continue
+                t0, _ = _window(a, take, "show_from", "show_to")
+                fig.apply(*take.pose_at(take.start + t0))
+                bpy.context.view_layer.update()
+                c = _part_pos(fig, a["side"], a["part"]) + _screen_offset(a)
+                obj = create_arrow(scene, pts, double=double or dbl,
+                                   location=(c.x, ARROW_DEPTH if a["on_top"] else c.y, c.z), kind="take")
+            obj["asl_take_arrow"] = a["id"]
+            for h in arrow_heads(obj):
+                h["asl_take_arrow"] = a["id"]
+            cu = obj.data
+            w = s.arrow_width * a["thickness"] / 100
+            cu.bevel_depth = w
+            cu.bevel_factor_mapping_end = 'SPLINE'
+            color = _hex_color(a["color"], tuple(s.arrow_color))
+            for m in cu.materials:
+                set_material_color(m, color)
+            for h in arrow_heads(obj):
+                me = cone_mesh(h.data.name, w * 3.6, w * 7.5)
+                me.materials.append(cu.materials[0])
+                old = h.data
+                h.data = me
+                if old.users == 0:
+                    bpy.data.meshes.remove(old)
+    finally:
+        fig.apply(*saved)
+
+
+def _tethered_matrix(fig, a):
+    m = (Matrix.Translation(_screen_offset(a))
+         @ part_matrix(fig.root, a["side"], a["part"], fig.joints)
+         @ _axis_basis(TETHER_AXES[a["axis"]])
+         @ Matrix.Rotation(math.radians(a["spin"]), 4, 'Z')
+         @ Matrix.Rotation(math.radians(a["tilt"]), 4, 'X'))
+    if a["on_top"]:
+        m.translation.y = ARROW_DEPTH
+    return m
+
+
+class _TetherSpec:
+    """Lets tether_points() draw a take arrow."""
+
+    def __init__(self, a):
+        self.mode = "ALONG" if a["kind"] == "along" else "AROUND"
+        self.length = a["length"] / 1000
+        self.radius = a["radius"] / 1000
+        self.sweep = a["sweep"]
+        self.reverse = a["reverse"]
+
+
+def update_take_arrows(take, fig, t):
+    """Show, hide and move the take's arrows for time t (seconds from the start of the take).
+    Call after the figure has been posed for t."""
+    objs = {o["asl_take_arrow"]: o for o in take_arrow_objects() if o.type == 'CURVE'}
+    if not objs or take is None:
+        return
+    rel = t - take.start
+    need_update = any(a["kind"] in ("along", "around") for a in take.arrows)
+    if need_update:
+        bpy.context.view_layer.update()
+    for a in take.arrows:
+        obj = objs.get(a["id"])
+        if obj is None:
+            continue
+        s0, s1 = _window(a, take, "show_from", "show_to")
+        visible = s0 - 1e-6 <= rel <= s1 + 1e-6
+        if a["kind"] in ("along", "around") and visible:
+            set_arrow_points(obj.data, tether_points(_TetherSpec(a)))
+            obj.matrix_world = _tethered_matrix(fig, a)
+        grow = 1.0
+        if a["kind"] == "path" and a["grow"]:
+            p0, p1 = _window(a, take, "from", "to")
+            grow = _clamp((rel - p0) / max(1e-3, p1 - p0), 0.0, 1.0)
+            if a["reverse"]:
+                grow = 1.0                        # a reversed path can't grow from its tail
+            visible = visible and grow > 0.03
+        obj.data.bevel_factor_end = grow
+        heads = arrow_heads(obj)
+        for h in heads:
+            if h.name.endswith(".head0") and h.constraints:
+                h.constraints[0].offset_factor = grow     # the main arrowhead rides the tip
+        for o in [obj] + heads:
+            o.hide_render = not visible
+            o.hide_viewport = not visible
+
+
+def take_arrow_bounds(take, fig, times):
+    """Front-view box around the arrows over the given times (for framing the GIF)."""
+    xs, zs = [], []
+    for t in times:
+        fig.apply(*take.pose_at(t))
+        update_take_arrows(take, fig, t)
+        for o in take_arrow_objects():
+            if o.type != 'CURVE' or o.hide_render:
+                continue
+            mw = o.matrix_world
+            r = o.data.bevel_depth * 8
+            for sp in o.data.splines:
+                for bp in sp.bezier_points:
+                    for co in (bp.co, bp.handle_left, bp.handle_right):
+                        w = mw @ co
+                        xs += [w.x - r, w.x + r]
+                        zs += [w.z - r, w.z + r]
+    if not xs:
+        return None
+    return min(xs), max(xs), min(zs), max(zs)
 
 
 # --- Animated GIF writer (pure Python + numpy, which ships with Blender) -----------
@@ -3399,65 +4824,127 @@ def cards_dir(scene):
     return bpy.path.abspath(d)
 
 
+class _TakeRender:
+    """Sets the scene up for rendering frames of a take (framing over the whole movement and its
+    arrows, other figures and card arrows hidden, label strip) and puts everything back after."""
+
+    def __init__(self, scene, fig, take, text, size, quality, label=True):
+        self.scene, self.fig, self.take = scene, fig, take
+        self.text, self.size, self.quality, self.label = text, size, quality, label
+        self.band = None
+
+    def __enter__(self):
+        import numpy as np  # noqa: F401  (numpy ships with Blender)
+        scene, fig, take, size = self.scene, self.fig, self.take, self.size
+        s, r = scene.asl, scene.render
+        self.saved_s = {k: getattr(s, k) for k in ("term", "show_label", "resolution", "transparent_bg",
+                                                   "frame_x", "frame_z", "frame_zoom")}
+        self.saved_r = {"engine": r.engine, "filepath": r.filepath, "use_freestyle": r.use_freestyle,
+                        "resolution_x": r.resolution_x, "resolution_y": r.resolution_y}
+        self.saved_world = tuple(scene.world.color) if scene.world is not None else None
+        self.saved_pose = fig.snapshot()
+        self.hidden = []
+        for root in all_figures():
+            if root != fig.root:
+                for o in figure_objects(root):
+                    if not o.hide_render:
+                        o.hide_render = True
+                        self.hidden.append(o)
+        for a in all_arrows():
+            if "asl_take_arrow" in a:
+                continue
+            for o in [a] + arrow_heads(a):
+                if not o.hide_render:
+                    o.hide_render = True
+                    self.hidden.append(o)
+        self.tmp = tempfile.mkdtemp(prefix="asl_gif_")
+        s.transparent_bg = False
+        s.term = self.text
+        s.show_label = self.label and bool(self.text.strip())
+        s.resolution = size
+        # frame the whole movement, the face and the arrows so nothing leaves the picture
+        n = max(2, int((take.end - take.start) * 15))
+        times = [take.start + (take.end - take.start) * i / (n - 1) for i in range(n)]
+        box = None
+        for t in times[::max(1, n // 24)] + [times[-1]]:
+            fig.apply(*take.pose_at(t))
+            update_take_arrows(take, fig, t)
+            b = sign_bounds(include_head=True)
+            if b:
+                box = b if box is None else (min(box[0], b[0]), max(box[1], b[1]), min(box[2], b[2]), max(box[3], b[3]))
+        ab = take_arrow_bounds(take, fig, times[::max(1, n // 24)] + [times[-1]]) if take.arrows else None
+        if ab and box:
+            box = (min(box[0], ab[0]), max(box[1], ab[1]), min(box[2], ab[2]), max(box[3], ab[3]))
+        fit_frame(scene, include_head=True, margin=0.08, box=box)
+        apply_render_settings(scene)
+        r.resolution_x = r.resolution_y = size
+        if s.show_label:
+            # The label strip is rendered once with the card renderer (white strip, crisp text,
+            # same as the cards) and laid over every frame; the strip hides everything behind it.
+            fig.apply(*take.pose_at(times[0]))
+            update_take_arrows(take, fig, times[0])
+            self.band = _render_array(scene, os.path.join(self.tmp, "label.png"))
+            s.show_label = False
+            update_label(scene)
+        if self.quality == 'FAST':
+            _use_workbench(scene)
+        r.resolution_x = r.resolution_y = size
+        return self
+
+    def frame(self, t, name):
+        """Render the take at time t; returns an RGB array."""
+        self.fig.apply(*self.take.pose_at(t))
+        update_take_arrows(self.take, self.fig, t)
+        return _render_array(self.scene, os.path.join(self.tmp, name))
+
+    def png(self, t):
+        """Render the take at time t; returns PNG file bytes."""
+        self.fig.apply(*self.take.pose_at(t))
+        update_take_arrows(self.take, self.fig, t)
+        r = self.scene.render
+        path = os.path.join(self.tmp, "preview.png")
+        r.filepath = path
+        r.image_settings.file_format = 'PNG'
+        r.image_settings.color_mode = 'RGB'
+        r.image_settings.color_depth = '8'
+        _render_op(self.scene)
+        with open(path, "rb") as fh:
+            return fh.read()
+
+    def __exit__(self, *exc):
+        scene, s, r = self.scene, self.scene.asl, self.scene.render
+        for k, v in self.saved_s.items():
+            setattr(s, k, v)
+        for k, v in self.saved_r.items():
+            setattr(r, k, v)
+        if self.saved_world is not None and scene.world is not None:
+            scene.world.color = self.saved_world
+        apply_render_settings(scene)          # also brings the backdrop back
+        update_framing(scene)
+        for o in self.hidden:
+            o.hide_render = False
+        self.fig.apply(*self.saved_pose)
+        try:
+            for fn in os.listdir(self.tmp):
+                os.remove(os.path.join(self.tmp, fn))
+            os.rmdir(self.tmp)
+        except OSError:
+            pass
+        return False
+
+
 def render_take(scene, fig, take, text, category, fps, size, quality, progress=None):
     """Render the trimmed take to animated GIFs. Returns a result dict."""
     import numpy as np
-    s = scene.asl
     n = int(round((take.end - take.start) * fps)) + 1
     if n < 2:
         raise ValueError("The trimmed recording is too short. Move the end handle later.")
     n = min(n, 400)
     times = [take.start + i / fps for i in range(n)]
-    r = scene.render
-    saved_s = {k: getattr(s, k) for k in ("term", "show_label", "resolution", "transparent_bg",
-                                          "frame_x", "frame_z", "frame_zoom")}
-    saved_r = {"engine": r.engine, "filepath": r.filepath, "use_freestyle": r.use_freestyle,
-               "resolution_x": r.resolution_x, "resolution_y": r.resolution_y}
-    saved_world = tuple(scene.world.color) if scene.world is not None else None
-    saved_pose = fig.snapshot()
-    hidden = []
-    for root in all_figures():
-        if root != fig.root:
-            for o in figure_objects(root):
-                if not o.hide_render:
-                    o.hide_render = True
-                    hidden.append(o)
-    for a in all_arrows():
-        for o in [a] + arrow_heads(a):
-            if not o.hide_render:
-                o.hide_render = True
-                hidden.append(o)
-    tmp = tempfile.mkdtemp(prefix="asl_gif_")
-    try:
-        s.transparent_bg = False
-        s.term = text
-        s.show_label = bool(text.strip())
-        s.resolution = size
-        # frame the whole movement (and the face) so nothing leaves the picture
-        box = None
-        for t in times[::max(1, n // 24)] + [times[-1]]:
-            fig.apply(*take.pose_at(t))
-            b = sign_bounds(include_head=True)
-            if b:
-                box = b if box is None else (min(box[0], b[0]), max(box[1], b[1]), min(box[2], b[2]), max(box[3], b[3]))
-        fit_frame(scene, include_head=True, margin=0.08, box=box)
-        apply_render_settings(scene)
-        r.resolution_x = r.resolution_y = size
-        band = None
-        if s.show_label:
-            # The label strip is rendered once with the card renderer (white strip, crisp text,
-            # same as the cards) and laid over every frame; the strip hides everything behind it.
-            fig.apply(*take.pose_at(times[0]))
-            band = _render_array(scene, os.path.join(tmp, "label.png"))
-            s.show_label = False
-            update_label(scene)
-        if quality == 'FAST':
-            _use_workbench(scene)
-        r.resolution_x = r.resolution_y = size
+    with _TakeRender(scene, fig, take, text, size, quality) as tr:
         frames = []
         for i, t in enumerate(times):
-            fig.apply(*take.pose_at(t))
-            frames.append(_render_array(scene, os.path.join(tmp, "f%04d.png" % i)))
+            frames.append(tr.frame(t, "f%04d.png" % i))
             if progress:
                 progress("render", i + 1, n)
         if progress:
@@ -3465,28 +4952,16 @@ def render_take(scene, fig, take, text, category, fps, size, quality, progress=N
         delays = gif_delays(len(frames), fps)
         quiz = encode_gif(frames, delays)
         labeled = quiz
-        if band is not None:
-            rows = int(math.ceil((s.label_size + 0.07) * size))
-            labeled = encode_gif([np.concatenate([f[:-rows], band[-rows:]], 0) for f in frames], delays)
+        if tr.band is not None:
+            rows = int(math.ceil((scene.asl.label_size + 0.07) * size))
+            labeled = encode_gif([np.concatenate([f[:-rows], tr.band[-rows:]], 0) for f in frames], delays)
         return {"labeled": labeled, "quiz": quiz, "frames": len(frames)}
-    finally:
-        for k, v in saved_s.items():
-            setattr(s, k, v)
-        for k, v in saved_r.items():
-            setattr(r, k, v)
-        if saved_world is not None and scene.world is not None:
-            scene.world.color = saved_world
-        apply_render_settings(scene)          # also brings the backdrop back
-        update_framing(scene)
-        for o in hidden:
-            o.hide_render = False
-        fig.apply(*saved_pose)
-        try:
-            for fn in os.listdir(tmp):
-                os.remove(os.path.join(tmp, fn))
-            os.rmdir(tmp)
-        except OSError:
-            pass
+
+
+def render_take_preview(scene, fig, take, t, size=320):
+    """One quick picture of the take at time t, framed like the GIF (for the web app)."""
+    with _TakeRender(scene, fig, take, "", size, 'FAST', label=False) as tr:
+        return tr.png(t)
 
 
 def save_motion_card(scene, take, text, category, fps, result):
@@ -3564,6 +5039,7 @@ class LiveSession:
         self._fps_times = collections.deque(maxlen=60)
         self.apply_ms = 0.0
         self._trim_guard = False
+        self.view_t = 0.0
 
     @property
     def running(self):
@@ -3600,6 +5076,7 @@ class LiveSession:
             return None
         self.fig = LiveFigure(root)
         self.rt.prev.clear()
+        self.rt.skel = ModelSkeleton(root)
         for side in SIDES:
             tb = self.fig.joints.get(f"{side}_thumb_base")
             wr = self.fig.joints.get(f"{side}_wrist")
@@ -3616,13 +5093,14 @@ class LiveSession:
         if self.take is not None:
             take = {"duration": round(self.take.duration, 3), "start": round(self.take.start, 3),
                     "end": round(self.take.end, 3), "samples": len(self.take.samples),
-                    "t0_ms": round(self.take.t0 * 1000, 2)}
+                    "t0_ms": round(self.take.t0 * 1000, 2), "arrows": self.take.arrows}
         lv = bpy.context.scene.asl_live
         return {"type": "state", "mode": self.mode,
                 "countdown": round(max(0.0, self.countdown_end - now), 2) if self.mode == "countdown" else 0,
                 "take": take, "calibrating": self.rt.calibrating, "calibrated": self.rt.calib is not None,
                 "figure": self.fig.name if self.fig else None, "error": self.error,
-                "settings": {"mirror": lv.mirror, "auto_stop": lv.auto_stop, "countdown": lv.countdown},
+                "settings": {"mirror": lv.mirror, "auto_stop": lv.auto_stop, "countdown": lv.countdown,
+                             "use_depth": lv.use_depth, "fov": lv.camera_fov},
                 "progress": self.progress, "last_gif": self.last_gif}
 
     def send_state(self):
@@ -3651,9 +5129,12 @@ class LiveSession:
             self.hello()
             self.send_state()
         elif typ == "settings":
-            for k in ("mirror", "auto_stop", "track_arms", "track_hands", "track_head", "track_face", "track_torso"):
+            for k in ("mirror", "auto_stop", "use_depth", "track_arms", "track_hands", "track_head",
+                      "track_face", "track_torso"):
                 if k in msg:
                     setattr(lv, k, bool(msg[k]))
+            if "fov" in msg:
+                lv.camera_fov = _clamp(float(msg["fov"]), 30.0, 120.0)
             if "countdown" in msg:
                 lv.countdown = int(msg["countdown"])
             self.send_state()
@@ -3667,10 +5148,10 @@ class LiveSession:
             elif act == "stop":
                 self.stop_recording()
             elif act == "retry":
-                self.take = None
+                self.drop_take()
                 self.start_countdown(msg.get("countdown", lv.countdown))
             elif act == "discard":
-                self.take = None
+                self.drop_take()
                 self.mode = "live"
                 self.send_state()
         elif typ == "seek" and self.take is not None:
@@ -3680,6 +5161,9 @@ class LiveSession:
                 self.show_take_at(float(msg.get("t", 0.0)))
         elif typ == "trim" and self.take is not None:
             self.set_trim(msg.get("start", self.take.start), msg.get("end", self.take.end), scene)
+            if self.take.arrows:
+                build_take_arrows(scene, self.fig, self.take)
+                self.show_take_at(self.view_t)
         elif typ == "play" and self.take is not None and self.mode in ("review", "playing"):
             self.play()
         elif typ == "pause" and self.mode == "playing":
@@ -3696,18 +5180,32 @@ class LiveSession:
             if msg.get("quality") in ("FAST", "CARD"):
                 lv.gif_quality = msg["quality"]
             self.make_gif(scene)
+        elif typ in ("arrow_add", "arrow_update", "arrow_delete", "arrows_clear") and self.take is not None:
+            self.edit_arrows(typ, msg, scene)
+        elif typ == "preview" and self.take is not None and self.mode == "review":
+            self.send_preview(scene, msg.get("t"), int(_clamp(int(msg.get("size", 320)), 160, 720)))
         elif typ == "snapshot":
             if self.ensure_figure(scene):
                 self.fig.to_sliders()
                 self.link.send({"type": "notice", "message": "Pose copied to the figure's sliders in Blender."})
 
     # --- live frames --------------------------------------------------------------
+    def configure(self, lv):
+        rt = self.rt
+        rt.mirror = lv.mirror
+        rt.use_depth = lv.use_depth
+        rt.fov = lv.camera_fov
+        rt.groups = [g for g in TRACK_GROUPS if getattr(lv, "track_" + g)]
+        sk = rt.skel
+        if sk is not None and time.perf_counter() - sk.refreshed > 1.0:
+            sk.refresh()             # follows body shape and sculpting changes, and slider poses
+
     def on_frame(self, msg, scene):
         t_start = time.perf_counter()
         self._fps_times.append(t_start)
         if self.mode in ("live", "countdown", "recording") and self.ensure_figure(scene):
             lv = scene.asl_live
-            self.rt.mirror = lv.mirror
+            self.configure(lv)
             was_cal = self.rt.calibrating
             rots, face, seen = self.rt.solve(msg)
             groups = [g for g in TRACK_GROUPS if getattr(lv, "track_" + g)]
@@ -3716,7 +5214,7 @@ class LiveSession:
             if self.mode == "recording":
                 t = float(msg.get("t", 0.0)) / 1000.0
                 r, f = self.fig.snapshot()
-                self.take.add(t, r, f, seen)
+                self.take.add(t, r, f, seen, msg)
                 if seen:
                     self.seen_any, self.last_seen_t = True, t
                 if self.take.duration >= MAX_TAKE_SECONDS:
@@ -3727,15 +5225,60 @@ class LiveSession:
                 self.send_state()
             _tag_redraw()
         self.apply_ms = 0.8 * self.apply_ms + 0.2 * (time.perf_counter() - t_start) * 1000
-        self.link.send({"type": "ack", "id": msg.get("id"), "ms": round((time.perf_counter() - t_start) * 1000, 2)})
+        ack = {"type": "ack", "id": msg.get("id"), "ms": round((time.perf_counter() - t_start) * 1000, 2)}
+        if self.rt.use_depth:
+            ack["touch"] = {sd: round(v.get("touch", 0.0), 2) for sd, v in self.rt.depth.info.items()}
+        self.link.send(ack)
 
     # --- recording ----------------------------------------------------------------
+    def drop_take(self):
+        self.take = None
+        clear_take_arrows()
+
+    def edit_arrows(self, typ, msg, scene):
+        tk = self.take
+        if typ == "arrow_add":
+            nid = max([a["id"] for a in tk.arrows] + [0]) + 1
+            spec = clean_take_arrow(msg.get("arrow") or {})
+            spec["id"] = nid
+            tk.arrows.append(spec)
+        elif typ == "arrow_update":
+            for i, a in enumerate(tk.arrows):
+                if a["id"] == msg.get("id"):
+                    tk.arrows[i] = clean_take_arrow(msg.get("arrow") or {}, a)
+        elif typ == "arrow_delete":
+            tk.arrows = [a for a in tk.arrows if a["id"] != msg.get("id")]
+        else:
+            tk.arrows = []
+        if self.ensure_figure(scene):
+            build_take_arrows(scene, self.fig, tk)
+            self.show_take_at(self.view_t)
+        self.link.send({"type": "arrows", "arrows": tk.arrows})
+        if msg.get("preview") and self.mode == "review":
+            self.send_preview(scene, msg.get("t"), int(msg.get("size", 320)))
+
+    def send_preview(self, scene, t, size=320):
+        if self.ensure_figure(scene) is None:
+            return
+        tk = self.take
+        t = self.view_t if t is None else tk.start + _clamp(float(t), 0.0, tk.end - tk.start)
+        try:
+            png = render_take_preview(scene, self.fig, tk, t, size)
+        except Exception as e:
+            traceback.print_exc()
+            self.link.send({"type": "notice", "message": f"Preview failed: {e}"})
+            return
+        finally:
+            self.show_take_at(self.view_t)
+        self.link.send({"type": "preview_ready", "bytes": len(png), "t": round(t - tk.start, 3)})
+        self.link.send_bytes(png)
+
     def start_countdown(self, secs):
         if self.ensure_figure(bpy.context.scene) is None:
             self.send_state()
             return
         self.error = ""
-        self.take = None
+        self.drop_take()
         secs = max(0.0, float(secs))
         if secs <= 0:
             self.begin_recording()
@@ -3746,6 +5289,12 @@ class LiveSession:
 
     def begin_recording(self):
         self.take = Take()
+        rt = self.rt
+        self.take.setup = {"mirror": rt.mirror, "use_depth": rt.use_depth, "fov": rt.fov,
+                           "groups": list(rt.groups) if rt.groups is not None else None,
+                           "calib": rt.calib, "thumb_rest": dict(rt.thumb_rest),
+                           "wrist_rest_z": dict(rt.wrist_rest_z), "hand_k": rt.depth.hand_k}
+        self.take.body_sig = rt.skel.sig if rt.skel else None
         self.seen_any = False
         self.mode = "recording"
         self.send_state()
@@ -3767,10 +5316,31 @@ class LiveSession:
                 self.show_take_at(take.start)
         self.send_state()
 
+    def follow_body(self, force=False):
+        """If the body shape changed since the take was solved, solve it again."""
+        tk, sk = self.take, self.rt.skel
+        if tk is None or sk is None:
+            return False
+        now = time.perf_counter()
+        if not force and now - sk.refreshed < 0.5:
+            return False
+        sk.refresh()
+        if tk.body_sig is not None and sk.sig != tk.body_sig:
+            if tk.resolve(sk):
+                self.status = "Recording updated for the new body shape."
+                if tk.arrows and self.fig is not None:
+                    build_take_arrows(bpy.context.scene, self.fig, tk)
+                return True
+        return False
+
     def show_take_at(self, t):
         if self.take is None or self.fig is None or not self.fig.valid():
             return
+        self.follow_body()
+        self.view_t = t
         self.fig.apply(*self.take.pose_at(t))
+        if self.take.arrows:
+            update_take_arrows(self.take, self.fig, t)
         _tag_redraw()
 
     def set_trim(self, start, end, scene):
@@ -3799,6 +5369,7 @@ class LiveSession:
             self._trim_guard = False
 
     def play(self):
+        self.follow_body(force=True)
         self.mode = "playing"
         self.play_t0 = time.perf_counter()
         self.play_from = self.take.start
@@ -3835,6 +5406,7 @@ class LiveSession:
             time.sleep(0)            # let the network thread run
 
         try:
+            self.follow_body(force=True)
             progress("render", 0, int(round((self.take.end - self.take.start) * fps)) + 1)
             res = render_take(scene, self.fig, self.take, text, lv.gif_category, fps, size, lv.gif_quality, progress)
             saved = save_motion_card(scene, self.take, text, lv.gif_category, fps, res)
@@ -3913,6 +5485,13 @@ class ASLLiveSettings(PropertyGroup):
     track_head: BoolProperty(name="Head", default=True)
     track_face: BoolProperty(name="Face", default=True)
     track_torso: BoolProperty(name="Body", default=True)
+    use_depth: BoolProperty(name="Place hands by position (face and body contact)", default=True,
+                            description="Work out how far away each hand is and place it relative to the face "
+                                        "and body, so a hand touching your nose touches the figure's nose. "
+                                        "Off: copy only the directions of the arms")
+    camera_fov: FloatProperty(name="Camera field of view", default=60.0, min=30.0, max=120.0, precision=0,
+                              description="Horizontal angle the webcam sees, in degrees. Most webcams are 60-78. "
+                                          "If hands land in front of the face, raise it; behind, lower it")
     auto_stop: BoolProperty(name="Stop when hands drop", default=True,
                             description="Stop recording 1 second after both hands leave the camera view")
     countdown: IntProperty(name="Countdown", default=3, min=0, max=10, subtype='TIME')
@@ -3956,7 +5535,8 @@ class ASL_OT_live_action(Operator):
     bl_label = "Live Action"
     bl_options = {'REGISTER'}
     action: EnumProperty(items=[(k, k, "") for k in ("calibrate", "record", "stop", "retry", "discard",
-                                                      "play", "pause", "gif", "snapshot")])
+                                                      "play", "pause", "gif", "snapshot",
+                                                      "arrow_path", "arrows_clear")])
 
     @classmethod
     def description(cls, context, props):
@@ -3967,6 +5547,9 @@ class ASL_OT_live_action(Operator):
                 "play": "Play the trimmed take", "pause": "Pause playback",
                 "gif": "Render the trimmed take as an animated GIF and add it to the cards",
                 "snapshot": "Copy the current pose into the figure's sliders so you can export it as a card",
+                "arrow_path": "Add an arrow that traces the right index fingertip's movement "
+                              "(adjust it in the web app's Review panel)",
+                "arrows_clear": "Remove all arrows from this recording",
                 }.get(props.action, "")
 
     def execute(self, context):
@@ -3980,11 +5563,13 @@ class ASL_OT_live_action(Operator):
         elif a == "stop":
             LIVE.stop_recording()
         elif a == "retry":
-            LIVE.take = None
+            LIVE.drop_take()
             LIVE.start_countdown(lv.countdown)
         elif a == "discard":
-            LIVE.take = None
+            LIVE.drop_take()
             LIVE.mode = "live"
+        elif a in ("arrow_path", "arrows_clear") and LIVE.take is not None:
+            LIVE.edit_arrows("arrow_add" if a == "arrow_path" else "arrows_clear", {"arrow": {"kind": "path"}}, scene)
         elif a == "play" and LIVE.take is not None:
             LIVE.play()
         elif a == "pause" and LIVE.mode == "playing":
@@ -4109,12 +5694,18 @@ class ASL_PT_live(_ASLPanel, Panel):
             box.label(text=f"Moving: {LIVE.fig.name}")
         if LIVE.rt.calibrating:
             box.label(text="Calibrating: face the camera and hold still", icon='VIEW_CAMERA')
+        touching = [("right" if sd == "R" else "left") for sd, v in LIVE.rt.depth.info.items() if v.get("touch", 0) > 0.5]
+        if touching and LIVE.mode in ("live", "recording"):
+            box.label(text=f"Touching: {' and '.join(touching)} hand", icon='HAND')
         if LIVE.error:
             box.label(text=LIVE.error, icon='ERROR')
         row = lay.row(align=True)
         row.operator("asl.live_action", text="Calibrate", icon='PIVOT_CURSOR').action = "calibrate"
         row.operator("asl.live_toggle", text="Stop Link", icon='UNLINKED')
         lay.prop(lv, "mirror")
+        lay.prop(lv, "use_depth")
+        if lv.use_depth:
+            lay.prop(lv, "camera_fov")
         grid = lay.grid_flow(columns=3, align=True)
         for k in ("arms", "hands", "head", "face", "torso"):
             grid.prop(lv, "track_" + k, toggle=True)
@@ -4154,6 +5745,10 @@ class ASL_PT_live(_ASLPanel, Panel):
                 row.operator("asl.live_action", text="Play", icon='PLAY').action = "play"
             row.operator("asl.live_action", text="Retry", icon='FILE_REFRESH').action = "retry"
             row.operator("asl.live_action", text="Discard", icon='TRASH').action = "discard"
+            arow = box.row(align=True)
+            arow.label(text=f"Arrows on the GIF: {len(tk.arrows)}", icon='FORWARD')
+            arow.operator("asl.live_action", text="", icon='ADD').action = "arrow_path"
+            arow.operator("asl.live_action", text="", icon='X').action = "arrows_clear"
             box.prop(lv, "gif_text")
             row = box.row(align=True)
             row.prop(lv, "gif_category", text="")
@@ -4256,6 +5851,177 @@ class ASL_OT_reset_proportions(Operator):
         return {'FINISHED'}
 
 
+class ASL_OT_reset_shape(Operator):
+    bl_idname = "asl.reset_shape"
+    bl_label = "Reset Body Shape"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        body = context.scene.asl_body
+        for key, _, d, _, _ in SHAPE_SPECS:
+            setattr(body, key, d)
+        refresh_all_figures()
+        return {'FINISHED'}
+
+
+def _active_part(context):
+    o = context.active_object
+    if o is None or o.type != 'MESH' or "asl_part" not in o:
+        return None, None
+    return o, figure_of(o)
+
+
+class ASL_OT_sculpt_part(Operator):
+    bl_idname = "asl.sculpt_part"
+    bl_label = "Sculpt Selected Part"
+    bl_description = ("Reshape the selected body part with Blender's sculpt brushes. The tracker and "
+                      "recordings follow the new shape (for example, hands touch a reshaped nose)")
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        o, root = _active_part(context)
+        if o is None:
+            self.report({'WARNING'}, "First click the body part you want to reshape (head, nose, chest, hand...).")
+            return {'CANCELLED'}
+        if context.mode != 'OBJECT':
+            bpy.ops.object.mode_set(mode='OBJECT')
+        make_custom(o)
+        o.hide_viewport = False
+        for other in context.selected_objects:
+            other.select_set(False)
+        o.select_set(True)
+        context.view_layer.objects.active = o
+        middle = mirror_suffix(part_suffix(o)) is None and o.get("asl_part") in ("head", "torso")
+        try:
+            o.data.use_mirror_x = middle          # sculpt both sides of the face/body at once
+        except AttributeError:
+            pass
+        bpy.ops.object.mode_set(mode='SCULPT')
+        self.report({'INFO'}, "Sculpting " + part_suffix(o) + ". Click Done Sculpting when finished.")
+        return {'FINISHED'}
+
+
+class ASL_OT_sculpt_done(Operator):
+    bl_idname = "asl.sculpt_done"
+    bl_label = "Done Sculpting"
+    bl_description = "Leave sculpt mode and give every figure in the scene the new shape"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        o = context.active_object
+        if context.mode != 'OBJECT':
+            bpy.ops.object.mode_set(mode='OBJECT')
+        root = figure_of(o) if o else None
+        if root is not None:
+            share_custom_parts(root)
+            refresh_all_figures()
+        if LIVE.rt.skel is not None:
+            LIVE.rt.skel.refresh()
+        return {'FINISHED'}
+
+
+class ASL_OT_reset_part(Operator):
+    bl_idname = "asl.reset_part"
+    bl_label = "Reset Part"
+    bl_description = "Put the selected sculpted part back to its original shape"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        o, root = _active_part(context)
+        if o is None or not o.get("asl_custom"):
+            self.report({'WARNING'}, "Select a sculpted body part first.")
+            return {'CANCELLED'}
+        if context.mode != 'OBJECT':
+            bpy.ops.object.mode_set(mode='OBJECT')
+        orig = bpy.data.meshes.get(o.get("asl_orig_mesh", ""))
+        targets = [bpy.data.objects.get(f"{r.name}.{part_suffix(o)}") for r in all_figures()]
+        for t in targets:
+            if t is None:
+                continue
+            if orig is not None:
+                _assign_mesh(t, orig)
+            for k in CUSTOM_PROPS:
+                if k in t:
+                    del t[k]
+            if "asl_len" in t:
+                t["asl_len"] = -1.0           # rebuilt at the current length on the next update
+            t.scale = (1, 1, 1)
+        refresh_all_figures()
+        if LIVE.rt.skel is not None:
+            LIVE.rt.skel.refresh()
+        return {'FINISHED'}
+
+
+class ASL_OT_mirror_part(Operator):
+    bl_idname = "asl.mirror_part"
+    bl_label = "Copy to Other Side"
+    bl_description = "Give the matching part on the other side of the body a mirrored copy of this shape"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        o, root = _active_part(context)
+        other = mirror_suffix(part_suffix(o)) if o else None
+        if o is None or other is None:
+            self.report({'WARNING'}, "Select a part on one side of the body (a hand, arm, eye, ear, cheek or eyebrow).")
+            return {'CANCELLED'}
+        t = bpy.data.objects.get(f"{root.name}.{other}")
+        if t is None:
+            return {'CANCELLED'}
+        if context.mode != 'OBJECT':
+            bpy.ops.object.mode_set(mode='OBJECT')
+        make_custom(o)
+        make_custom(t)
+        _assign_mesh(t, o.data)
+        mirror_mesh_x(t.data)
+        t.scale = o.scale
+        share_custom_parts(root)
+        refresh_all_figures()
+        return {'FINISHED'}
+
+
+class ASL_PT_shape(_ASLPanel, Panel):
+    bl_label = "Body Shape & Sculpting"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return _get("ASL_Camera") is not None
+
+    def draw(self, context):
+        body = context.scene.asl_body
+        lay = self.layout
+        if context.mode == 'SCULPT':
+            o = context.active_object
+            box = lay.box()
+            box.label(text=f"Sculpting: {part_suffix(o) if o else ''}", icon='SCULPTMODE_HLT')
+            box.label(text="Drag on the part. Ctrl = push in, Shift = smooth.")
+            box.label(text="F = brush size, Shift+F = strength.")
+            r = box.row()
+            r.scale_y = 1.4
+            r.operator("asl.sculpt_done", icon='CHECKMARK')
+            return
+        col = lay.column(align=True)
+        for key, _, _, _, _ in SHAPE_SPECS:
+            col.prop(body, key, slider=True)
+        lay.operator("asl.reset_shape", icon='LOOP_BACK')
+        box = lay.box()
+        box.label(text="Sculpt a body part", icon='SCULPTMODE_HLT')
+        o, root = _active_part(context)
+        if o is None:
+            box.label(text="Click a part of the figure first (nose, head, chest, palm...).")
+        else:
+            box.label(text=f"Selected: {part_suffix(o)}" + ("  (sculpted)" if o.get("asl_custom") else ""))
+        r = box.row()
+        r.scale_y = 1.3
+        r.enabled = o is not None
+        r.operator("asl.sculpt_part", icon='BRUSH_DATA')
+        row = box.row(align=True)
+        row.enabled = o is not None
+        row.operator("asl.mirror_part", icon='MOD_MIRROR')
+        row.operator("asl.reset_part", icon='LOOP_BACK')
+        box.label(text="Live tracking and recordings follow these changes.", icon='INFO')
+
+
 class ASL_PT_body(_ASLPanel, Panel):
     bl_label = "Body & Face"
     bl_options = {'DEFAULT_CLOSED'}
@@ -4267,8 +6033,18 @@ class ASL_PT_body(_ASLPanel, Panel):
     def draw(self, context):
         fig = main_figure(context.scene).asl_fig
         _sliders(self.layout, fig, [p[0] for p in BODY_PARAMS])
-        self.layout.label(text="Face (non-manual markers)")
-        _sliders(self.layout, fig, FACE_KEYS)
+        lay = self.layout
+        box = lay.box()
+        box.label(text="Eyebrows", icon='HIDE_OFF')
+        _sliders(box, fig, ["brows", "brow_squeeze"])
+        cols = box.row()
+        for side, title in (("R", "Right brow"), ("L", "Left brow")):
+            c = cols.column(align=True)
+            c.label(text=title)
+            for n, lab in zip(BROW_NODES, ("Inner end", "Middle", "Outer end")):
+                c.prop(fig, f"brow_{n}_{side}", text=lab, slider=True)
+        lay.label(text="Mouth, cheeks and eyes")
+        _sliders(lay, fig, [k for k in FACE_KEYS if not k.startswith("brow")])
         self.layout.operator("asl.reset_group", text="Reset Body").prefix = "torso_"
         self.layout.operator("asl.reset_group", text="Reset Head").prefix = "head_"
 
@@ -4429,12 +6205,13 @@ CLASSES = [
     ASLFigure, ASLBody, ASLTether, ASLSceneSettings, ASLLiveSettings, ASL_OT_upgrade_figures,
     ASL_OT_live_toggle, ASL_OT_live_action,
     ASL_OT_set_start, ASL_OT_set_end, ASL_OT_edit_role, ASL_OT_add_tethered_arrow, ASL_OT_detach_arrow,
-    ASL_OT_reset_proportions,
+    ASL_OT_reset_proportions, ASL_OT_reset_shape, ASL_OT_sculpt_part, ASL_OT_sculpt_done, ASL_OT_reset_part,
+    ASL_OT_mirror_part,
     ASL_OT_new_scene, ASL_OT_clear_sign, ASL_OT_add_ghost, ASL_OT_delete_figure, ASL_OT_select_figure,
     ASL_OT_apply_handshape, ASL_OT_save_handshape, ASL_OT_copy_hand, ASL_OT_reset_group,
     ASL_OT_fit_frame, ASL_OT_add_arrow, ASL_OT_flip_arrows, ASL_OT_delete_arrows, ASL_OT_framing, ASL_OT_look_through, ASL_OT_export,
     ASL_OT_load_sign,
-    ASL_PT_card, ASL_PT_live, ASL_PT_motion, ASL_PT_figures, ASL_PT_proportions, ASL_PT_body,
+    ASL_PT_card, ASL_PT_live, ASL_PT_motion, ASL_PT_figures, ASL_PT_proportions, ASL_PT_shape, ASL_PT_body,
     _make_arm_panel("R"), _make_hand_panel("R"), _make_arm_panel("L"), _make_hand_panel("L"),
     ASL_PT_arrows, ASL_PT_framing,
 ]

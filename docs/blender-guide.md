@@ -54,8 +54,13 @@ To change a card later, click **Open Sign Recipe** and pick its file from `cards
 **Right Arm / Left Arm panels:** raise forward, raise sideways, rotate inward, elbow bend,
 forearm turn (0 = palm facing in, about 90 = palm facing out), wrist bend and wrist side.
 
-**Body & Face:** lean, turn, head nod/turn/tilt, and **Eyebrows** (raised for yes/no
-questions and topics, furrowed for wh-questions).
+**Body & Face:** lean, turn, head nod/turn/tilt, and the face:
+
+- **Eyebrows**: one slider raises (yes/no questions, topics) or furrows (wh-questions) both
+  brows. Below it, each brow's inner end, middle and outer end move on their own, and
+  **Squeeze** pulls the inner ends together. For example, inner ends up and outer ends down
+  makes a worried face; one brow up makes a doubtful one.
+- Mouth open, smile/frown, pucker (OO), puffed cheeks, and closing each eye.
 
 A good fingerspelling position to start from: Right Arm *Raise sideways* 22, *Elbow bend* 150,
 *Forearm turn* 90, *Wrist bend* -10, then **Framing & Look → Close-up on right hand**.
@@ -135,6 +140,28 @@ Figures made with an older version of the add-on are rebuilt automatically when 
 file (their poses are kept), so the length sliders work on them too. If the Card panel ever
 shows "Figures from an older version", click **Update Figures**.
 
+## Body shape and sculpting
+
+The **Body Shape & Sculpting** panel changes the figure's body for every figure on the card:
+**Head size**, **Body width**, **Body height**, **Body depth**, **Upper arm** and **Forearm**
+length, **Arm thickness** and **Hand size**. **Reset Body Shape** returns to the defaults.
+
+To reshape a part by hand:
+
+1. Click the part on the figure (the nose, the head, the chest, a palm...).
+2. Click **Sculpt Selected Part**. Blender switches to Sculpt Mode. Drag on the part to push it
+   out; hold **Ctrl** to push in and **Shift** to smooth. **F** changes the brush size. The face
+   and body are sculpted on both sides at once.
+3. Click **Done Sculpting**. Every figure in the scene (including faded start positions) gets
+   the new shape.
+
+**Copy to Other Side** gives the matching part on the other side (the other hand, eye, ear,
+cheek or eyebrow) a mirrored copy. **Reset Part** puts a sculpted part back.
+
+Sculpted parts are kept when the figure is rebuilt by an add-on update. If you sculpt a finger
+or arm section and later change its length, it is stretched to the new length.
+Live tracking and recorded takes follow all of these changes (see the live tracking guide).
+
 ## Framing and look
 
 **Fit Hands** and **Fit Hands + Face** (in the Card panel and in **Framing & Look**) zoom and
@@ -156,8 +183,8 @@ The **Live Tracking & Recording** panel connects the figure to your webcam throu
 app's Record tab, so you can pose it by signing, and record signs as animated GIF cards.
 See [live-tracking-guide.md](live-tracking-guide.md).
 
-The **Body & Face** panel now also has face sliders for non-manual markers: mouth open,
-smile/frown, pucker (OO), puffed cheeks, and closing each eye.
+Recorded GIFs can have arrows of their own (paths that trace a movement, arrows attached to a
+body part, and fixed shapes); they are set up in the web app's Review panel.
 
 ## Re-render every card from the command line
 

@@ -5,10 +5,12 @@ import { esc } from "../ui.js";
 import { BlenderLink } from "./link.js";
 import { loadLandmarkers, MP_VERSION } from "./mediapipe.js";
 import { Tracker, assignSides, drawOverlay } from "./tracker.js";
+import { createArrowEditor } from "./arrows.js";
 
 const SETTINGS_KEY = "asl-study-tool:record-settings";
 const defaults = { port: 8766, mirrorPreview: true, mirrorFigure: false, autoStop: true, countdown: 3,
-                   smoothing: 0.5, face: "auto", category: "phrase", quality: "FAST", fps: 15, size: 480 };
+                   smoothing: 0.5, face: "auto", category: "phrase", quality: "FAST", fps: 15, size: 480,
+                   useDepth: true, fov: 60 };
 
 function loadSettings() {
   try {
@@ -43,7 +45,8 @@ function createSession() {
     snaps: [],                // { t (ms, capture clock), url }
     capturing: false,
     lastSides: null,
-    gifUrl: null, gifName: "", gifInfo: null, expectGif: null,
+    gifUrl: null, gifName: "", gifInfo: null, expectBin: null,
+    arrowEd: null, takeId: null, viewT: 0,
     playhead: null, fps: 0, frameTimes: [],
     dom: null,
   };
@@ -56,12 +59,13 @@ function createSession() {
       render();
     },
     onMessage: (m) => onBlender(m),
-    onBinary: (buf) => onGif(buf),
+    onBinary: (buf) => onBinary(buf),
   });
 
   function pushSettings() {
     const s = st.settings;
-    link.send({ type: "settings", mirror: s.mirrorFigure, auto_stop: s.autoStop, countdown: s.countdown });
+    link.send({ type: "settings", mirror: s.mirrorFigure, auto_stop: s.autoStop, countdown: s.countdown,
+                use_depth: s.useDepth, fov: s.fov });
   }
 
   // --- messages from Blender ---------------------------------------------------------
@@ -80,24 +84,34 @@ function createSession() {
       render();
     } else if (m.type === "playhead") {
       st.playhead = m.t;
+      st.viewT = m.t;
       updateTimeline();
     } else if (m.type === "render_progress") {
       if (st.blender) st.blender.progress = { stage: m.stage, done: m.done, total: m.total };
       updateProgress();
     } else if (m.type === "gif_ready") {
-      st.expectGif = m;
+      st.expectBin = { kind: "gif", info: m };
+    } else if (m.type === "preview_ready") {
+      st.expectBin = { kind: "preview", info: m };
+    } else if (m.type === "arrows") {
+      st.arrowEd?.setArrows(m.arrows || []);
     } else if (m.type === "notice") {
       flash(m.message);
     }
   }
 
-  function onGif(buf) {
-    if (!st.expectGif) return;
+  function onBinary(buf) {
+    const exp = st.expectBin;
+    st.expectBin = null;
+    if (!exp) return;
+    if (exp.kind === "preview") {
+      st.arrowEd?.setPreview(buf, exp.info.t);
+      return;
+    }
     if (st.gifUrl) URL.revokeObjectURL(st.gifUrl);
     st.gifUrl = URL.createObjectURL(new Blob([buf], { type: "image/gif" }));
-    st.gifInfo = st.expectGif;
-    st.gifName = st.expectGif.name || "sign.gif";
-    st.expectGif = null;
+    st.gifInfo = exp.info;
+    st.gifName = exp.info.name || "sign.gif";
     render();
     st.dom?.root.querySelector("#result")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
@@ -274,6 +288,10 @@ function createSession() {
             <label class="check"><input type="checkbox" id="s-mirror-preview" ${s.mirrorPreview ? "checked" : ""}> Show the camera like a mirror</label>
             <label class="check"><input type="checkbox" id="s-mirror-figure" ${s.mirrorFigure ? "checked" : ""}> Figure mirrors me (left-handed signers)</label>
             <label class="check"><input type="checkbox" id="s-autostop" ${s.autoStop ? "checked" : ""}> Stop recording when my hands drop</label>
+            <label class="check"><input type="checkbox" id="s-depth" ${s.useDepth ? "checked" : ""}> Place hands by position, so touching my face touches the figure's face</label>
+            <div class="field"><label for="s-fov">Camera field of view</label>
+              <select id="s-fov">${[50, 55, 60, 65, 70, 78, 90].map((n) => opt(n, s.fov, n + "°" + (n === 60 ? " (most webcams)" : n === 78 ? " (wide webcams)" : ""))).join("")}</select>
+              <span class="muted small">If your hands land in front of the figure's face, choose a wider angle; behind it, a narrower one.</span></div>
             <div class="field"><label for="s-countdown">Countdown before recording</label>
               <select id="s-countdown">${[0, 2, 3, 5].map((n) => opt(n, s.countdown, n ? `${n} seconds` : "None")).join("")}</select></div>
             <div class="field"><label for="s-smooth">Smoothing <span class="muted" id="s-smooth-val"></span></label>
@@ -286,7 +304,7 @@ function createSession() {
           <details class="side-box">
             <summary>How to connect Blender</summary>
             <ol class="steps">
-              <li>Install the ASL Flashcard Editor add-on (version 0.5 or newer).</li>
+              <li>Install the ASL Flashcard Editor add-on (version 0.6 or newer).</li>
               <li>In Blender press <kbd>N</kbd>, open <b>ASL Cards</b>, click <b>New Card Scene</b> if needed.</li>
               <li>In <b>Live Tracking &amp; Recording</b>, click <b>Start Live Link</b>.</li>
               <li>Click <b>Start camera</b> on this page. The status turns green when they find each other.</li>
@@ -317,6 +335,16 @@ function createSession() {
     };
     root.querySelector("#s-autostop").onchange = (e) => {
       s.autoStop = e.target.checked;
+      save();
+      pushSettings();
+    };
+    root.querySelector("#s-depth").onchange = (e) => {
+      s.useDepth = e.target.checked;
+      save();
+      pushSettings();
+    };
+    root.querySelector("#s-fov").onchange = (e) => {
+      s.fov = +e.target.value;
       save();
       pushSettings();
     };
@@ -413,6 +441,11 @@ function createSession() {
     if (link.connected && L.total) {
       rows.push(["Delay", `${L.total.toFixed(0)} ms camera to model`, L.total < 120 ? "ok" : "warn"]);
       rows.push(["", `tracking ${t ? t.detectMs.toFixed(0) : "-"} ms, Blender ${L.blender.toFixed(1)} ms`, ""]);
+    }
+    const touch = link.connected && msg && msg.hands.length ? link.touch : null;
+    if (touch) {
+      const parts = Object.entries(touch).filter(([, v]) => v > 0.5).map(([k]) => (k === "R" ? "right" : "left"));
+      rows.push(["Touching", parts.length ? `${parts.join(" and ")} hand on face or chest` : "-", parts.length ? "ok" : ""]);
     }
     if (st.blender?.calibrating) rows.push(["", "Calibrating: face the camera and hold still", "warn"]);
     el.innerHTML = rows.map(([k, v, c]) => `<dt>${esc(k)}</dt><dd class="${c}">${esc(v)}</dd>`).join("");
@@ -511,6 +544,7 @@ function createSession() {
             </div>
             <div class="field"><label for="desc">What does this sign mean?</label>
               <input type="text" id="desc" maxlength="120" placeholder="for example: Nice to meet you" autocomplete="off"></div>
+            <section class="arrows" id="arrows"></section>
             <div class="gif-opts">
               <div class="field"><label for="g-cat">Category</label><select id="g-cat">${opt("phrase", s.category, "Phrase")}${opt("word", s.category, "Word")}</select></div>
               <div class="field"><label for="g-look">Look</label><select id="g-look">${opt("FAST", s.quality, "Fast")}${opt("CARD", s.quality, "Card look (slower)")}</select></div>
@@ -536,6 +570,7 @@ function createSession() {
       let raf = 0, pending = null;
       const seek = (t) => {
         pending = t;
+        st.viewT = t;
         if (!raf) raf = requestAnimationFrame(() => {
           raf = 0;
           link.send({ type: "seek", t: pending });
@@ -551,11 +586,32 @@ function createSession() {
         localTrim(+a.value, +z.value, +z.value);
         seek(+z.value);
       };
-      const commit = () => link.send({ type: "trim", start: +a.value, end: +z.value });
+      const commit = () => {
+        link.send({ type: "trim", start: +a.value, end: +z.value });
+        st.arrowEd?.moved();
+      };
       a.onchange = commit;
       z.onchange = commit;
       el.querySelector("#desc").value = st.lastDesc || "";
       el.querySelector("#desc").oninput = (e) => (st.lastDesc = e.target.value);
+      st.arrowEd = createArrowEditor(el.querySelector("#arrows"), {
+        send: (m) => link.send(m),
+        length: () => {
+          const tk = st.blender?.take;
+          return tk ? tk.end - tk.start : 0;
+        },
+        now: () => {
+          const tk = st.blender?.take;
+          return tk ? Math.min(tk.end - tk.start, Math.max(0, st.viewT - tk.start)) : 0;
+        },
+      });
+      st.takeId = null;
+    }
+    if (st.takeId !== take.t0_ms) {           // a new take: show its arrows (none yet)
+      st.takeId = take.t0_ms;
+      st.viewT = take.start;
+      st.arrowEd.reset();
+      st.arrowEd.setArrows(take.arrows || []);
     }
     const a = el.querySelector("#t-start"), z = el.querySelector("#t-end");
     if (+a.max !== take.duration || el.dataset.samples !== String(take.samples)) {
@@ -568,6 +624,8 @@ function createSession() {
     localTrim(take.start, take.end, st.playhead ?? take.start);
     el.querySelector("#play-btn").innerHTML = b.mode === "playing" ? "Pause <kbd>Space</kbd>" : "Play <kbd>Space</kbd>";
     el.querySelectorAll("button, input, select").forEach((x) => (x.disabled = rendering));
+    if (b.mode === "review" && st._wasPlaying) st.arrowEd?.moved();
+    st._wasPlaying = b.mode === "playing";
     updateProgress();
   }
 

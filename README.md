@@ -32,8 +32,10 @@ drafts drawn with the editor and should be checked by a fluent signer before any
 - **Sentences:** practice sets for the starter sentences and each Lifeprint lesson (1-15). Three
   directions: signs to English, gloss to English (works before cards are drawn), and English to signs.
 - **Progress:** answers per day, percent correct over time, and a success rate for every sign.
-- **Record:** your webcam moves the Blender figure in real time (fingers, arms, head and facial
-  expression). Record a sign, trim it, describe it, retry with one key, and save it as an
+- **Record:** your webcam moves the Blender figure in real time (fingers, arms, head, eyebrows
+  and facial expression). Hands are placed by position, so touching your nose touches the
+  figure's nose. Record a sign, trim it, describe it, add arrows (movement paths, arrows on a
+  body part, fixed shapes) with controls for each one, retry with one key, and save it as an
   animated GIF card. See [docs/live-tracking-guide.md](docs/live-tracking-guide.md).
 - **Profiles:** a nickname plus a recovery code. Saved in the browser for now; online sync
   between devices is the next planned step.
@@ -57,6 +59,9 @@ Then open <http://localhost:8000>. (In VS Code, the "Live Server" extension does
 3. After a minute the site is live at `https://cjlittle7.github.io/ASL-Study-Tool/`.
 
 ## Making cards
+
+The figure's body can be reshaped with sliders (head size, body width, arm lengths, hand
+size...) or sculpted with Blender's brushes; live tracking and recordings follow the new shape.
 
 See [docs/blender-guide.md](docs/blender-guide.md). In short: install the add-on in Blender,
 click **New Card Scene**, pose the figure, type the English term, set the cards folder to this
