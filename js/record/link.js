@@ -94,6 +94,7 @@ export class BlenderLink {
 
   _ack(msg) {
     if (msg.touch) this.touch = msg.touch;
+    this.shape = msg.shape || null;
     const s = this.sent.get(msg.id);
     if (!s) return;
     this.sent.delete(msg.id);

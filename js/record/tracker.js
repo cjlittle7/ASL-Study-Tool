@@ -37,6 +37,8 @@ export class Tracker {
     this.lastFace = null;
     this.detectMs = 0;
     this.handSeen = { R: 0, L: 0 };
+    this.sideAssigner = new SideAssigner();
+    this.lastSides = null;
     // smoothing (minCutoff in Hz is set from the Smoothing slider)
     this.filters = {
       pose: new FilterGroup(1.8, 8),        // meters
@@ -139,7 +141,8 @@ export class Tracker {
     }
 
     if (handRes && handRes.worldLandmarks) {
-      const sides = assignSides(handRes, poseImg);
+      const sides = this.sideAssigner.assign(handRes, poseImg);
+      this.lastSides = sides;
       const present = { R: false, L: false };
       handRes.worldLandmarks.forEach((world, i) => {
         const side = sides[i];
@@ -180,41 +183,68 @@ export class Tracker {
 }
 
 /**
- * Decide which hand is the person's right and which is the left.
- * MediaPipe's own left/right label assumes a mirrored selfie image and is unreliable,
- * so each hand is matched to the nearest wrist of the body pose instead.
+ * Decide which hand is the person's right and which is the left, frame after frame.
+ * Three clues are weighed:
+ *   * where each side's hand was a moment ago (hands don't jump), which keeps crossed arms
+ *     straight even when the body tracker mixes up the wrists,
+ *   * which body-pose wrist the hand is nearest,
+ *   * MediaPipe's own left/right label (it judges from the hand's shape; flipped because the
+ *     camera picture isn't mirrored).
+ * A swap must be clearly better than keeping the current labels, so one odd frame changes nothing.
  */
-export function assignSides(handRes, poseImg) {
-  const hands = handRes.landmarks || [];
-  const n = hands.length;
-  const out = new Array(n).fill(null);
-  if (!n) return out;
-  const wrist = (i) => hands[i][0];
-  const pw = poseImg && poseImg[16] && poseImg[15] ? { R: poseImg[16], L: poseImg[15] } : null;
-  if (pw) {
+export class SideAssigner {
+  constructor() {
+    this.prev = { R: null, L: null };
+  }
+
+  assign(handRes, poseImg, now = performance.now()) {
+    const hands = handRes?.landmarks || [];
+    const n = hands.length;
+    const out = new Array(n).fill(null);
+    if (!n) return out;
+    const info = hands.map((lm, i) => {
+      let x = 0, y = 0;
+      for (const p of lm) { x += p.x; y += p.y; }
+      const size = Math.hypot(lm[0].x - lm[9].x, lm[0].y - lm[9].y) || 0.05;
+      const label = handRes.handedness?.[i]?.[0];
+      return { c: { x: x / lm.length, y: y / lm.length }, w: lm[0], size,
+               label: label ? (label.categoryName === "Left" ? "R" : "L") : null, conf: label?.score ?? 0 };
+    });
+    const pw = poseImg && poseImg[16] && poseImg[15] &&
+      (poseImg[16].visibility ?? 1) > 0.3 && (poseImg[15].visibility ?? 1) > 0.3 ? { R: poseImg[16], L: poseImg[15] } : null;
     const d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const cost = (h, s) => {
+      let c = 0;
+      const pv = this.prev[s];
+      if (pv && now - pv.t < 400) c += 1.2 * Math.min(3, d(h.c, pv.c) / h.size);
+      if (pw) c += 0.6 * Math.min(3, d(h.w, pw[s]) / h.size);
+      if (h.label) c += 0.8 * h.conf * (h.label === s ? 0 : 1);
+      return c;
+    };
     if (n === 1) {
-      out[0] = d(wrist(0), pw.R) <= d(wrist(0), pw.L) ? "R" : "L";
+      out[0] = cost(info[0], "R") <= cost(info[0], "L") ? "R" : "L";
     } else {
-      const keep = d(wrist(0), pw.R) + d(wrist(1), pw.L);
-      const swap = d(wrist(0), pw.L) + d(wrist(1), pw.R);
-      out[0] = keep <= swap ? "R" : "L";
-      out[1] = keep <= swap ? "L" : "R";
+      const keep = cost(info[0], "R") + cost(info[1], "L");
+      const swap = cost(info[0], "L") + cost(info[1], "R");
+      // "keep" means: hand 0 is the one that was the right hand last frame, if it was
+      const was0 = this.prev.R && this.prev.L ? (d(info[0].c, this.prev.R.c) <= d(info[0].c, this.prev.L.c) ? "R" : "L") : null;
+      let first;
+      if (was0 === "R") first = swap < keep - 0.5 ? "L" : "R";
+      else if (was0 === "L") first = keep < swap - 0.5 ? "R" : "L";
+      else first = keep <= swap ? "R" : "L";
+      out[0] = first;
+      out[1] = first === "R" ? "L" : "R";
     }
+    out.forEach((s, i) => {
+      if (s) this.prev[s] = { c: info[i].c, t: now };
+    });
     return out;
   }
-  // No body pose: fall back to MediaPipe's label, flipped because the camera image isn't mirrored.
-  for (let i = 0; i < n; i++) {
-    const label = handRes.handedness?.[i]?.[0]?.categoryName;
-    out[i] = label === "Left" ? "R" : label === "Right" ? "L" : null;
-  }
-  if (n === 2 && out[0] === out[1]) {
-    // both got the same label: the one further to the image's left is the person's right
-    const left0 = wrist(0).x < wrist(1).x;
-    out[0] = left0 ? "R" : "L";
-    out[1] = left0 ? "L" : "R";
-  }
-  return out;
+}
+
+/** One-off version (no memory of earlier frames). */
+export function assignSides(handRes, poseImg) {
+  return new SideAssigner().assign(handRes, poseImg);
 }
 
 // --- drawing the tracked points over the camera picture ---------------------------

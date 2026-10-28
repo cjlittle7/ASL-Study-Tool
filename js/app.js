@@ -6,6 +6,7 @@ import { renderLesson, renderLessonList } from "./lessons.js";
 import { renderPractice } from "./practice.js";
 import { initProfile } from "./profile.js";
 import { renderProgress } from "./progress.js";
+import { renderPhone } from "./record/phone.js";
 import { renderRecord } from "./record/page.js";
 import { renderSentences } from "./sentences.js";
 import { esc } from "./ui.js";
@@ -19,11 +20,13 @@ const routes = {
   sentences: () => renderSentences(main),
   progress: () => renderProgress(main),
   record: () => renderRecord(main),
+  phone: (arg) => renderPhone(main, arg),
 };
 
 async function route() {
   const [, page = "learn", arg] = location.hash.split("/");
   const name = routes[page] ? page : "learn";
+  document.body.classList.toggle("phone-mode", name === "phone");
   document.querySelectorAll(".tabs a").forEach((a) => {
     if (a.dataset.route === name) a.setAttribute("aria-current", "page");
     else a.removeAttribute("aria-current");

@@ -34,7 +34,10 @@ drafts drawn with the editor and should be checked by a fluent signer before any
 - **Progress:** answers per day, percent correct over time, and a success rate for every sign.
 - **Record:** your webcam moves the Blender figure in real time (fingers, arms, head, eyebrows
   and facial expression). Hands are placed by position, so touching your nose touches the
-  figure's nose. Record a sign, trim it, describe it, add arrows (movement paths, arrows on a
+  figure's nose. Handshape help recognizes ASL handshapes (and learns your own) and guides the
+  fingers into the exact shape; crossed arms and turning wrists no longer make the figure jerk.
+  Add your phone as a second camera at any angle for measured (not estimated)
+  depth. Record a sign, trim it, describe it, add arrows (movement paths, arrows on a
   body part, fixed shapes) with controls for each one, retry with one key, and save it as an
   animated GIF card. See [docs/live-tracking-guide.md](docs/live-tracking-guide.md).
 - **Profiles:** a nickname plus a recovery code. Saved in the browser for now; online sync
@@ -53,10 +56,28 @@ Then open <http://localhost:8000>. (In VS Code, the "Live Server" extension does
 
 ## Publish with GitHub Pages
 
-1. Push this folder to `https://github.com/cjlittle7/ASL-Study-Tool`.
-2. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**,
-   branch `main`, folder `/ (root)`.
-3. After a minute the site is live at `https://cjlittle7.github.io/ASL-Study-Tool/`.
+Publishing puts the app online at `https://cjlittle7.github.io/ASL-Study-Tool/`. You need this to
+use your **phone as a second camera** (phones only allow the camera on `https` pages), and to open
+the app from any device.
+
+Without the command line:
+
+1. Sign in at <https://github.com> and open <https://github.com/cjlittle7/ASL-Study-Tool>.
+2. Click **Add file → Upload files**. Unzip `ASL-Study-Tool.zip` on your computer, open the
+   `ASL-Study-Tool` folder, select **everything inside it** (`index.html`, `css`, `js`, `data`,
+   `cards`, `blender`, `docs`, `vendor`, `README.md`) and drag it onto the page. (Drag the
+   contents, not the folder itself, so `index.html` ends up at the top level.)
+3. Click **Commit changes**.
+4. Go to **Settings → Pages**. Under **Build and deployment**, set **Source** to *Deploy from a
+   branch*, branch `main`, folder `/ (root)`, and click **Save**.
+5. Wait a minute or two, then open `https://cjlittle7.github.io/ASL-Study-Tool/`. If it says
+   404, wait another minute and reload.
+
+When you get a new version, upload the files again the same way (GitHub replaces the old ones).
+The phone always uses the published copy, so publish again after each update; the Record tab
+warns you if the online copy is missing or too old for the phone camera.
+
+With git instead: push this folder to the repository's `main` branch, then do step 4.
 
 ## Making cards
 

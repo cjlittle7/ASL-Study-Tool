@@ -14,7 +14,7 @@ No video leaves your computer. The browser sends Blender only numbers (about 4 K
 
 ## What you need
 
-- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.6 or newer**.
+- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.8 or newer**.
 - Chrome, Edge or Firefox, and a webcam.
 - The web app opened from `http://localhost:8000` (see the README) or from GitHub Pages.
   Browsers only allow the camera on `localhost` or `https` addresses.
@@ -58,13 +58,111 @@ out where each hand really is:
    fingertip counting most. The shoulder and elbow follow, and the elbow points the way yours does.
    Hands are kept out of the head and chest.
 
-The Status box shows **Touching** when a hand is taken as touching the face or chest. If hands
-still land a little in front of the face, choose a wider **Camera field of view**; if they
-sink into it, a narrower one. Turn **Place hands by position** off to go back to copying
-only the arm directions.
+The Status box shows **Touching** when a hand is taken as touching the face or chest. Turn
+**Place hands by position** off to go back to copying only the arm directions.
+
+**Camera field of view** is measured automatically: as your hands move, their nearer parts look
+bigger by an amount that depends on how wide the lens is, and the add-on picks the width that
+fits best. It takes a few seconds (pointing your fingers toward the camera now and then helps),
+and the Settings box shows the result. You can still choose a value by hand: if hands land a
+little in front of the face, choose a wider angle; if they sink into it, a narrower one.
 
 When a hand touches the face, the add-on also learns how far off MediaPipe's hand size is for
 you, which makes hand distance more accurate for the rest of the session.
+
+## Handshape help
+
+Fingers are the hardest part to track: a webcam often sees them half hidden, so a tracked V can
+come out with a bent finger or the thumb in the wrong place. **Handshape help** knows the ASL
+handshapes (A, S, B, 5, C, O, 1, L, V, W, I, Y, X, flat O, bent B, claw, D, E, F, G, K, M, N, R,
+T, U/H and a relaxed hand) and guides the figure's fingers into the exact shape:
+
+- A small machine-learning model (k-nearest neighbors) compares your tracked finger angles
+  with examples of each handshape. It learns the examples by bending the figure's own hand into
+  every handshape in many slightly different ways and tracking them, so it knows how each shape
+  looks to the tracker. That takes about half a second when the link starts.
+- When it's sure which handshape you're making, the fingers are pulled into that handshape's
+  exact pose. When it isn't sure (in the middle of changing from one sign to the next, or a shape
+  it doesn't know), the fingers are left as tracked. **Strength** sets how hard it pulls.
+- The Status box shows what it sees, for example "right V 92%".
+
+### Teaching it your hands
+
+Everyone's hands are a little different, so you can teach it your own versions. In the Record
+tab, open **Teach handshapes**, pick a handshape and a hand, click **Teach**, and hold the shape
+for 3 seconds (turning your wrist a little gives it more to learn from). Your examples count
+three times as much as the built-in ones and are saved in Blender's settings folder
+(`asl_handshape_examples.json`), so they're kept for next time. The figure still makes the
+*correct* handshape: your examples only help recognize it. **Forget all my examples** removes
+them.
+
+In testing with deliberately sloppy handshapes (every finger joint randomly off by about 9°, seen
+from random wrist angles), it picked the right handshape about 93% of the time, and when it
+wasn't sure it mostly left the fingers alone. One person's unusual V went from not recognized to
+recognized every time after teaching it once.
+
+## Crossed arms and turning wrists
+
+Two kinds of tracking glitch used to make the figure jerk:
+
+- **The tracker reads a hand inside out** for a frame (its depth backwards, so a right hand
+  looks like a left one). The wrist then spins half a turn. The add-on now checks each hand's 3D
+  shape: a right hand's thumb and bent fingers are always on one particular side of the palm,
+  and a left hand's on the other. A hand that comes out mirror-imaged is flipped back.
+- **The two hands get mixed up** when the arms cross. The web page now remembers where each
+  hand was a moment ago and also uses MediaPipe's own left/right judgment, so hands keep their
+  identity while they pass each other, even when the body tracker mixes up the wrists. A swap
+  has to be clearly better before it happens.
+
+As a last safety net, an arm joint that suddenly turns more than about 55° in one frame is held
+back for up to 3 frames, and only follows if the new position is still there; real movements
+that fast are rare.
+
+In testing with these glitches added to wrist turns and crossed arms, the figure's joints jumped
+more than 30° in one frame 30-34 times per run without the fixes, and not at all with them.
+
+
+With one camera, how far away your hands are has to be estimated. A phone set up at another
+angle sees the same points from the side, so Blender can measure it instead (triangulation).
+This helps most with signs that move toward or away from the body, and with a hand hidden from
+the laptop camera by the other hand.
+
+What you need: the web app published on **GitHub Pages** (or another `https` address), because
+phone browsers only allow the camera on `https` pages. The phone and laptop should be on the same
+Wi-Fi.
+
+1. On the laptop, in the Record tab, click **Connect a phone** (in the Phone camera box). A QR
+   code and a 6-letter code appear.
+2. On the phone, scan the QR code (or open the web app and go to `#/phone`, then type the code).
+   Tap **Start phone camera** and allow the camera.
+3. Stand the phone up 1 to 2 meters away, about a quarter turn (45-90°) from the laptop
+   camera, where it sees your head and both hands. The back camera is sharper if you can
+   see the screen some other way; the front camera lets you check the picture.
+4. Move your arms around for a few seconds. Blender works out where the phone is and what its
+   lens is from your movements; you don't measure anything. The box then says **In use**, with
+   the angle between the cameras.
+
+If the phone gets moved, its points stop lining up with the laptop's; Blender notices within a
+couple of seconds and finds it again (move your arms around). **Find the phone again** forces this.
+
+How the delay is kept low:
+
+- The phone does its own tracking and sends only point positions (about 2 KB per frame), never video.
+- The phone and laptop talk directly (WebRTC). A free public server is used only to introduce
+  them with the code.
+- Phone frames travel on a channel that never re-sends or queues: a late frame is dropped
+  instead of holding up newer ones.
+- The phone's clock is matched to the laptop's with quick time checks, and Blender
+  interpolates the phone's points to the exact moment of each laptop frame, or predicts them a
+  few hundredths of a second ahead. **Nothing waits for the phone**: the laptop camera still
+  drives the figure at its own speed, and the phone corrects the depth.
+- If the phone's frames stop or fall too far behind, Blender goes back to one camera smoothly.
+
+Recordings keep the phone's points, so a take recorded with two cameras is solved with two
+cameras again if you change the figure's body.
+
+Later, with a second USB webcam: the same combining works for a second camera on the laptop
+itself, without pairing. That option isn't in the app yet.
 
 ## Eyebrows
 
@@ -159,7 +257,7 @@ The old files stay on disk.
 | Smoothing | Off, light, medium or strong jitter removal |
 | Face tracking | Automatic, every frame, every other frame, or off |
 | Place hands by position | Hands are placed relative to your face and body (see above). Off: only arm directions are copied |
-| Camera field of view | How wide your webcam sees. Most are about 60°, wide ones about 78° |
+| Camera field of view | How wide your webcam sees. **Automatic** (default) measures it from your hands; or pick it (most webcams are about 60°, wide ones about 78°) |
 | Blender port | Must match the Port in Blender's panel (default 8766) |
 
 In Blender you can also switch tracking of **Arms, Hands, Head, Face and Body** on or off.
@@ -191,8 +289,16 @@ making the GIF, so a fingertip that touched the nose still touches the (new) nos
   body's wrists.
 - **The head is tilted when you're not**: click **Calibrate** while facing the camera.
 - **Eyebrows look raised or furrowed when relaxed**: click **Calibrate** with a relaxed face.
-- **A hand near the face lands in front of or inside the figure's face**: change **Camera field
-  of view** in the Record tab's Settings (or in Blender's panel).
+- **A hand near the face lands in front of or inside the figure's face**: give the automatic
+  field of view a few seconds of hand movement, or choose a value by hand in the Record tab's
+  Settings (or in Blender's panel).
+- **The phone shows "404"**: the app isn't published on GitHub Pages yet, or the published copy
+  is older than the phone camera feature. Publish it (see the README); the Record tab's Phone
+  camera box shows a warning until it finds the online copy.
+- **The phone won't pair**: both devices need internet for the pairing step. Make sure the laptop
+  still shows the code, and that the phone opened the address from the QR code (an `https` address).
+- **Phone connected but "Finding the phone" never finishes**: the phone must see your face and
+  hands at the same time as the laptop does. Move your arms through a big area for a few seconds.
 - **High delay**: the Status box shows whether tracking or Blender is slow. Close other
   camera apps, set Face tracking to Automatic, and use Solid shading in Blender.
 

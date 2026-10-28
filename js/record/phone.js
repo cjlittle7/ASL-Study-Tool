@@ -6,7 +6,7 @@
 import { esc } from "../ui.js";
 import { loadLandmarkers } from "./mediapipe.js";
 import { PhoneSender } from "./phonelink.js";
-import { Tracker, assignSides, drawOverlay } from "./tracker.js";
+import { Tracker, drawOverlay } from "./tracker.js";
 
 let P = null;           // one phone session survives re-renders
 
@@ -108,7 +108,7 @@ function createPhoneSession() {
     if (msg.face) out.face = { pts: msg.face.pts };
     sender.send(out);
     if (st.dom?.root.isConnected) {
-      const sides = res.handRes ? assignSides(res.handRes, res.poseRes?.landmarks?.[0]) : null;
+      const sides = res.handRes ? st.tracker?.lastSides ?? null : null;
       drawOverlay(st.dom.overlay, st.dom.video, res, sides);
       if (now - (st._statAt || 0) > 1000) {
         st._statAt = now;

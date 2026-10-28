@@ -464,6 +464,24 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .arrow-preview-img span[hidden] { display: none; }
 .arrow-preview figcaption { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
 
+/* phone as a second camera */
+.warn-box { background: var(--marker-soft); border-left: 4px solid var(--marker); border-radius: 0 var(--radius-ctl) var(--radius-ctl) 0; padding: 8px 12px; margin: 8px 0 12px; }
+.warn-box p { margin: 0 0 8px; }
+.qr { width: 200px; max-width: 100%; aspect-ratio: 1; background: #fff; border-radius: var(--radius-ctl); margin: 8px 0; }
+.qr svg { width: 100%; height: 100%; display: block; }
+.pair-code { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.18em; margin: 4px 0; font-variant-numeric: tabular-nums; }
+.break { overflow-wrap: anywhere; }
+.phone-mode .topbar, .phone-mode .dict-toggle, .phone-mode #dictionary { display: none !important; }
+.phone { max-width: 560px; margin: 0 auto; }
+.phone h1 { margin: 6px 0 12px; font-size: 1.5rem; }
+.phone-cam { aspect-ratio: 4 / 3; }
+.phone-actions { margin: 12px 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.phone-code input { font-size: 1.4rem; letter-spacing: 0.15em; text-transform: uppercase; max-width: 220px; }
+.cam-msg-inline { margin: 10px 0 0; color: var(--ink-soft); }
+.cam-msg-inline.error { color: var(--arrow); }
+.phone-help ul { padding-left: 1.2em; margin: 8px 0 0; }
+.phone-help li { margin-bottom: 6px; }
+
 @media (max-width: 900px) {
   .rec-layout { grid-template-columns: 1fr; }
   .review-grid { grid-template-columns: 1fr; }

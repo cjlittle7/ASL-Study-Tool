@@ -27,7 +27,7 @@ How the figure works (worth reading if you want to change the code):
 bl_info = {
     "name": "ASL Flashcard Editor",
     "author": "ASL Study Tool",
-    "version": (0, 7, 0),
+    "version": (0, 8, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > Sidebar (N) > ASL Cards",
     "description": "Pose a signer figure, export ASL flashcards, and record signs with live webcam tracking",
@@ -3775,6 +3775,91 @@ class StereoRig:
         return st
 
 
+class FovEstimator:
+    """Works out the webcam's field of view from your hands. A hand has real depth (fingers nearer
+    or further than the wrist, in MediaPipe's 3D hand points) and a webcam's perspective makes the
+    nearer parts look bigger by an amount that depends on the lens. For each candidate field of view
+    the hand is fitted to the picture; the one that fits best over many frames wins. Hands pointing
+    toward or away from the camera tell the most."""
+
+    CANDS = list(range(40, 104, 2))
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.cost = [0.0] * len(self.CANDS)
+        self.weight = 0.0
+        self.estimate = None
+        self.last_t = -1e9
+        self.frames = 0
+
+    def update(self, hands_raw, img, t_sec):
+        if t_sec - self.last_t < 0.2 or not img:
+            return
+        W, H = img
+        used = False
+        for h in hands_raw.values():
+            Q, uv = h.get("world"), h.get("img")
+            if not Q or not uv or len(Q) != 21 or len(uv) != 21:
+                continue
+            f0 = W / (2 * math.tan(math.radians(65) / 2))
+            t0 = fit_camera_translation(Q, uv, (f0, W / 2, H / 2))
+            if t0 is None:
+                continue
+            zs = [q[2] for q in Q]
+            ext = (max(zs) - min(zs)) / t0.z           # how much depth the hand has, relative
+            if ext < 0.12:                              # flat to the camera: says little
+                continue
+            us, vs = [p[0] for p in uv], [p[1] for p in uv]
+            size2 = (max(us) - min(us)) ** 2 + (max(vs) - min(vs)) ** 2
+            if size2 < 400:
+                continue
+            errs = []
+            for fov in self.CANDS:
+                f = W / (2 * math.tan(math.radians(fov) / 2))
+                cam = (f, W / 2, H / 2)
+                t = fit_camera_translation(Q, uv, cam)
+                if t is None:
+                    errs.append(None)
+                    continue
+                e = 0.0
+                for q, p in zip(Q, uv):
+                    z = q[2] + t.z
+                    if z < 0.05:
+                        e += 1e4
+                        continue
+                    e += (f * (q[0] + t.x) / z + W / 2 - p[0]) ** 2 + (f * (q[1] + t.y) / z + H / 2 - p[1]) ** 2
+                errs.append(e / 21 / size2)
+            good = [e for e in errs if e is not None]
+            if not good:
+                continue
+            lo = min(good)
+            w = min(1.0, (ext / 0.25) ** 2)
+            for i, e in enumerate(errs):
+                # relative fit: 0 for the best candidate of this frame, growing for worse ones
+                self.cost[i] = self.cost[i] * 0.997 + w * (((e if e is not None else 10 * lo) - lo) / (lo + 1e-6))
+            self.weight = self.weight * 0.997 + w
+            used = True
+        if not used:
+            return
+        self.last_t = t_sec
+        self.frames += 1
+        if self.weight >= 8:
+            i = min(range(len(self.CANDS)), key=lambda k: self.cost[k])
+            fov = float(self.CANDS[i])
+            if 0 < i < len(self.CANDS) - 1:               # between grid steps
+                a, b, c = self.cost[i - 1], self.cost[i], self.cost[i + 1]
+                den = a - 2 * b + c
+                if den > 1e-12:
+                    fov += _clamp(0.5 * (a - c) / den, -1.0, 1.0) * 2
+            self.estimate = fov if self.estimate is None else self.estimate * 0.8 + fov * 0.2
+
+    @property
+    def ready(self):
+        return self.estimate is not None
+
+
 class DepthPlacer:
     """Steps 1-4 above for one frame. Used by Retargeter.solve when the browser sends picture
     coordinates and a figure skeleton is known."""
@@ -4240,9 +4325,14 @@ class Retargeter:
         self.skel = None          # ModelSkeleton of the figure (for depth-aware hand placement)
         self.use_depth = True
         self.fov = 60.0           # camera's horizontal field of view (degrees)
+        self.fov_auto = False     # work the field of view out from the hands (FovEstimator)
+        self.fov_manual = 60.0
+        self.fov_est = FovEstimator()
         self.groups = None        # tracked groups (None = all), see TRACK_GROUPS
         self.depth = DepthPlacer(self)
         self.stereo = None        # StereoRig when a second camera (phone) is connected
+        self.shape = None         # HandshapeGuide: recognizes handshapes and guides the fingers
+        self.hold = {}            # joint -> frames a sudden jump has been held back (see _no_spasms)
         self.reset()
 
     def reset(self):
@@ -4627,11 +4717,15 @@ class Retargeter:
         for h in msg.get("hands") or []:
             side = h.get("side")
             if side in ("R", "L") and len(h.get("world") or []) == 21:
+                h = self.fix_depth_flip(h, side)
                 if self.mirror:
                     side = "L" if side == "R" else "R"
                 hands[side] = [self.conv(p) for p in h["world"]]
                 hands_raw[side] = h
         t_sec = float(msg.get("t", 0.0)) / 1000.0
+        if self.fov_auto and hands_raw:
+            self.fov_est.update(hands_raw, msg.get("img"), t_sec)
+        self.fov = self.fov_est.estimate if (self.fov_auto and self.fov_est.ready) else self.fov_manual
 
         tl = self.torso(pose) if pose else None
         calib = self.calib or {}
@@ -4671,6 +4765,8 @@ class Retargeter:
             frames[side] = H
             self.fingers(side, P, H, out)
             self.thumb(side, P, H, out)
+            if self.shape is not None:
+                self.shape.apply(side, out, t_sec)
 
         # arms: by position when possible, otherwise by direction
         placed = {}
@@ -4697,9 +4793,58 @@ class Retargeter:
             if self.calib_left <= 0:
                 self._finish_calibration()
 
+        self._no_spasms(out)
         for k, e in out.items():
             self.prev[k] = e
         return out, face_vals, bool(hands)
+
+    HAND_CHIRALITY = 1             # sign of fix_depth_flip's measure for a right hand (see tests)
+    SPIKE = math.radians(55)       # a joint turning further than this in one frame is suspicious
+    SPIKE_HOLD = 3                 # ...held back for at most this many frames unless it stays
+
+    def _no_spasms(self, out):
+        """A tracking glitch (a hand read mirror-wise for one frame, two hands mixed up) can flip a
+        joint half a turn and back. Real movements that big in one frame are rare, so a sudden jump
+        is held back for a couple of frames, and only accepted if it is still there."""
+        for k in [k for k in out if k.endswith(("_shoulder", "_elbow", "_wrist"))]:
+            prev = self.prev.get(k)
+            if prev is None:
+                continue
+            q1 = prev.to_quaternion()
+            q2 = out[k].to_quaternion()
+            if q1.rotation_difference(q2).angle > self.SPIKE:
+                n = self.hold.get(k, 0)
+                if n < self.SPIKE_HOLD:
+                    self.hold[k] = n + 1
+                    out[k] = prev.copy()
+                    continue
+            self.hold[k] = 0
+
+    def fix_depth_flip(self, h, side):
+        """MediaPipe sometimes reads a hand's depth backwards for a frame or two. That turns the
+        3D hand into its mirror image (a right hand shaped like a left one), and the wrist spins
+        half a turn. A right hand has its thumb and bent fingers on the palm side of the plane
+        through the wrist, index knuckle and pinky knuckle in one particular turning direction; a
+        left hand in the other. If the 3D points have the wrong one for this hand, their depth is
+        flipped back. (Open, flat hands give no clear answer and are left alone.)"""
+        W = h["world"]
+        P = [Vector(p) for p in W]
+        n = (P[5] - P[0]).cross(P[17] - P[0])
+        if n.length < 1e-9:
+            return h
+        n.normalize()
+        e = (P[2] - P[0]).dot(n) + (P[3] - P[0]).dot(n) * 0.5
+        for mcp, tip in ((5, 8), (9, 12), (13, 16), (17, 20)):
+            e += 0.5 * (P[tip] - P[mcp]).dot(n)
+        want = self.HAND_CHIRALITY * (1 if side == "R" else -1)      # the person's own side
+        if e * want >= -0.012:
+            return h
+        zc = sum(p[2] for p in W) / 21
+        h = dict(h)
+        h["world"] = [[p[0], p[1], 2 * zc - p[2]] for p in W]
+        self.flips = getattr(self, "flips", 0) + 1
+        return h
+
 
     def _finish_calibration(self):
         acc = self._calib_acc
@@ -4728,6 +4873,253 @@ class Retargeter:
             calib["brow"] = {ps: [sum(b[ps][i] for b in brows) / len(brows) for i in range(3)] for ps in SIDES}
             calib["brow"]["gap"] = sum(b["gap"] for b in brows) / len(brows)
         self.calib = calib
+
+
+# --- Handshape recognition: a small machine-learning model that guides the fingers -----------
+#
+# Every tracked hand is described by 21 numbers: the same finger and thumb angles as the Hand
+# sliders. A k-nearest-neighbors classifier compares them with labeled examples of ASL handshapes:
+#   * built-in examples, made by bending the figure's own hand into each handshape with random
+#     variations and running them through the tracker's finger solver (so they include its quirks),
+#   * your own examples ("Teach" in the Record tab), which count more because they come from your
+#     real hand and camera.
+# When the tracked hand is clearly one handshape, its fingers are pulled toward that handshape's
+# exact pose: fully when the match is sure, not at all when it is unsure, smoothly in between.
+# In-between shapes (while moving from one sign to the next) are left as tracked.
+
+HAND_FEATURES = ([f"{f}_{p}" for f in FINGERS for p in ("base", "side", "mid", "tip")]
+                 + ["thumb_out", "thumb_across", "thumb_roll", "thumb_mid", "thumb_tip"])
+# how far apart two hands must be on each number to count as "one unit" different
+_FEAT_SCALE = [18.0 if f.endswith(("base", "mid", "tip")) else 9.0 for f in HAND_FEATURES[:16]] + \
+              [14.0, 14.0, 16.0, 18.0, 18.0]
+# U and H are the same handshape (H is held sideways); the classifier shows them as one
+SHAPE_CLASSES = [k for k in HANDSHAPES if k != "H"]
+SHAPE_LABELS = {k: ("U / H" if k == "U" else HANDSHAPES[k][0].split(" (")[0]) for k in SHAPE_CLASSES}
+
+
+def rots_to_features(out, side):
+    """Joint rotations of one hand -> the 21 slider values (degrees). None if a joint is missing."""
+    d = math.degrees
+    m = 1 if side == "R" else -1
+    v = []
+    try:
+        for f in FINGERS:
+            b = out[f"{side}_{f}_base"]
+            v += [-d(b[0]), m * d(b[1]), -d(out[f"{side}_{f}_mid"][0]), -d(out[f"{side}_{f}_tip"][0])]
+        c, tb = out[f"{side}_thumb_cmc"], out[f"{side}_thumb_base"]
+        v += [m * d(c[1]), -d(tb[0]), m * d(tb[2]), -d(out[f"{side}_thumb_mid"][0]), -d(out[f"{side}_thumb_tip"][0])]
+    except KeyError:
+        return None
+    return v
+
+
+def features_to_rots(v, side, out):
+    r = math.radians
+    m = 1 if side == "R" else -1
+    for i, f in enumerate(FINGERS):
+        base, sd, mid, tip = v[4 * i: 4 * i + 4]
+        out[f"{side}_{f}_base"] = Euler((-r(base), m * r(sd), 0.0))
+        out[f"{side}_{f}_mid"] = Euler((-r(mid), 0.0, 0.0))
+        out[f"{side}_{f}_tip"] = Euler((-r(tip), 0.0, 0.0))
+    out_, across, roll, tmid, ttip = v[16:21]
+    out[f"{side}_thumb_cmc"] = Euler((0.0, m * r(out_), 0.0))
+    out[f"{side}_thumb_base"] = Euler((-r(across), 0.0, m * r(roll)))
+    out[f"{side}_thumb_mid"] = Euler((-r(tmid), 0.0, 0.0))
+    out[f"{side}_thumb_tip"] = Euler((-r(ttip), 0.0, 0.0))
+    return out
+
+
+def shape_vector(name):
+    vals = HANDSHAPES[name][1]
+    return [float(vals.get(f, 0.0)) for f in HAND_FEATURES]
+
+
+def user_examples_path():
+    return os.path.join(bpy.utils.user_resource('CONFIG'), "asl_handshape_examples.json")
+
+
+class HandshapeModel:
+    """k-nearest-neighbors handshape classifier (numpy)."""
+
+    K = 7
+
+    def __init__(self):
+        self.X = None            # (N, 21) scaled features
+        self.y = []              # class index per row
+        self.w = None            # weight per row (your own examples count more)
+        self.builtin = 0
+        self.user = {}           # class -> list of feature lists (your examples)
+        self.trained = False
+
+    # --- training ------------------------------------------------------------------------------
+    def train_builtin(self, skel, per_class=50, seed=1):
+        """Make examples by bending the figure's own hand into each handshape with variations,
+        turning them into tracked-style points (with tracker noise) and solving them back."""
+        import numpy as np
+        import random
+        rnd = random.Random(seed)
+        rt = Retargeter()
+        rt.thumb_rest = {"R": skel.mpi["R_thumb_base"].to_3x3().normalized()}
+        rows, ys = [], []
+        for ci, name in enumerate(SHAPE_CLASSES):
+            base = shape_vector(name)
+            for n in range(per_class):
+                v = []
+                for f, x in zip(HAND_FEATURES, base):
+                    sd = 4.0 if f.endswith("side") else 9.0 if f.startswith("thumb") else 8.0
+                    v.append(x + rnd.gauss(0, sd))
+                rots = features_to_rots(v, "R", {})
+                P = skel.hand_points("R", rots)
+                P = [p + Vector((rnd.gauss(0, 0.0025), rnd.gauss(0, 0.0025), rnd.gauss(0, 0.004))) for p in P]
+                out = {}
+                rt.prev.clear()
+                rt.prev_thumb.clear()
+                H = rt.hand_frame("R", P)
+                rt.fingers("R", P, H, out)
+                rt.thumb("R", P, H, out)
+                fv = rots_to_features(out, "R")
+                if fv is not None:
+                    rows.append(fv)
+                    ys.append(ci)
+        self._builtin_X = np.array(rows, dtype=float)
+        self._builtin_y = ys
+        self.builtin = len(rows)
+        self._rebuild()
+        self.trained = True
+
+    def load_user(self):
+        try:
+            with open(user_examples_path(), encoding="utf-8") as fh:
+                d = json.load(fh)
+            self.user = {k: v for k, v in d.get("examples", {}).items() if k in SHAPE_CLASSES}
+        except Exception:
+            self.user = {}
+
+    def save_user(self):
+        try:
+            os.makedirs(os.path.dirname(user_examples_path()), exist_ok=True)
+            with open(user_examples_path(), "w", encoding="utf-8") as fh:
+                json.dump({"version": 1, "features": HAND_FEATURES, "examples": self.user}, fh)
+        except OSError:
+            traceback.print_exc()
+
+    def add_user(self, name, feats):
+        lst = self.user.setdefault(name, [])
+        lst.extend([round(x, 1) for x in f] for f in feats)
+        del lst[:-200]                                   # keep the newest 200 per handshape
+        self._rebuild()
+        self.save_user()
+
+    def forget_user(self, name=None):
+        if name:
+            self.user.pop(name, None)
+        else:
+            self.user = {}
+        self._rebuild()
+        self.save_user()
+
+    def _rebuild(self):
+        import numpy as np
+        X = [getattr(self, "_builtin_X", np.zeros((0, 21)))]
+        y = list(getattr(self, "_builtin_y", []))
+        w = [np.ones(len(y))]
+        for name, lst in self.user.items():
+            if lst:
+                X.append(np.array(lst, dtype=float))
+                y += [SHAPE_CLASSES.index(name)] * len(lst)
+                w.append(np.full(len(lst), 3.0))
+        self.X = np.vstack(X) / np.array(_FEAT_SCALE) if y else None
+        self.y = np.array(y, dtype=int)
+        self.w = np.concatenate(w) if y else None
+
+    # --- using it -------------------------------------------------------------------------------
+    def classify(self, feats):
+        """-> (class index, probability 0..1, how typical the hand is 0..1) or None."""
+        import numpy as np
+        if self.X is None or feats is None:
+            return None
+        x = np.array(feats, dtype=float) / np.array(_FEAT_SCALE)
+        d2 = ((self.X - x) ** 2).sum(1)
+        k = min(self.K, len(d2))
+        idx = np.argpartition(d2, k - 1)[:k]
+        kern = self.w[idx] * np.exp(-d2[idx] / 2.0)
+        votes = np.bincount(self.y[idx], weights=kern, minlength=len(SHAPE_CLASSES))
+        total = votes.sum()
+        if total <= 1e-12:
+            return None
+        c = int(votes.argmax())
+        p = float(votes[c] / total)
+        # Far from every example (a shape between signs, or one it doesn't know): not sure.
+        # Hands of the same shape typically sit within about 12 squared units of an example.
+        typical = float(math.exp(-max(0.0, float(d2[idx].min()) - 12.0) / 10.0))
+        return c, p, typical
+
+
+class HandshapeGuide:
+    """Per-frame use of the model: steady probabilities, and the pull toward the recognized shape."""
+
+    def __init__(self):
+        self.model = HandshapeModel()
+        self.strength = 0.7
+        self.enabled = True
+        self.reset()
+
+    def reset(self):
+        self.probs = {}          # side -> smoothed probabilities
+        self.current = {}        # side -> (name, confidence)
+        self.teach = None        # {"name", "side", "until", "feats": []}
+
+    def ensure_trained(self, skel):
+        if not self.model.trained and skel is not None:
+            self.model.load_user()
+            self.model.train_builtin(skel)
+
+    def apply(self, side, out, t):
+        import numpy as np
+        feats = rots_to_features(out, side)
+        if feats is None:
+            return
+        tc = self.teach
+        if tc is not None and tc["side"] == side and t <= tc["until"]:
+            tc["feats"].append(feats)
+        if not self.enabled or not self.model.trained:
+            self.current.pop(side, None)
+            return
+        r = self.model.classify(feats)
+        if r is None:
+            return
+        c, p, typical = r
+        vec = np.zeros(len(SHAPE_CLASSES))
+        vec[c] = p * typical
+        prev = self.probs.get(side)
+        sm = vec if prev is None else prev * 0.6 + vec * 0.4         # steady: no flicker between shapes
+        self.probs[side] = sm
+        best = int(sm.argmax())
+        conf = float(sm[best])
+        name = SHAPE_CLASSES[best]
+        self.current[side] = (name, conf)
+        if best != c:
+            return              # the hand is changing shape: don't pull it back toward the old one
+        conf = min(conf, p * typical)
+        a = self.strength * _smooth((conf - 0.45) / 0.35)
+        if a <= 0.01:
+            return
+        target = shape_vector(name)     # always the correct handshape (your examples only help recognize it)
+        guided = [x + (tg - x) * a for x, tg in zip(feats, target)]
+        features_to_rots(guided, side, out)
+
+    def start_teaching(self, name, side, seconds, t):
+        self.teach = {"name": name, "side": side, "until": t + seconds, "start": t, "feats": []}
+
+    def finish_teaching(self, t):
+        tc = self.teach
+        if tc is None or t < tc["until"]:
+            return None
+        self.teach = None
+        feats = tc["feats"][::2]
+        if len(feats) >= 5:
+            self.model.add_user(tc["name"], feats)
+        return tc["name"], len(feats)
 
 
 class LiveFigure:
@@ -4848,7 +5240,7 @@ class Take:
         self.times.append(t)
         self.msgs.append(msg)
 
-    def resolve(self, skel):
+    def resolve(self, skel, shapes=None):
         """Solve every recorded frame again for the figure's current body shape (after the Body
         Shape sliders, proportions or sculpting changed), so hands still land on the face etc."""
         st = self.setup
@@ -4856,10 +5248,15 @@ class Take:
             return False
         rt = Retargeter()
         rt.mirror, rt.use_depth, rt.fov, rt.groups = st["mirror"], st["use_depth"], st["fov"], st["groups"]
+        rt.fov_manual, rt.fov_auto = st["fov"], False      # the field of view in use while recording
         rt.calib = st["calib"]
         rt.thumb_rest, rt.wrist_rest_z = dict(st["thumb_rest"]), dict(st["wrist_rest_z"])
         rt.skel = skel
         rt.depth.hand_k = st.get("hand_k", 1.0)
+        if shapes is not None and st.get("shape_help", True):
+            g = HandshapeGuide()
+            g.model, g.strength, g.enabled = shapes.model, st.get("shape_strength", shapes.strength), True
+            rt.shape = g
         if st.get("stereo"):
             rt.stereo = StereoRig()
             rt.stereo.load(st["stereo"])
@@ -5597,6 +5994,8 @@ class LiveSession:
         self.rt = Retargeter()
         self.stereo = StereoRig()
         self.rt.stereo = self.stereo
+        self.shapes = HandshapeGuide()
+        self.rt.shape = self.shapes
         self.fig = None
         self.mode = "off"            # off, live, countdown, recording, review, playing, rendering
         self.take = None
@@ -5653,6 +6052,10 @@ class LiveSession:
         self.fig = LiveFigure(root)
         self.rt.prev.clear()
         self.rt.skel = ModelSkeleton(root)
+        try:
+            self.shapes.ensure_trained(self.rt.skel)     # about a second, once per Blender session
+        except Exception:
+            traceback.print_exc()
         for side in SIDES:
             tb = self.fig.joints.get(f"{side}_thumb_base")
             wr = self.fig.joints.get(f"{side}_wrist")
@@ -5676,7 +6079,12 @@ class LiveSession:
                 "take": take, "calibrating": self.rt.calibrating, "calibrated": self.rt.calib is not None,
                 "figure": self.fig.name if self.fig else None, "error": self.error,
                 "settings": {"mirror": lv.mirror, "auto_stop": lv.auto_stop, "countdown": lv.countdown,
-                             "use_depth": lv.use_depth, "fov": lv.camera_fov},
+                             "use_depth": lv.use_depth, "fov": lv.camera_fov, "fov_auto": lv.camera_fov_auto},
+                "fov_estimate": round(self.rt.fov_est.estimate) if self.rt.fov_est.ready else None,
+                "fov_progress": round(min(1.0, self.rt.fov_est.weight / 8), 2),
+                "shapes": {"classes": [[k, SHAPE_LABELS[k]] for k in SHAPE_CLASSES],
+                           "taught": {k: len(v) for k, v in self.shapes.model.user.items() if v},
+                           "help": lv.shape_help, "strength": round(lv.shape_strength, 2)},
                 "progress": self.progress, "last_gif": self.last_gif, "stereo": self.stereo.status()}
 
     def send_state(self):
@@ -5709,13 +6117,31 @@ class LiveSession:
                       "track_face", "track_torso"):
                 if k in msg:
                     setattr(lv, k, bool(msg[k]))
-            if "fov" in msg:
+            if "fov" in msg and msg["fov"] is not None:
                 lv.camera_fov = _clamp(float(msg["fov"]), 30.0, 120.0)
+            if "fov_auto" in msg:
+                lv.camera_fov_auto = bool(msg["fov_auto"])
+            if "shape_help" in msg:
+                lv.shape_help = bool(msg["shape_help"])
+            if "shape_strength" in msg:
+                lv.shape_strength = _clamp(float(msg["shape_strength"]), 0.0, 1.0)
             if "countdown" in msg:
                 lv.countdown = int(msg["countdown"])
             self.send_state()
         elif typ == "calibrate":
             self.rt.start_calibration()
+            self.send_state()
+        elif typ == "teach":
+            name = msg.get("name")
+            side = msg.get("side") if msg.get("side") in SIDES else "R"
+            if name in SHAPE_CLASSES:
+                t = float((self.last_msg or {}).get("t", 0.0)) / 1000.0
+                self.shapes.start_teaching(name, side, float(msg.get("seconds", 2.5)), t)
+                self.link.send({"type": "notice", "message": f"Hold the {SHAPE_LABELS[name]} handshape with your "
+                                f"{'right' if side == 'R' else 'left'} hand..."})
+        elif typ == "teach_forget":
+            self.shapes.model.forget_user(msg.get("name") or None)
+            self.link.send({"type": "notice", "message": "Your handshape examples were removed."})
             self.send_state()
         elif typ == "cam2_info":
             self.stereo.phone_info = {k: msg[k] for k in ("phone", "phone_fps", "rtt_ms", "phone_ms") if k in msg}
@@ -5783,7 +6209,10 @@ class LiveSession:
         rt = self.rt
         rt.mirror = lv.mirror
         rt.use_depth = lv.use_depth
-        rt.fov = lv.camera_fov
+        rt.fov_auto = lv.camera_fov_auto
+        rt.fov_manual = lv.camera_fov
+        self.shapes.enabled = lv.shape_help
+        self.shapes.strength = lv.shape_strength
         rt.groups = [g for g in TRACK_GROUPS if getattr(lv, "track_" + g)]
         sk = rt.skel
         if sk is not None and time.perf_counter() - sk.refreshed > 1.0:
@@ -5815,6 +6244,15 @@ class LiveSession:
             _tag_redraw()
         self.apply_ms = 0.8 * self.apply_ms + 0.2 * (time.perf_counter() - t_start) * 1000
         ack = {"type": "ack", "id": msg.get("id"), "ms": round((time.perf_counter() - t_start) * 1000, 2)}
+        cur = self.shapes.current
+        if cur:
+            ack["shape"] = {sd: [SHAPE_LABELS[n], round(c, 2)] for sd, (n, c) in cur.items()}
+        done = self.shapes.finish_teaching(float(msg.get("t", 0.0)) / 1000.0)
+        if done:
+            name, n = done
+            self.link.send({"type": "notice", "message": (f"Learned {n} examples of {SHAPE_LABELS[name]} from your hand."
+                            if n >= 5 else "Not enough frames with that hand in view. Try again.")})
+            self.send_state()
         if self.rt.use_depth:
             ack["touch"] = {sd: round(v.get("touch", 0.0), 2) for sd, v in self.rt.depth.info.items()}
         self.link.send(ack)
@@ -5883,6 +6321,7 @@ class LiveSession:
                            "groups": list(rt.groups) if rt.groups is not None else None,
                            "calib": rt.calib, "thumb_rest": dict(rt.thumb_rest),
                            "wrist_rest_z": dict(rt.wrist_rest_z), "hand_k": rt.depth.hand_k,
+                           "shape_help": self.shapes.enabled, "shape_strength": self.shapes.strength,
                            "stereo": self.stereo.export()}
         self.take.body_sig = rt.skel.sig if rt.skel else None
         self.seen_any = False
@@ -5916,7 +6355,7 @@ class LiveSession:
             return False
         sk.refresh()
         if tk.body_sig is not None and sk.sig != tk.body_sig:
-            if tk.resolve(sk):
+            if tk.resolve(sk, self.shapes):
                 self.status = "Recording updated for the new body shape."
                 if tk.arrows and self.fig is not None:
                     build_take_arrows(bpy.context.scene, self.fig, tk)
@@ -6085,6 +6524,14 @@ class ASLLiveSettings(PropertyGroup):
                             description="Work out how far away each hand is and place it relative to the face "
                                         "and body, so a hand touching your nose touches the figure's nose. "
                                         "Off: copy only the directions of the arms")
+    shape_help: BoolProperty(name="Handshape help", default=True,
+                             description="Recognize ASL handshapes and guide the figure's fingers into the exact "
+                                         "shape when the match is clear")
+    shape_strength: FloatProperty(name="Strength", default=0.7, min=0.0, max=1.0, subtype='FACTOR',
+                                  description="How strongly a recognized handshape pulls the fingers into place")
+    camera_fov_auto: BoolProperty(name="Automatic field of view", default=True,
+                                  description="Work out how wide the webcam sees from your hands (move them toward "
+                                              "and away from the camera for a few seconds). Off: use the value below")
     camera_fov: FloatProperty(name="Camera field of view", default=60.0, min=30.0, max=120.0, precision=0,
                               description="Horizontal angle the webcam sees, in degrees. Most webcams are 60-78. "
                                           "If hands land in front of the face, raise it; behind, lower it")
@@ -6316,8 +6763,24 @@ class ASL_PT_live(_ASLPanel, Panel):
         row.operator("asl.live_toggle", text="Stop Link", icon='UNLINKED')
         lay.prop(lv, "mirror")
         lay.prop(lv, "use_depth")
+        row = lay.row(align=True)
+        row.prop(lv, "shape_help")
+        if lv.shape_help:
+            row.prop(lv, "shape_strength", slider=True)
+            cur = LIVE.shapes.current
+            if cur and LIVE.mode in ("live", "recording"):
+                lay.label(text="Handshape: " + ",  ".join(
+                    f"{'right' if sd == 'R' else 'left'} {SHAPE_LABELS[n]} ({int(c * 100)}%)" for sd, (n, c) in sorted(cur.items())),
+                    icon='VIEW_PAN')
         if lv.use_depth:
-            lay.prop(lv, "camera_fov")
+            lay.prop(lv, "camera_fov_auto")
+            if lv.camera_fov_auto:
+                fe = LIVE.rt.fov_est
+                lay.label(text=(f"Field of view: about {fe.estimate:.0f}°" if fe.ready else
+                                f"Field of view: measuring ({int(min(1, fe.weight / 8) * 100)}%), "
+                                "point your fingers at the camera now and then"), icon='CAMERA_DATA')
+            else:
+                lay.prop(lv, "camera_fov")
         grid = lay.grid_flow(columns=3, align=True)
         for k in ("arms", "hands", "head", "face", "torso"):
             grid.prop(lv, "track_" + k, toggle=True)

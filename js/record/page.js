@@ -4,17 +4,27 @@
 import { esc } from "../ui.js";
 import { BlenderLink } from "./link.js";
 import { loadLandmarkers, MP_VERSION } from "./mediapipe.js";
-import { Tracker, assignSides, drawOverlay } from "./tracker.js";
+import { Tracker, drawOverlay } from "./tracker.js";
 import { createArrowEditor } from "./arrows.js";
+import { PhoneHub } from "./phonelink.js";
+
+const QR_URL = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+const PUBLIC_SITE = "https://cjlittle7.github.io/ASL-Study-Tool/";
 
 const SETTINGS_KEY = "asl-study-tool:record-settings";
 const defaults = { port: 8766, mirrorPreview: true, mirrorFigure: false, autoStop: true, countdown: 3,
                    smoothing: 0.5, face: "auto", category: "phrase", quality: "FAST", fps: 15, size: 480,
-                   useDepth: true, fov: 60 };
+                   useDepth: true, fov: "auto", fovVersion: 2, phoneSite: "",
+                   shapeHelp: true, shapeStrength: 0.7, teachShape: "B", teachSide: "R" };
 
 function loadSettings() {
   try {
-    return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    if (saved.fovVersion !== 2) {             // field of view is now measured automatically by default
+      delete saved.fov;
+      saved.fovVersion = 2;
+    }
+    return { ...defaults, ...saved };
   } catch {
     return { ...defaults };
   }
@@ -51,6 +61,25 @@ function createSession() {
     dom: null,
   };
 
+  // --- the phone as a second camera --------------------------------------------------------
+  const phone = new PhoneHub({
+    onFrame: (m) => link.send(m),                  // straight on to Blender, no waiting
+    onStatus: () => {
+      sendPhoneInfo();
+      renderPhone();
+    },
+  });
+  function sendPhoneInfo() {
+    link.send({ type: "cam2_info", phone: phone.receiving, phone_fps: phone.fps,
+                rtt_ms: Math.round(phone.rtt || 0), phone_ms: phone.phoneMs });
+  }
+  setInterval(() => {
+    if (phone.state === "connected" || phone.state === "waiting") {
+      sendPhoneInfo();
+      renderPhone();
+    }
+  }, 1000);
+
   const link = new BlenderLink({
     onStatus: (s) => {
       st.linkStatus = s;
@@ -65,7 +94,8 @@ function createSession() {
   function pushSettings() {
     const s = st.settings;
     link.send({ type: "settings", mirror: s.mirrorFigure, auto_stop: s.autoStop, countdown: s.countdown,
-                use_depth: s.useDepth, fov: s.fov });
+                use_depth: s.useDepth, fov_auto: s.fov === "auto", fov: s.fov === "auto" ? null : +s.fov,
+                shape_help: s.shapeHelp, shape_strength: s.shapeStrength });
   }
 
   // --- messages from Blender ---------------------------------------------------------
@@ -82,6 +112,9 @@ function createSession() {
       if (m.mode === "live" && prevMode && prevMode !== "live" && prevMode !== "rendering") clearSnaps();
       if (m.mode !== "playing") st.playhead = null;
       render();
+      renderPhone();
+      updateFovNote();
+      renderTeach();
     } else if (m.type === "playhead") {
       st.playhead = m.t;
       st.viewT = m.t;
@@ -175,7 +208,7 @@ function createSession() {
     link.sendFrame(msg);
     if (st.capturing) snap(msg.t);
     if (st.dom && st.dom.root.isConnected) {
-      st.lastSides = res.handRes ? assignSides(res.handRes, res.poseRes?.landmarks?.[0]) : null;
+      st.lastSides = res.handRes ? st.tracker?.lastSides ?? null : null;
       drawOverlay(st.dom.overlay, st.dom.video, res, st.lastSides);
       if (now - (st._statsAt || 0) > 250) {
         st._statsAt = now;
@@ -254,6 +287,8 @@ function createSession() {
     }
     wire(root);
     render();
+    renderPhone();
+    updateFovNote();
   }
 
   function template() {
@@ -283,15 +318,32 @@ function createSession() {
             <h2>Status</h2>
             <dl class="status-list" id="status"></dl>
           </section>
+          <section class="side-box" id="phone-box"></section>
+          <details class="side-box" id="teach-box">
+            <summary>Teach handshapes</summary>
+            <p class="muted small">Show the app your own version of a handshape so it recognizes it better.
+              Pick the handshape, make it with the chosen hand, click <b>Teach</b> and hold it for 3 seconds
+              (turning your wrist a little helps).</p>
+            <div class="field"><label for="t-shape">Handshape</label><select id="t-shape"></select></div>
+            <div class="field"><label for="t-side">Hand</label><select id="t-side">
+              <option value="R">Right</option><option value="L">Left</option></select></div>
+            <div class="row"><button type="button" class="btn secondary" id="t-go">Teach</button>
+              <span class="muted small" id="t-count"></span></div>
+            <p class="small" id="t-taught"></p>
+            <button type="button" class="link-btn danger small" id="t-forget">Forget all my examples</button>
+          </details>
           <section class="side-box">
             <h2>Settings</h2>
             <label class="check"><input type="checkbox" id="s-mirror-preview" ${s.mirrorPreview ? "checked" : ""}> Show the camera like a mirror</label>
             <label class="check"><input type="checkbox" id="s-mirror-figure" ${s.mirrorFigure ? "checked" : ""}> Figure mirrors me (left-handed signers)</label>
             <label class="check"><input type="checkbox" id="s-autostop" ${s.autoStop ? "checked" : ""}> Stop recording when my hands drop</label>
             <label class="check"><input type="checkbox" id="s-depth" ${s.useDepth ? "checked" : ""}> Place hands by position, so touching my face touches the figure's face</label>
+            <label class="check"><input type="checkbox" id="s-shape" ${s.shapeHelp ? "checked" : ""}> Handshape help: recognize ASL handshapes and guide the figure's fingers into them</label>
+            <div class="field"><label for="s-shape-strength">Handshape help strength <span class="muted" id="s-shape-val">${Math.round(s.shapeStrength * 100)}%</span></label>
+              <input type="range" id="s-shape-strength" min="0" max="1" step="0.05" value="${s.shapeStrength}"></div>
             <div class="field"><label for="s-fov">Camera field of view</label>
-              <select id="s-fov">${[50, 55, 60, 65, 70, 78, 90].map((n) => opt(n, s.fov, n + "°" + (n === 60 ? " (most webcams)" : n === 78 ? " (wide webcams)" : ""))).join("")}</select>
-              <span class="muted small">If your hands land in front of the figure's face, choose a wider angle; behind it, a narrower one.</span></div>
+              <select id="s-fov">${opt("auto", s.fov, "Automatic")}${[50, 55, 60, 65, 70, 78, 90].map((n) => opt(n, s.fov, n + "°" + (n === 60 ? " (most webcams)" : n === 78 ? " (wide webcams)" : ""))).join("")}</select>
+              <span class="muted small" id="s-fov-note"></span></div>
             <div class="field"><label for="s-countdown">Countdown before recording</label>
               <select id="s-countdown">${[0, 2, 3, 5].map((n) => opt(n, s.countdown, n ? `${n} seconds` : "None")).join("")}</select></div>
             <div class="field"><label for="s-smooth">Smoothing <span class="muted" id="s-smooth-val"></span></label>
@@ -304,7 +356,7 @@ function createSession() {
           <details class="side-box">
             <summary>How to connect Blender</summary>
             <ol class="steps">
-              <li>Install the ASL Flashcard Editor add-on (version 0.6 or newer).</li>
+              <li>Install the ASL Flashcard Editor add-on (version 0.8 or newer).</li>
               <li>In Blender press <kbd>N</kbd>, open <b>ASL Cards</b>, click <b>New Card Scene</b> if needed.</li>
               <li>In <b>Live Tracking &amp; Recording</b>, click <b>Start Live Link</b>.</li>
               <li>Click <b>Start camera</b> on this page. The status turns green when they find each other.</li>
@@ -343,8 +395,58 @@ function createSession() {
       save();
       pushSettings();
     };
+    root.querySelector("#s-shape").onchange = (e) => {
+      s.shapeHelp = e.target.checked;
+      save();
+      pushSettings();
+    };
+    root.querySelector("#s-shape-strength").oninput = (e) => {
+      s.shapeStrength = +e.target.value;
+      root.querySelector("#s-shape-val").textContent = `${Math.round(s.shapeStrength * 100)}%`;
+      save();
+      clearTimeout(st._strengthTimer);
+      st._strengthTimer = setTimeout(pushSettings, 150);
+    };
+    root.querySelector("#t-shape").onchange = (e) => {
+      s.teachShape = e.target.value;
+      save();
+    };
+    root.querySelector("#t-side").value = s.teachSide;
+    root.querySelector("#t-side").onchange = (e) => {
+      s.teachSide = e.target.value;
+      save();
+    };
+    root.querySelector("#t-go").onclick = () => {
+      if (!link.connected || !st.stream) {
+        flash("Start the camera and connect to Blender first.");
+        return;
+      }
+      let n = 3;
+      const btn = root.querySelector("#t-go");
+      const out = root.querySelector("#t-count");
+      btn.disabled = true;
+      const tick = () => {
+        if (n > 0) {
+          out.textContent = `Get ready... ${n}`;
+          n--;
+          setTimeout(tick, 700);
+        } else {
+          link.send({ type: "teach", name: s.teachShape, side: s.teachSide, seconds: 3 });
+          out.textContent = "Hold it...";
+          setTimeout(() => {
+            out.textContent = "";
+            btn.disabled = false;
+          }, 3300);
+        }
+      };
+      tick();
+    };
+    root.querySelector("#t-forget").onclick = () => {
+      if (window.confirm("Remove every handshape example you taught? (The built-in ones stay.)")) link.send({ type: "teach_forget" });
+    };
     root.querySelector("#s-fov").onchange = (e) => {
-      s.fov = +e.target.value;
+      s.fov = e.target.value === "auto" ? "auto" : +e.target.value;
+      updateFovNote();
       save();
       pushSettings();
     };
@@ -377,6 +479,15 @@ function createSession() {
     };
 
     root.addEventListener("click", (e) => {
+      const pb = e.target.closest("[data-phone]");
+      if (pb) {
+        const a = pb.dataset.phone;
+        if (a === "start") phone.start();
+        else if (a === "stop") phone.stop();
+        else if (a === "recal") link.send({ type: "stereo", action: "recalibrate" });
+        else if (a === "recheck") checkSite(true);
+        return;
+      }
       const b = e.target.closest("[data-act]");
       if (!b || b.disabled) return;
       const a = b.dataset.act;
@@ -401,6 +512,154 @@ function createSession() {
         }
       } else if (e.key === "Escape" && mode === "countdown") act.stop();
     };
+  }
+
+  function phoneSiteUrl() {
+    if (st.settings.phoneSite) return st.settings.phoneSite;
+    const local = /^(localhost|127\.|\[::1\])/.test(location.hostname);
+    return location.protocol === "https:" && !local ? location.origin + location.pathname : PUBLIC_SITE;
+  }
+  function phoneLink() {
+    const base = phoneSiteUrl().replace(/#.*$/, "");
+    const test = /[?&](peer=[^&#]+)/.exec(location.href);           // self-hosted pairing server (tests)
+    return `${base}#/phone/${phone.code}${test ? "?" + test[1] : ""}`;
+  }
+
+  let qrLoading = null;
+  function drawQr(el, text) {
+    const make = () => {
+      const qr = window.qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      el.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      el.querySelector("svg")?.setAttribute("aria-label", "QR code: open this on your phone");
+    };
+    if (window.qrcode) return make();
+    qrLoading = qrLoading || new Promise((res, rej) => {
+      const sc = document.createElement("script");
+      sc.src = QR_URL;
+      sc.onload = res;
+      sc.onerror = rej;
+      document.head.appendChild(sc);
+    });
+    qrLoading.then(make, () => (el.textContent = "(QR code unavailable offline: type the address below on the phone)"));
+  }
+
+  // Is the phone page online at the address the QR code points to? A tiny picture that ships with
+  // the phone page is loaded from there (pictures load from any site, so no permission is needed).
+  const siteCheck = {};
+  function siteBase() {
+    return phoneSiteUrl().replace(/#.*$/, "").replace(/\/?$/, "/");
+  }
+  function checkSite(force = false) {
+    const base = siteBase();
+    if (!force && siteCheck[base]) return;
+    siteCheck[base] = "checking";
+    const img = new Image();
+    const done = (v) => {
+      siteCheck[base] = v;
+      renderPhone();
+    };
+    img.onload = () => done("ok");
+    img.onerror = () => done(navigator.onLine === false ? "unknown" : "missing");
+    img.src = `${base}js/record/phone-ready.png?${Date.now()}`;
+  }
+
+  function renderPhone() {
+    const box = st.dom?.root.querySelector("#phone-box");
+    if (!box || !st.dom.root.isConnected) return;
+    const ps = phone.state;
+    const stereo = st.blender?.stereo || {};
+    let html = `<h2>Phone camera</h2>`;
+    if (ps === "off" || ps === "error") {
+      html += `<p class="muted small">Use your phone as a second camera at another angle. With two views,
+        Blender measures how far away your hands are instead of estimating it.</p>
+        ${ps === "error" ? `<p class="error small">${esc(phone.error)}</p>` : ""}
+        <button type="button" class="btn secondary" data-phone="start">Connect a phone</button>`;
+    } else if (ps === "starting") {
+      html += `<p class="muted">Getting a pairing code...</p>`;
+    } else if (ps === "waiting") {
+      checkSite();
+      const site = siteCheck[siteBase()];
+      if (site === "missing") {
+        html += `<div class="warn-box small"><p><b>Your phone will show "404".</b> The web app isn't online at
+          <code>${esc(phoneSiteUrl())}</code> yet (or that copy is older than this one). Phones only allow the camera on
+          https pages, so the phone needs the app published on GitHub Pages.</p>
+          <p><a href="https://github.com/cjlittle7/ASL-Study-Tool#publish-with-github-pages" target="_blank" rel="noopener">How to publish it</a>
+          (about 5 minutes), then click <b>Check again</b>.</p>
+          <button type="button" class="btn secondary" data-phone="recheck">Check again</button></div>`;
+      }
+      html += `<p class="small">On your phone, scan this code or open the address below, then tap <b>Start phone camera</b>.</p>
+        <div class="qr" id="phone-qr"></div>
+        <p class="pair-code" aria-label="Pairing code">${esc(phone.code)}</p>
+        <p class="small break"><a href="${esc(phoneLink())}" target="_blank" rel="noopener">${esc(phoneLink())}</a></p>
+        <details class="small"><summary>Phone page address</summary>
+          <p class="muted">The phone needs the web app from an https address (GitHub Pages).</p>
+          <input type="url" id="phone-site" value="${esc(phoneSiteUrl())}" style="width:100%"></details>
+        <button type="button" class="btn secondary" data-phone="stop">Cancel</button>`;
+    } else if (ps === "connected") {
+      const rec = phone.receiving;
+      const stateText = !rec ? ["Connected, waiting for tracking frames...", "warn"]
+        : stereo.state === "ready" ? [`In use: ${stereo.angle ?? "?"}° from the laptop camera`, "ok"]
+        : stereo.state === "moved" ? [`The phone moved. Move your arms around (${Math.round((stereo.progress || 0) * 100)}%)`, "warn"]
+        : stereo.state === "off" ? ["Turned off", ""]
+        : [`Finding the phone: move your arms around (${Math.round((stereo.progress || 0) * 100)}%)`, "warn"];
+      const rows = [
+        ["Phone", rec ? `${phone.fps} fps, tracking ${phone.phoneMs || "-"} ms` : "No frames", rec ? "ok" : "warn"],
+        ["Link", `${Math.round(phone.rtt || 0)} ms round trip`, phone.rtt < 60 ? "ok" : "warn"],
+        ["Status", stateText[0], stateText[1]],
+      ];
+      if (stereo.lag_ms != null && stereo.state === "ready") rows.push(["Behind", `${stereo.lag_ms} ms (filled in by prediction)`, stereo.lag_ms < 80 ? "ok" : "warn"]);
+      if (stereo.live_error_px != null) rows.push(["Match", `${stereo.live_error_px} px`, stereo.live_error_px < 8 ? "ok" : "warn"]);
+      html += `<dl class="status-list">${rows.map(([k, v, c]) => `<dt>${esc(k)}</dt><dd class="${c}">${esc(v)}</dd>`).join("")}</dl>
+        <div class="row">
+          <button type="button" class="btn secondary" data-phone="recal" title="Then move your arms around for a few seconds">Find the phone again</button>
+          <button type="button" class="btn secondary" data-phone="stop">Disconnect</button>
+        </div>`;
+    }
+    const sig = html;
+    if (box.dataset.sig === sig) return;           // don't redraw (keeps the QR and inputs still)
+    box.dataset.sig = sig;
+    box.innerHTML = html;
+    const qr = box.querySelector("#phone-qr");
+    if (qr) drawQr(qr, phoneLink());
+    const site = box.querySelector("#phone-site");
+    if (site) site.onchange = () => {
+      st.settings.phoneSite = site.value.trim() === PUBLIC_SITE ? "" : site.value.trim();
+      saveSettings(st.settings);
+      box.dataset.sig = "";
+      renderPhone();
+    };
+  }
+
+  function renderTeach() {
+    const sh = st.blender?.shapes;
+    const box = st.dom?.root.querySelector("#teach-box");
+    if (!box || !sh) return;
+    const sel = box.querySelector("#t-shape");
+    if (sel.options.length !== sh.classes.length) {
+      sel.innerHTML = sh.classes.map(([k, label]) => `<option value="${esc(k)}">${esc(label)}</option>`).join("");
+      sel.value = st.settings.teachShape;
+    }
+    const taught = Object.entries(sh.taught || {});
+    const label = Object.fromEntries(sh.classes);
+    box.querySelector("#t-taught").textContent = taught.length
+      ? "Your examples: " + taught.map(([k, n]) => `${label[k] || k} (${n})`).join(", ")
+      : "No examples of your own yet.";
+    box.querySelector("#t-forget").hidden = !taught.length;
+  }
+
+  function updateFovNote() {
+    const el = st.dom?.root.querySelector("#s-fov-note");
+    if (!el) return;
+    const b = st.blender;
+    if (st.settings.fov === "auto") {
+      el.textContent = b?.fov_estimate ? `Measured: about ${b.fov_estimate}°.`
+        : b ? `Measuring (${Math.round((b.fov_progress || 0) * 100)}%): now and then point your fingers toward the camera.`
+        : "Measured from your hands once tracking starts.";
+    } else {
+      el.textContent = "If your hands land in front of the figure's face, choose a wider angle; behind it, a narrower one.";
+    }
   }
 
   function setCamMsg(text, isError = false) {
@@ -446,6 +705,11 @@ function createSession() {
     if (touch) {
       const parts = Object.entries(touch).filter(([, v]) => v > 0.5).map(([k]) => (k === "R" ? "right" : "left"));
       rows.push(["Touching", parts.length ? `${parts.join(" and ")} hand on face or chest` : "-", parts.length ? "ok" : ""]);
+    }
+    const shape = link.connected && msg && msg.hands.length && st.settings.shapeHelp ? link.shape : null;
+    if (shape) {
+      const parts = Object.entries(shape).sort().map(([sd, [name, c]]) => `${sd === "R" ? "right" : "left"} ${name} ${Math.round(c * 100)}%`);
+      rows.push(["Handshape", parts.join(", "), Object.values(shape).some(([, c]) => c > 0.6) ? "ok" : ""]);
     }
     if (st.blender?.calibrating) rows.push(["", "Calibrating: face the camera and hold still", "warn"]);
     el.innerHTML = rows.map(([k, v, c]) => `<dt>${esc(k)}</dt><dd class="${c}">${esc(v)}</dd>`).join("");
@@ -689,7 +953,7 @@ function createSession() {
 
   // connect automatically; the link retries quietly until Blender is listening
   link.connect(st.settings.port);
-  return { mount, link, st };
+  return { mount, link, st, phone };
 }
 
 let keyHandler = null;
