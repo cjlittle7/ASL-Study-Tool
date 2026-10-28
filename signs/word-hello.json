@@ -1,0 +1,314 @@
+{
+  "version": 2,
+  "term": "Hello",
+  "category": "word",
+  "notes": "Flat hand starts at the side of the forehead, like a salute, and moves outward.",
+  "card": {
+    "uppercase": true,
+    "label_size": 0.07500000298023224,
+    "show_label": true
+  },
+  "framing": {
+    "x": -0.15513113141059875,
+    "z": 0.5563251972198486,
+    "zoom": 0.595514714717865,
+    "view_angle": 0.0
+  },
+  "arrow_style": {
+    "color": [
+      0.8500000238418579,
+      0.10000000149011612,
+      0.11999999731779099
+    ],
+    "width": 0.006000000052154064
+  },
+  "proportions": {
+    "R_thumb_base": 44.0,
+    "R_thumb_mid": 31.0,
+    "R_thumb_tip": 26.0,
+    "R_index_base": 44.0,
+    "R_index_mid": 26.0,
+    "R_index_tip": 21.0,
+    "R_middle_base": 49.0,
+    "R_middle_mid": 30.0,
+    "R_middle_tip": 22.0,
+    "R_ring_base": 46.0,
+    "R_ring_mid": 28.0,
+    "R_ring_tip": 21.0,
+    "R_pinky_base": 36.0,
+    "R_pinky_mid": 21.0,
+    "R_pinky_tip": 19.0,
+    "L_thumb_base": 44.0,
+    "L_thumb_mid": 31.0,
+    "L_thumb_tip": 26.0,
+    "L_index_base": 44.0,
+    "L_index_mid": 26.0,
+    "L_index_tip": 21.0,
+    "L_middle_base": 49.0,
+    "L_middle_mid": 30.0,
+    "L_middle_tip": 22.0,
+    "L_ring_base": 46.0,
+    "L_ring_mid": 28.0,
+    "L_ring_tip": 21.0,
+    "L_pinky_base": 36.0,
+    "L_pinky_mid": 21.0,
+    "L_pinky_tip": 19.0,
+    "neck": 70.0,
+    "R_thumbpos_along": 0.0,
+    "R_thumbpos_across": 0.0,
+    "R_thumbpos_out": 0.0,
+    "R_shoulderpos_up": 0.0,
+    "R_shoulderpos_out": 0.0,
+    "R_shoulderpos_forward": 0.0,
+    "L_thumbpos_along": 0.0,
+    "L_thumbpos_across": 0.0,
+    "L_thumbpos_out": 0.0,
+    "L_shoulderpos_up": 0.0,
+    "L_shoulderpos_out": 0.0,
+    "L_shoulderpos_forward": 0.0,
+    "mirror": true
+  },
+  "figures": [
+    {
+      "role": "start",
+      "ghost": true,
+      "opacity": 0.3,
+      "show": {
+        "head": false,
+        "torso": false,
+        "arm_R": true,
+        "arm_L": false,
+        "hand_R": true,
+        "hand_L": false
+      },
+      "pose": {
+        "torso_lean": 0.0,
+        "torso_turn": 0.0,
+        "head_nod": 0.0,
+        "head_turn": 0.0,
+        "head_tilt": 0.0,
+        "R_shoulder_forward": 73.0,
+        "R_shoulder_out": 2.0,
+        "R_shoulder_twist": 16.0,
+        "R_elbow_bend": 139.0,
+        "R_forearm_turn": 93.0,
+        "R_wrist_bend": 9.0,
+        "R_wrist_side": 0.0,
+        "R_index_base": 0.0,
+        "R_index_mid": 0.0,
+        "R_index_tip": 0.0,
+        "R_index_side": 1.0,
+        "R_middle_base": 0.0,
+        "R_middle_mid": 0.0,
+        "R_middle_tip": 0.0,
+        "R_middle_side": 0.0,
+        "R_ring_base": 0.0,
+        "R_ring_mid": 0.0,
+        "R_ring_tip": 0.0,
+        "R_ring_side": -1.0,
+        "R_pinky_base": 0.0,
+        "R_pinky_mid": 0.0,
+        "R_pinky_tip": 0.0,
+        "R_pinky_side": -2.0,
+        "R_thumb_across": 36.3,
+        "R_thumb_out": 28.4,
+        "R_thumb_roll": 29.0,
+        "R_thumb_mid": 65.8,
+        "R_thumb_tip": 70.8,
+        "L_shoulder_forward": 5.0,
+        "L_shoulder_out": 8.0,
+        "L_shoulder_twist": 10.0,
+        "L_elbow_bend": 15.0,
+        "L_forearm_turn": 0.0,
+        "L_wrist_bend": 0.0,
+        "L_wrist_side": 0.0,
+        "L_index_base": 12.0,
+        "L_index_mid": 18.0,
+        "L_index_tip": 10.0,
+        "L_index_side": 4.0,
+        "L_middle_base": 12.0,
+        "L_middle_mid": 18.0,
+        "L_middle_tip": 10.0,
+        "L_middle_side": 0.0,
+        "L_ring_base": 12.0,
+        "L_ring_mid": 18.0,
+        "L_ring_tip": 10.0,
+        "L_ring_side": -6.0,
+        "L_pinky_base": 12.0,
+        "L_pinky_mid": 18.0,
+        "L_pinky_tip": 10.0,
+        "L_pinky_side": -12.0,
+        "L_thumb_across": 10.0,
+        "L_thumb_out": 0.0,
+        "L_thumb_roll": 0.0,
+        "L_thumb_mid": 10.0,
+        "L_thumb_tip": 8.0,
+        "brows": 0.0
+      }
+    },
+    {
+      "role": "end",
+      "ghost": false,
+      "opacity": 1.0,
+      "show": {
+        "head": true,
+        "torso": true,
+        "arm_R": true,
+        "arm_L": true,
+        "hand_R": true,
+        "hand_L": true
+      },
+      "pose": {
+        "torso_lean": 0.0,
+        "torso_turn": 0.0,
+        "head_nod": 0.0,
+        "head_turn": 0.0,
+        "head_tilt": 0.0,
+        "R_shoulder_forward": 34.0,
+        "R_shoulder_out": 53.0,
+        "R_shoulder_twist": -58.0,
+        "R_elbow_bend": 116.0,
+        "R_forearm_turn": 76.0,
+        "R_wrist_bend": -30.0,
+        "R_wrist_side": 0.0,
+        "R_index_base": 0.0,
+        "R_index_mid": 0.0,
+        "R_index_tip": 0.0,
+        "R_index_side": 1.0,
+        "R_middle_base": 0.0,
+        "R_middle_mid": 0.0,
+        "R_middle_tip": 0.0,
+        "R_middle_side": 0.0,
+        "R_ring_base": 0.0,
+        "R_ring_mid": 0.0,
+        "R_ring_tip": 0.0,
+        "R_ring_side": -1.0,
+        "R_pinky_base": 0.0,
+        "R_pinky_mid": 0.0,
+        "R_pinky_tip": 0.0,
+        "R_pinky_side": -2.0,
+        "R_thumb_across": 36.3,
+        "R_thumb_out": 28.4,
+        "R_thumb_roll": 29.0,
+        "R_thumb_mid": 65.8,
+        "R_thumb_tip": 70.8,
+        "L_shoulder_forward": 5.0,
+        "L_shoulder_out": 8.0,
+        "L_shoulder_twist": 10.0,
+        "L_elbow_bend": 15.0,
+        "L_forearm_turn": 0.0,
+        "L_wrist_bend": 0.0,
+        "L_wrist_side": 0.0,
+        "L_index_base": 12.0,
+        "L_index_mid": 18.0,
+        "L_index_tip": 10.0,
+        "L_index_side": 4.0,
+        "L_middle_base": 12.0,
+        "L_middle_mid": 18.0,
+        "L_middle_tip": 10.0,
+        "L_middle_side": 0.0,
+        "L_ring_base": 12.0,
+        "L_ring_mid": 18.0,
+        "L_ring_tip": 10.0,
+        "L_ring_side": -6.0,
+        "L_pinky_base": 12.0,
+        "L_pinky_mid": 18.0,
+        "L_pinky_tip": 10.0,
+        "L_pinky_side": -12.0,
+        "L_thumb_across": 10.0,
+        "L_thumb_out": 0.0,
+        "L_thumb_roll": 0.0,
+        "L_thumb_mid": 10.0,
+        "L_thumb_tip": 8.0,
+        "brows": 0.0
+      }
+    }
+  ],
+  "arrows": [
+    {
+      "kind": "arc",
+      "auto": true,
+      "tether": null,
+      "double": false,
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.2390299141407013
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.75
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.619681715965271
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "points": [
+        {
+          "co": [
+            0.08123783767223358,
+            0.0,
+            0.045286692678928375
+          ],
+          "hl": [
+            0.11533136665821075,
+            0.0,
+            0.02585984580218792
+          ],
+          "hr": [
+            0.04714430496096611,
+            0.0,
+            0.06471353769302368
+          ]
+        },
+        {
+          "co": [
+            -0.006089331116527319,
+            0.0,
+            0.09504661709070206
+          ],
+          "hl": [
+            0.03307030349969864,
+            0.0,
+            0.09755545109510422
+          ],
+          "hr": [
+            -0.04524896293878555,
+            0.0,
+            0.0925377830862999
+          ]
+        },
+        {
+          "co": [
+            -0.08635267615318298,
+            0.0,
+            0.034549690783023834
+          ],
+          "hl": [
+            -0.05501693859696388,
+            0.0,
+            0.05816838890314102
+          ],
+          "hr": [
+            -0.11768841743469238,
+            0.0,
+            0.010930994525551796
+          ]
+        }
+      ]
+    }
+  ]
+}

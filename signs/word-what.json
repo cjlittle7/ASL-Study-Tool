@@ -1,0 +1,288 @@
+{
+  "version": 2,
+  "term": "What",
+  "category": "word",
+  "notes": "Both open hands, palms up, shake slightly side to side. Eyebrows down.",
+  "card": {
+    "uppercase": true,
+    "label_size": 0.07500000298023224,
+    "show_label": true
+  },
+  "framing": {
+    "x": 0.013555213809013367,
+    "z": 0.4148343503475189,
+    "zoom": 0.8330394625663757,
+    "view_angle": 0.0
+  },
+  "arrow_style": {
+    "color": [
+      0.8500000238418579,
+      0.10000000149011612,
+      0.11999999731779099
+    ],
+    "width": 0.006000000052154064
+  },
+  "proportions": {
+    "R_thumb_base": 44.0,
+    "R_thumb_mid": 31.0,
+    "R_thumb_tip": 26.0,
+    "R_index_base": 44.0,
+    "R_index_mid": 26.0,
+    "R_index_tip": 21.0,
+    "R_middle_base": 49.0,
+    "R_middle_mid": 30.0,
+    "R_middle_tip": 22.0,
+    "R_ring_base": 46.0,
+    "R_ring_mid": 28.0,
+    "R_ring_tip": 21.0,
+    "R_pinky_base": 36.0,
+    "R_pinky_mid": 21.0,
+    "R_pinky_tip": 19.0,
+    "L_thumb_base": 44.0,
+    "L_thumb_mid": 31.0,
+    "L_thumb_tip": 26.0,
+    "L_index_base": 44.0,
+    "L_index_mid": 26.0,
+    "L_index_tip": 21.0,
+    "L_middle_base": 49.0,
+    "L_middle_mid": 30.0,
+    "L_middle_tip": 22.0,
+    "L_ring_base": 46.0,
+    "L_ring_mid": 28.0,
+    "L_ring_tip": 21.0,
+    "L_pinky_base": 36.0,
+    "L_pinky_mid": 21.0,
+    "L_pinky_tip": 19.0,
+    "neck": 70.0,
+    "R_thumbpos_along": 0.0,
+    "R_thumbpos_across": 0.0,
+    "R_thumbpos_out": 0.0,
+    "R_shoulderpos_up": 0.0,
+    "R_shoulderpos_out": 0.0,
+    "R_shoulderpos_forward": 0.0,
+    "L_thumbpos_along": 0.0,
+    "L_thumbpos_across": 0.0,
+    "L_thumbpos_out": 0.0,
+    "L_shoulderpos_up": 0.0,
+    "L_shoulderpos_out": 0.0,
+    "L_shoulderpos_forward": 0.0,
+    "mirror": true
+  },
+  "figures": [
+    {
+      "role": "",
+      "ghost": false,
+      "opacity": 1.0,
+      "show": {
+        "head": true,
+        "torso": true,
+        "arm_R": true,
+        "arm_L": true,
+        "hand_R": true,
+        "hand_L": true
+      },
+      "pose": {
+        "torso_lean": 0.0,
+        "torso_turn": 0.0,
+        "head_nod": 0.0,
+        "head_turn": 0.0,
+        "head_tilt": 0.0,
+        "R_shoulder_forward": 18.35,
+        "R_shoulder_out": 34.02,
+        "R_shoulder_twist": 33.91,
+        "R_elbow_bend": 92.59,
+        "R_forearm_turn": -110.0,
+        "R_wrist_bend": -10.18,
+        "R_wrist_side": 25.0,
+        "R_index_base": 0.0,
+        "R_index_mid": 0.0,
+        "R_index_tip": 0.0,
+        "R_index_side": 14.0,
+        "R_middle_base": 0.0,
+        "R_middle_mid": 0.0,
+        "R_middle_tip": 0.0,
+        "R_middle_side": 2.0,
+        "R_ring_base": 0.0,
+        "R_ring_mid": 0.0,
+        "R_ring_tip": 0.0,
+        "R_ring_side": -12.0,
+        "R_pinky_base": 0.0,
+        "R_pinky_mid": 0.0,
+        "R_pinky_tip": 0.0,
+        "R_pinky_side": -24.0,
+        "R_thumb_across": 0.0,
+        "R_thumb_out": 14.0,
+        "R_thumb_roll": 0.0,
+        "R_thumb_mid": 0.0,
+        "R_thumb_tip": 0.0,
+        "L_shoulder_forward": 7.59,
+        "L_shoulder_out": -7.46,
+        "L_shoulder_twist": 1.59,
+        "L_elbow_bend": 87.63,
+        "L_forearm_turn": -79.72,
+        "L_wrist_bend": 7.26,
+        "L_wrist_side": 25.0,
+        "L_index_base": 0.0,
+        "L_index_mid": 0.0,
+        "L_index_tip": 0.0,
+        "L_index_side": 14.0,
+        "L_middle_base": 0.0,
+        "L_middle_mid": 0.0,
+        "L_middle_tip": 0.0,
+        "L_middle_side": 2.0,
+        "L_ring_base": 0.0,
+        "L_ring_mid": 0.0,
+        "L_ring_tip": 0.0,
+        "L_ring_side": -12.0,
+        "L_pinky_base": 0.0,
+        "L_pinky_mid": 0.0,
+        "L_pinky_tip": 0.0,
+        "L_pinky_side": -24.0,
+        "L_thumb_across": 0.0,
+        "L_thumb_out": 14.0,
+        "L_thumb_roll": 0.0,
+        "L_thumb_mid": 0.0,
+        "L_thumb_tip": 0.0,
+        "brows": -0.7
+      }
+    }
+  ],
+  "arrows": [
+    {
+      "kind": "double",
+      "auto": false,
+      "tether": null,
+      "double": true,
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.17002204060554504
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.75
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.32997485995292664
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "points": [
+        {
+          "co": [
+            -0.03500000014901161,
+            0.0,
+            0.0
+          ],
+          "hl": [
+            -0.05833333730697632,
+            0.0,
+            0.0
+          ],
+          "hr": [
+            -0.011666666716337204,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "co": [
+            0.03500000014901161,
+            0.0,
+            0.0
+          ],
+          "hl": [
+            0.011666666716337204,
+            0.0,
+            0.0
+          ],
+          "hr": [
+            0.05833333730697632,
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "double",
+      "auto": false,
+      "tether": null,
+      "double": true,
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.16998407244682312
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -0.75
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.3298618793487549
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "points": [
+        {
+          "co": [
+            -0.03500000014901161,
+            0.0,
+            0.0
+          ],
+          "hl": [
+            -0.05833333730697632,
+            0.0,
+            0.0
+          ],
+          "hr": [
+            -0.011666666716337204,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "co": [
+            0.03500000014901161,
+            0.0,
+            0.0
+          ],
+          "hl": [
+            0.011666666716337204,
+            0.0,
+            0.0
+          ],
+          "hr": [
+            0.05833333730697632,
+            0.0,
+            0.0
+          ]
+        }
+      ]
+    }
+  ]
+}

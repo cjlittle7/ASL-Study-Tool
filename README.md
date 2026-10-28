@@ -34,8 +34,7 @@ drafts drawn with the editor and should be checked by a fluent signer before any
 - **Progress:** answers per day, percent correct over time, and a success rate for every sign.
 - **Record:** your webcam moves the Blender figure in real time (fingers, arms, head, eyebrows
   and facial expression). Hands are placed by position, so touching your nose touches the
-  figure's nose. Add your phone as a second camera at any angle for measured (not estimated)
-  depth. Record a sign, trim it, describe it, add arrows (movement paths, arrows on a
+  figure's nose. Record a sign, trim it, describe it, add arrows (movement paths, arrows on a
   body part, fixed shapes) with controls for each one, retry with one key, and save it as an
   animated GIF card. See [docs/live-tracking-guide.md](docs/live-tracking-guide.md).
 - **Profiles:** a nickname plus a recovery code. Saved in the browser for now; online sync
