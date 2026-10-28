@@ -27,7 +27,7 @@ How the figure works (worth reading if you want to change the code):
 bl_info = {
     "name": "ASL Flashcard Editor",
     "author": "ASL Study Tool",
-    "version": (0, 6, 0),
+    "version": (0, 7, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > Sidebar (N) > ASL Cards",
     "description": "Pose a signer figure, export ASL flashcards, and record signs with live webcam tracking",
@@ -2753,6 +2753,7 @@ class LiveLink:
         self._running = False
         self._send_lock = threading.Lock()
         self.latest = None                  # newest "frame" message; older ones are dropped
+        self.cam2 = collections.deque(maxlen=20)   # second-camera frames waiting for the timer
         self.commands = collections.deque()  # every other message, in order
         self.connected = False
         self.frames_in = 0
@@ -2892,9 +2893,12 @@ class LiveLink:
             return
         if not isinstance(msg, dict):
             return
-        if msg.get("type") == "frame":
+        typ = msg.get("type")
+        if typ == "frame":
             self.latest = msg
             self.frames_in += 1
+        elif typ == "cam2":
+            self.cam2.append(msg)            # second camera: every frame is kept briefly
         else:
             self.commands.append(msg)
 
@@ -3272,6 +3276,505 @@ class ModelSkeleton:
         return P
 
 
+# --- Second camera (a phone): true depth from two views ------------------------------
+#
+# The phone runs the same tracker and sends where each point is in ITS picture. Nothing about
+# where the phone stands is entered by hand:
+#   1. Calibration: while you move your arms, the first camera's 3D estimates of face, body and
+#      hand points are matched with where the phone sees them. That gives the phone's direction,
+#      position and lens (a "camera resection"), then a two-view refinement corrects for the first
+#      camera's depth errors, and the eye-corner spacing fixes the scale.
+#   2. Timing: the web page converts phone times to the laptop's clock. Blender interpolates the
+#      phone's points to the exact moment of each laptop frame, or predicts them a little ahead
+#      when the phone's newest frame is slightly older, so nothing waits for the phone.
+#   3. Fusion: the laptop camera says exactly which direction a point is in (its picture is the
+#      newest); the phone says how far along that direction it is. The phone counts more when
+#      it looks from a clearly different angle and when its data is fresh.
+#   4. If the phone gets moved, its points stop lining up; this is noticed and it recalibrates.
+
+STEREO_CALIB_POSE = (0, 2, 5, 7, 8, 11, 12, 23, 24)   # body points with trustworthy depth
+STEREO_POSE = STEREO_CALIB_POSE + (13, 14, 15, 16)
+
+
+def _rodrigues(r):
+    import numpy as np
+    th = float(np.linalg.norm(r))
+    if th < 1e-12:
+        return np.eye(3)
+    k = r / th
+    K = np.array([[0, -k[2], k[1]], [k[2], 0, -k[0]], [-k[1], k[0], 0]])
+    return np.eye(3) + math.sin(th) * K + (1 - math.cos(th)) * (K @ K)
+
+
+def _rot_to_vec(R):
+    import numpy as np
+    c = _clamp((np.trace(R) - 1) / 2, -1.0, 1.0)
+    th = math.acos(c)
+    if th < 1e-9:
+        return np.zeros(3)
+    if th > math.pi - 1e-6:
+        w, V = np.linalg.eigh((R + R.T) / 2)
+        return V[:, -1] * th
+    v = np.array([R[2, 1] - R[1, 2], R[0, 2] - R[2, 0], R[1, 0] - R[0, 1]])
+    return v / (2 * math.sin(th)) * th
+
+
+def _project(X, R, t, f, c):
+    """X (N,3) in camera-1 space -> pixels in a camera with rotation R, translation t."""
+    Y = X @ R.T + t
+    z = Y[:, 2:3]
+    return f * Y[:, :2] / z + c, z[:, 0]
+
+
+def _triangulate(uv1, uv2, f1, c1, R, t, f2, c2):
+    """Linear two-view triangulation, batched. Returns (N,3) in camera-1 space."""
+    import numpy as np
+    P1 = np.array([[f1, 0, c1[0], 0], [0, f1, c1[1], 0], [0, 0, 1, 0]], dtype=float)
+    K2 = np.array([[f2, 0, c2[0]], [0, f2, c2[1]], [0, 0, 1]], dtype=float)
+    P2 = K2 @ np.hstack([R, t.reshape(3, 1)])
+    A = np.stack([uv1[:, 0:1] * P1[2] - P1[0], uv1[:, 1:2] * P1[2] - P1[1],
+                  uv2[:, 0:1] * P2[2] - P2[0], uv2[:, 1:2] * P2[2] - P2[1]], axis=1)
+    A /= np.linalg.norm(A, axis=2, keepdims=True) + 1e-12
+    _, _, Vt = np.linalg.svd(A)
+    Xh = Vt[:, -1, :]
+    return Xh[:, :3] / Xh[:, 3:4]
+
+
+def _lm(fun, p0, iters=30):
+    """Small Levenberg-Marquardt with a numeric Jacobian. fun(p) -> residual vector."""
+    import numpy as np
+    p = np.array(p0, dtype=float)
+    r = fun(p)
+    cost = float(r @ r)
+    lam = 1e-3
+    for _ in range(iters):
+        J = np.empty((r.size, p.size))
+        for j in range(p.size):
+            dp = np.zeros_like(p)
+            dp[j] = 1e-6 * max(1.0, abs(p[j]))
+            J[:, j] = (fun(p + dp) - r) / dp[j]
+        A = J.T @ J
+        g = J.T @ r
+        improved = False
+        for _ in range(8):
+            try:
+                step = np.linalg.solve(A + lam * np.diag(np.diag(A) + 1e-9), -g)
+            except np.linalg.LinAlgError:
+                lam *= 10
+                continue
+            r2 = fun(p + step)
+            c2 = float(r2 @ r2)
+            if c2 < cost:
+                p, r, cost = p + step, r2, c2
+                lam = max(1e-7, lam / 3)
+                improved = True
+                break
+            lam *= 10
+        if not improved or float(np.abs(step).max()) < 1e-9:
+            break
+    return p, cost
+
+
+def _huber_w(res, delta):
+    import numpy as np
+    a = np.abs(res)
+    return np.where(a <= delta, 1.0, np.sqrt(delta / np.maximum(a, 1e-12)))
+
+
+def stereo_resection(X, uv, w, size2):
+    """Where camera 2 is, from 3D points (camera-1 space) and where camera 2 sees them.
+    Returns (R, t, f2) or None. Principal point assumed at the picture's center."""
+    import numpy as np
+    c2 = np.array(size2, dtype=float) / 2
+    n = len(X)
+    if n < 12:
+        return None
+    # normalized DLT
+    mX = np.average(X, axis=0, weights=w)
+    sX = math.sqrt(3) / max(1e-9, np.sqrt(np.average(((X - mX) ** 2).sum(1), weights=w)))
+    mu = np.average(uv, axis=0, weights=w)
+    su = math.sqrt(2) / max(1e-9, np.sqrt(np.average(((uv - mu) ** 2).sum(1), weights=w)))
+    Xn = (X - mX) * sX
+    un = (uv - mu) * su
+    rows = np.zeros((2 * n, 12))
+    Xh = np.hstack([Xn, np.ones((n, 1))])
+    rows[0::2, 0:4] = Xh
+    rows[0::2, 8:12] = -un[:, 0:1] * Xh
+    rows[1::2, 4:8] = Xh
+    rows[1::2, 8:12] = -un[:, 1:2] * Xh
+    rows *= np.repeat(np.sqrt(w), 2)[:, None]
+    _, _, Vt = np.linalg.svd(rows)
+    Pn = Vt[-1].reshape(3, 4)
+    Tu = np.array([[su, 0, -su * mu[0]], [0, su, -su * mu[1]], [0, 0, 1]])
+    TX = np.array([[sX, 0, 0, -sX * mX[0]], [0, sX, 0, -sX * mX[1]], [0, 0, sX, -sX * mX[2]], [0, 0, 0, 1]])
+    P = np.linalg.inv(Tu) @ Pn @ TX
+    M = P[:, :3]
+    if np.linalg.det(M) < 0:
+        P = -P
+        M = -M
+    # RQ decomposition: M = K R
+    Q, U = np.linalg.qr(np.flipud(M).T)
+    K = np.flipud(np.fliplr(U.T))
+    R = np.flipud(Q.T)
+    D = np.diag(np.sign(np.diag(K)))
+    K, R = K @ D, D @ R
+    if np.linalg.det(R) < 0:
+        R = -R
+        K = -K
+    t = np.linalg.inv(K) @ P[:, 3]          # M = K R exactly, so this t has the right scale
+    K /= K[2, 2]
+    f2 = float(abs(K[0, 0]) + abs(K[1, 1])) / 2
+    # refine: rotation, translation, focal length (robust)
+    r0 = _rot_to_vec(R)
+    p0 = np.concatenate([r0, t, [math.log(max(f2, 50.0))]])
+    sw = np.sqrt(np.repeat(w, 2))
+
+    def res(p, hw=None):
+        Rr = _rodrigues(p[:3])
+        pr, z = _project(X, Rr, p[3:6], math.exp(p[6]), c2)
+        e = (pr - uv).ravel() * sw
+        e = np.where(np.repeat(z, 2) > 0.05, e, 50.0)
+        return e if hw is None else e * hw
+
+    hw = np.ones(2 * n)
+    p = p0
+    for _ in range(3):
+        p, _ = _lm(lambda q: res(q, hw), p, iters=25)
+        e = res(p)
+        hw = _huber_w(e, max(2.0, 1.5 * float(np.median(np.abs(e)))))
+    return _rodrigues(p[:3]), p[3:6], math.exp(p[6])
+
+
+def stereo_refine(uv1, uv2, w, f1, c1, R, t, f2, c2):
+    """Two-view refinement: rotation, direction of travel and lens of camera 2 so that the points
+    seen by both cameras line up, with camera 1's lens and the distance between the cameras fixed
+    (the distance is set from the eye corners afterwards). Returns (R, t, f2)."""
+    import numpy as np
+    tn = float(np.linalg.norm(t))
+    if tn < 1e-6:
+        return R, t, f2
+    d = t / tn
+    th, ph = math.acos(_clamp(d[2], -1, 1)), math.atan2(d[1], d[0])
+    p0 = np.concatenate([_rot_to_vec(R), [th, ph, math.log(f2)]])
+    sw = np.sqrt(np.repeat(w, 4))
+
+    def unpack(p):
+        dd = np.array([math.sin(p[3]) * math.cos(p[4]), math.sin(p[3]) * math.sin(p[4]), math.cos(p[3])])
+        return _rodrigues(p[:3]), dd * tn, math.exp(p[5])
+
+    def res(p, hw=None):
+        Rr, tt, ff = unpack(p)
+        X = _triangulate(uv1, uv2, f1, c1, Rr, tt, ff, c2)
+        z1 = X[:, 2]
+        p1 = f1 * X[:, :2] / np.maximum(z1[:, None], 1e-6) + c1
+        p2, z2 = _project(X, Rr, tt, ff, c2)
+        e = np.hstack([p1 - uv1, p2 - uv2]).ravel() * sw
+        bad = np.repeat((z1 < 0.05) | (z2 < 0.05), 4)
+        e = np.where(bad, 30.0, e)
+        return e if hw is None else e * hw
+
+    hw = np.ones(4 * len(uv1))
+    p = p0
+    for _ in range(3):
+        p, _ = _lm(lambda q: res(q, hw), p, iters=25)
+        e = res(p)
+        hw = _huber_w(e, max(1.5, 1.5 * float(np.median(np.abs(e)))))
+    return unpack(p)
+
+
+class StereoRig:
+    """Keeps the phone's recent frames, its calibration, and fuses its view into the depth of
+    the first camera's points. See the notes at the top of this section."""
+
+    CALIB_MIN_SAMPLES = 600
+    CALIB_MIN_SECONDS = 3.0
+
+    def __init__(self):
+        self.frames = collections.deque(maxlen=40)   # (t seconds, {key: (u, v, w)}, (W, H))
+        self.calib = None         # {"R","t","f2","size2","f1","err"}
+        self.samples = collections.deque(maxlen=6000)  # (t, key, X(3), uv1(2), uv2(2), w)
+        self.state = "waiting"    # waiting, collecting, ready, moved
+        self.err_hist = collections.deque(maxlen=90)
+        self.bad_since = None
+        self.last_t1 = 0.0
+        self.info = {}
+        self.enabled = True
+        self.phone_info = {}
+        self.f1_hint, self.c1_hint = 1000.0, (320.0, 240.0)
+        self.pending = collections.deque(maxlen=60)   # laptop frames waiting for the phone's
+        self._last_collect = -1e9
+
+    # --- incoming phone frames ---------------------------------------------------------------
+    @staticmethod
+    def parse(msg):
+        pts = {}
+        p2 = msg.get("pose2d") or []
+        for i, p in enumerate(p2):
+            if i in STEREO_POSE and len(p) >= 2:
+                vis = p[2] if len(p) > 2 else 1.0
+                if vis > 0.5:
+                    pts[("p", i)] = (p[0], p[1], vis)
+        for h in msg.get("hands") or []:
+            side = h.get("side")
+            img = h.get("img") or []
+            if side in SIDES and len(img) == 21:
+                s = float(h.get("score", 1.0))
+                for i, p in enumerate(img):
+                    pts[("h", side, i)] = (p[0], p[1], s)
+        face = msg.get("face") or {}
+        for k, p in (face.get("pts") or {}).items():
+            pts[("f", int(k))] = (p[0], p[1], 0.6)
+        return pts
+
+    def add(self, msg):
+        img = msg.get("img") or [640, 480]
+        t = float(msg.get("t", 0.0)) / 1000.0
+        if self.frames and t <= self.frames[-1][0]:
+            return
+        self.frames.append((t, self.parse(msg), (float(img[0]), float(img[1]))))
+        if self.state == "waiting":
+            self.state = "collecting"
+
+    @property
+    def connected(self):
+        return bool(self.frames) and self.last_t1 - self.frames[-1][0] < 1.0
+
+    def aligned(self, t):
+        """The phone's points at laptop time t: interpolated between two phone frames, or
+        predicted from the last two when the newest phone frame is a little older than t.
+        Returns (points, freshness 0..1, picture size) or None."""
+        fr = self.frames
+        if not fr:
+            return None
+        i = len(fr) - 1
+        while i > 0 and fr[i][0] > t:
+            i -= 1
+        ta, pa, size = fr[i]
+        if ta <= t and i + 1 < len(fr):
+            tb, pb, _ = fr[i + 1]
+            w = (t - ta) / max(1e-6, tb - ta)
+            pts = {k: (a[0] + (pb[k][0] - a[0]) * w, a[1] + (pb[k][1] - a[1]) * w, min(a[2], pb[k][2]))
+                   for k, a in pa.items() if k in pb}
+            return pts, 1.0, size
+        gap = t - ta
+        if gap < -0.05 or gap > 0.25:
+            return None
+        pts = dict(pa)
+        if gap > 0 and i > 0:
+            tp, pp, _ = fr[i - 1]
+            dt = ta - tp
+            if 0 < dt < 0.15:
+                g = min(gap, 0.1)
+                pts = {k: (a[0] + (a[0] - pp[k][0]) * g / dt, a[1] + (a[1] - pp[k][1]) * g / dt, a[2])
+                       if k in pp else a for k, a in pa.items()}
+        fresh = 1.0 if gap < 0.03 else math.exp(-((gap - 0.03) / 0.08) ** 2)
+        return pts, fresh, size
+
+    # --- calibration -----------------------------------------------------------------------
+    def reset(self):
+        self.calib = None
+        self._last_collect = -1e9
+        self.pending.clear()
+        self.samples.clear()
+        self.err_hist.clear()
+        self.bad_since = None
+        self.state = "collecting" if self.frames else "waiting"
+
+    def recalibrate(self):
+        self.calib = None
+        self._last_collect = -1e9
+        self.pending.clear()
+        self.samples.clear()
+        self.err_hist.clear()
+        self.bad_since = None
+        self.state = "collecting"
+
+    def progress(self):
+        if self.state != "collecting" and self.state != "moved":
+            return 1.0 if self.calib else 0.0
+        n = len(self.samples)
+        span = (self.samples[-1][0] - self.samples[0][0]) if n > 1 else 0.0
+        return min(1.0, n / self.CALIB_MIN_SAMPLES, span / self.CALIB_MIN_SECONDS)
+
+    def match_pending(self):
+        newest = self.frames[-1][0] if self.frames else -1e9
+        while self.pending:
+            t, pts1 = self.pending[0]
+            if t > newest:
+                break
+            self.pending.popleft()
+            al = self.aligned(t)
+            if al is not None:
+                self.collect(t, pts1, al[0], al[1])
+
+    def collect(self, t, pts1, pts2, fresh):
+        """pts1: {key: (X raw camera-1 meters, uv1, w1, calib_ok)}."""
+        if fresh < 0.999 or t - self._last_collect < 0.08:
+            return                      # about 12 frames a second is plenty, and spans more time
+        self._last_collect = t
+        for k, (X, uv1, w1, ok) in pts1.items():
+            p2 = pts2.get(k)
+            if ok and p2 is not None:
+                self.samples.append((t, k, (X.x, X.y, X.z), uv1, (p2[0], p2[1]), w1 * p2[2]))
+        if self.progress() >= 1.0:
+            self.solve()
+
+    def solve(self, f1=None, c1=None):
+        import numpy as np
+        S = list(self.samples)
+        if len(S) < 50:
+            return False
+        if len(S) > 1500:
+            idx = np.linspace(0, len(S) - 1, 1500).astype(int)
+            S = [S[i] for i in idx]
+        X = np.array([s[2] for s in S], dtype=float)
+        uv1 = np.array([s[3] for s in S], dtype=float)
+        uv2 = np.array([s[4] for s in S], dtype=float)
+        w = np.array([s[5] for s in S], dtype=float)
+        keys = [s[1] for s in S]
+        size2 = self.frames[-1][2] if self.frames else (640.0, 480.0)
+        f1 = f1 or self.f1_hint
+        c1 = np.array(c1 if c1 is not None else self.c1_hint, dtype=float)
+        res = stereo_resection(X, uv2, w, size2)
+        if res is None:
+            return False
+        R, t, f2 = res
+        c2 = np.array(size2) / 2
+        R, t, f2 = stereo_refine(uv1, uv2, w, f1, c1, R, t, f2, c2)
+        # scale from the eye corners (about 89 mm apart)
+        Xs = _triangulate(uv1, uv2, f1, c1, R, t, f2, c2)
+        by_t = {}
+        for (ts, k, *_), x in zip(S, Xs):
+            if k in (("f", 33), ("f", 263)):
+                by_t.setdefault(ts, {})[k[1]] = x
+        iods = [float(np.linalg.norm(v[33] - v[263])) for v in by_t.values() if 33 in v and 263 in v]
+        if len(iods) >= 5:
+            s = IOD_M / float(np.median(iods))
+            if 0.5 < s < 2.0:
+                t = t * s
+        Xs = _triangulate(uv1, uv2, f1, c1, R, t, f2, c2)
+        p2, z2 = _project(Xs, R, t, f2, c2)
+        err = float(np.median(np.linalg.norm(p2 - uv2, axis=1)))
+        if not np.all(np.isfinite(t)) or np.mean(z2 > 0) < 0.9:
+            self.samples.clear()
+            return False
+        C2 = -R.T @ t
+        axis2 = R.T @ np.array([0, 0, 1.0])
+        angle = math.degrees(math.acos(_clamp(float(axis2 @ np.array([0, 0, 1.0])), -1, 1)))
+        self.calib = {"R": R, "t": t, "f2": f2, "size2": size2, "err": err, "angle": angle,
+                      "center": C2, "f1": f1, "c1": c1}
+        self.state = "ready"
+        self.err_hist.clear()
+        self.bad_since = None
+        return True
+
+    def export(self):
+        c = self.calib
+        if not c:
+            return None
+        return {k: (v.tolist() if hasattr(v, "tolist") else v) for k, v in c.items()}
+
+    def load(self, d):
+        import numpy as np
+        if not d:
+            self.calib = None
+            return
+        self.calib = {k: (np.array(v) if isinstance(v, list) else v) for k, v in d.items()}
+        self.state = "ready"
+
+    # --- fusing the phone's view into camera-1 points -------------------------------------
+    def fuse(self, t, cam, pts1, msg):
+        """pts1: {key: (X raw camera-1 meters (Vector), uv1, w1, calib_ok)}.
+        Returns {key: improved X (Vector)} for the points the phone helps with."""
+        import numpy as np
+        self.last_t1 = t
+        self.f1_hint, self.c1_hint = cam[0], (cam[1], cam[2])
+        al = msg.get("_cam2")
+        if al is None:
+            al = self.aligned(t) if self.frames else None
+            if al is not None:
+                msg["_cam2"] = al                  # kept with recordings, so they can be re-solved
+        if al is None:
+            self.info = {}
+            return {}
+        pts2, fresh, size2 = al
+        if self.calib is None:
+            if self.enabled:
+                # The phone's frames usually arrive a little after the laptop's. For calibration
+                # wait until the phone has frames on both sides of this moment, then match exactly.
+                self.pending.append((t, pts1))
+                self.match_pending()
+            return {}
+        c = self.calib
+        keys = [k for k in pts1 if k in pts2]
+        if not keys:
+            return {}
+        f1, cx, cy = cam
+        R, tt, f2 = c["R"], c["t"], c["f2"]
+        c2 = np.array(c["size2"]) / 2
+        uv1 = np.array([pts1[k][1] for k in keys], dtype=float)
+        X1 = np.array([tuple(pts1[k][0]) for k in keys], dtype=float)
+        uv2 = np.array([pts2[k][:2] for k in keys], dtype=float)
+        w2 = np.array([pts2[k][2] for k in keys], dtype=float)
+        d = np.column_stack([(uv1[:, 0] - cx) / f1, (uv1[:, 1] - cy) / f1, np.ones(len(keys))])
+        a = d @ R.T
+        b = tt
+        du, dv = uv2[:, 0] - c2[0], uv2[:, 1] - c2[1]
+        c_u = f2 * a[:, 0] - du * a[:, 2]
+        e_u = du * b[2] - f2 * b[0]
+        c_v = f2 * a[:, 1] - dv * a[:, 2]
+        e_v = dv * b[2] - f2 * b[1]
+        lam = (c_u * e_u + c_v * e_v) / np.maximum(c_u ** 2 + c_v ** 2, 1e-12)
+        Xs = d * lam[:, None]
+        # how much the phone's view adds: its viewing angle on the point
+        C2 = c["center"]
+        r1 = d / np.linalg.norm(d, axis=1, keepdims=True)
+        r2 = Xs - C2
+        r2 /= np.linalg.norm(r2, axis=1, keepdims=True) + 1e-12
+        sin2 = np.sum(np.cross(r1, r2) ** 2, axis=1)
+        p2, z2 = _project(Xs, R, tt, f2, c2)
+        resid = np.linalg.norm(p2 - uv2, axis=1)
+        ok = (lam > 0.15) & (lam < 4.0) & (z2 > 0.1) & (sin2 > 0.01)
+        wt = w2 * fresh * sin2 / (sin2 + 0.05) * ok
+        z_mono = X1[:, 2]
+        z = (wt * 4.0 * lam + 0.4 * z_mono) / (wt * 4.0 + 0.4)
+        out = {}
+        for k, zi, wi, X in zip(keys, z, wt, X1):
+            if wi > 0.02:
+                out[k] = Vector((X[0] * zi / X[2], X[1] * zi / X[2], zi))
+        # does the phone still line up? (if it was moved, the residuals grow)
+        good = wt > 0.3
+        if good.sum() >= 8 and fresh > 0.9:
+            # residual of the phone's points around the best fit along each camera-1 ray
+            self.err_hist.append(float(np.median(resid[good])))
+            med = float(np.median(self.err_hist))
+            limit = max(8.0, 0.02 * c["size2"][0])
+            if med > limit and len(self.err_hist) > 30:
+                self.bad_since = self.bad_since or t
+                if t - self.bad_since > 2.0:
+                    self.state = "moved"
+                    self.calib = None
+                    self.samples.clear()
+                    self.err_hist.clear()
+            else:
+                self.bad_since = None
+        self.info = {"used": len(out), "fresh": round(fresh, 2)}
+        return out
+
+    def status(self):
+        c = self.calib
+        st = {"connected": self.connected, "state": self.state if self.enabled else "off",
+              "progress": round(self.progress(), 2)}
+        if self.frames:
+            st["lag_ms"] = round(max(0.0, self.last_t1 - self.frames[-1][0]) * 1000)
+        if c:
+            st.update(angle=round(c["angle"]), error_px=round(c["err"], 1))
+            if self.err_hist:
+                st["live_error_px"] = round(sorted(self.err_hist)[len(self.err_hist) // 2], 1)
+        st.update(self.phone_info)
+        return st
+
+
 class DepthPlacer:
     """Steps 1-4 above for one frame. Used by Retargeter.solve when the browser sends picture
     coordinates and a figure skeleton is known."""
@@ -3340,7 +3843,66 @@ class DepthPlacer:
                 else:
                     lam = d.dot(S) / a
                 out[side + "_el"] = d * lam
+        # every body point the second camera can use, by MediaPipe index (the person's sides)
+        pts = {}
+        for i in STEREO_POSE:
+            if i < len(pose) and i < len(pose2d) and (len(pose[i]) < 4 or pose[i][3] > 0.5):
+                pts[i] = _back_project(pose2d[i], pose[i][2] + t.z, cam)
+        for side in SIDES:
+            ps = rt._side(side)
+            pts[POSE_IDX[ps]["sh"]] = out[side + "_sh"]
+            if side + "_el" in out:
+                pts[POSE_IDX[ps]["el"]] = out[side + "_el"]
+        out["pts"] = pts
         return out
+
+    def stereo_fuse(self, msg, t_sec, cam, fc, body, pose, pose2d, hands_raw, hands_cam):
+        """Let the second camera correct the distances of face, body and hand points."""
+        rt = self.rt
+        st = rt.stereo
+        pts1 = {}
+        if fc is not None:
+            for k, (X, uv) in fc["pts"].items():
+                pts1[("f", k)] = (X, uv, 1.0, True)
+        for i, X in body["pts"].items():
+            vis = pose[i][3] if len(pose[i]) > 3 else 1.0
+            pts1[("p", i)] = (X, pose2d[i], vis, i in STEREO_CALIB_POSE)
+        for side, (P, t) in hands_cam.items():
+            ps = rt._side(side)
+            img = hands_raw[side]["img"]
+            for i in range(21):
+                pts1[("h", ps, i)] = (P[i], img[i], 1.0, True)
+        fused = st.fuse(t_sec, cam, pts1, msg)
+        if not fused:
+            return False
+        if fc is not None:
+            for k in list(fc["pts"]):
+                X = fused.get(("f", k))
+                if X is not None:
+                    fc["pts"][k] = (X, fc["pts"][k][1])
+        for i in list(body["pts"]):
+            X = fused.get(("p", i))
+            if X is not None:
+                body["pts"][i] = X
+        for side in SIDES:
+            ps = rt._side(side)
+            for key, name in (("sh", "_sh"), ("el", "_el")):
+                X = fused.get(("p", POSE_IDX[ps][key]))
+                if X is not None:
+                    body[side + name] = X
+        for side, (P, t) in list(hands_cam.items()):
+            ps = rt._side(side)
+            got = [(i, fused[("h", ps, i)]) for i in range(21) if ("h", ps, i) in fused]
+            if len(got) < 3:
+                continue
+            shift = sum((X - P[i] for i, X in got), Vector()) / len(got)
+            newP = [fused.get(("h", ps, i), P[i] + shift) for i in range(21)]
+            k = (t.z + shift.z) / t.z if t.z > 1e-6 else 1.0
+            if len(got) >= 15 and abs(k - 1) < 0.25:
+                # the true distance shows how far off the single-camera hand size is: learn it
+                self.hand_k = _clamp(self.hand_k * (1 + 0.03 * (k - 1)), 0.8, 1.25)
+            hands_cam[side] = (newP, t + shift)
+        return True
 
     def hand_cam(self, side, h, cam, t_sec):
         Q, uv = h.get("world"), h.get("img")
@@ -3470,6 +4032,16 @@ class DepthPlacer:
         if body is None:
             return {}
         conv = rt.conv
+        hands_cam = {}
+        for side in SIDES:
+            h = hands_raw.get(side)
+            if h is not None and side in hand_frames:
+                hc = self.hand_cam(side, h, cam, t_sec)
+                if hc is not None:
+                    hands_cam[side] = hc
+        stereo = False
+        if rt.stereo is not None and rt.stereo.enabled:
+            stereo = self.stereo_fuse(msg, t_sec, cam, fc, body, pose, pose2d, hands_raw, hands_cam)
 
         # the figure's torso and head for this frame's rotations
         use = rt.tracked
@@ -3535,9 +4107,7 @@ class DepthPlacer:
         placed = {}
         for side in SIDES:
             h = hands_raw.get(side)
-            if h is None or side not in hand_frames:
-                continue
-            hc = self.hand_cam(side, h, cam, t_sec)
+            hc = hands_cam.get(side)
             if hc is None:
                 continue
             P, t = hc
@@ -3616,7 +4186,7 @@ class DepthPlacer:
             cosA = _clamp((L1 * L1 + dist * dist - L2 * L2) / (2 * L1 * dist), -1.0, 1.0)
             E = S + (dhat * cosA + perp * math.sqrt(max(0.0, 1 - cosA * cosA))) * L1
             placed[side] = (S, E, Wt, Rt)
-            self.info[side] = {"touch": max(strengths), "depth": round(t.z, 3),
+            self.info[side] = {"touch": max(strengths), "depth": round(t.z, 3), "stereo": stereo,
                                "targets": M, "wrist": Wt, "hand_rot": R_hand, "strengths": strengths,
                                "model_hand": [R_hand @ v for v in q]}
         return placed
@@ -3672,6 +4242,7 @@ class Retargeter:
         self.fov = 60.0           # camera's horizontal field of view (degrees)
         self.groups = None        # tracked groups (None = all), see TRACK_GROUPS
         self.depth = DepthPlacer(self)
+        self.stereo = None        # StereoRig when a second camera (phone) is connected
         self.reset()
 
     def reset(self):
@@ -4289,6 +4860,9 @@ class Take:
         rt.thumb_rest, rt.wrist_rest_z = dict(st["thumb_rest"]), dict(st["wrist_rest_z"])
         rt.skel = skel
         rt.depth.hand_k = st.get("hand_k", 1.0)
+        if st.get("stereo"):
+            rt.stereo = StereoRig()
+            rt.stereo.load(st["stereo"])
         new = []
         for (t, rots, face, seen), msg in zip(self.samples, self.msgs):
             out, _, _ = rt.solve(msg)
@@ -5021,6 +5595,8 @@ class LiveSession:
     def __init__(self):
         self.link = LiveLink()
         self.rt = Retargeter()
+        self.stereo = StereoRig()
+        self.rt.stereo = self.stereo
         self.fig = None
         self.mode = "off"            # off, live, countdown, recording, review, playing, rendering
         self.take = None
@@ -5101,7 +5677,7 @@ class LiveSession:
                 "figure": self.fig.name if self.fig else None, "error": self.error,
                 "settings": {"mirror": lv.mirror, "auto_stop": lv.auto_stop, "countdown": lv.countdown,
                              "use_depth": lv.use_depth, "fov": lv.camera_fov},
-                "progress": self.progress, "last_gif": self.last_gif}
+                "progress": self.progress, "last_gif": self.last_gif, "stereo": self.stereo.status()}
 
     def send_state(self):
         self.last_state = time.perf_counter()
@@ -5140,6 +5716,19 @@ class LiveSession:
             self.send_state()
         elif typ == "calibrate":
             self.rt.start_calibration()
+            self.send_state()
+        elif typ == "cam2_info":
+            self.stereo.phone_info = {k: msg[k] for k in ("phone", "phone_fps", "rtt_ms", "phone_ms") if k in msg}
+            if not msg.get("phone"):
+                self.stereo.frames.clear()
+        elif typ == "stereo":
+            act = msg.get("action")
+            if act == "recalibrate":
+                self.stereo.recalibrate()
+            elif act == "forget":
+                self.stereo.reset()
+            elif act in ("on", "off"):
+                self.stereo.enabled = act == "on"
             self.send_state()
         elif typ == "record":
             act = msg.get("action")
@@ -5293,7 +5882,8 @@ class LiveSession:
         self.take.setup = {"mirror": rt.mirror, "use_depth": rt.use_depth, "fov": rt.fov,
                            "groups": list(rt.groups) if rt.groups is not None else None,
                            "calib": rt.calib, "thumb_rest": dict(rt.thumb_rest),
-                           "wrist_rest_z": dict(rt.wrist_rest_z), "hand_k": rt.depth.hand_k}
+                           "wrist_rest_z": dict(rt.wrist_rest_z), "hand_k": rt.depth.hand_k,
+                           "stereo": self.stereo.export()}
         self.take.body_sig = rt.skel.sig if rt.skel else None
         self.seen_any = False
         self.mode = "recording"
@@ -5437,6 +6027,8 @@ class LiveSession:
     # --- the timer --------------------------------------------------------------
     def tick(self):
         scene = bpy.context.scene
+        while self.link.cam2:
+            self.stereo.add(self.link.cam2.popleft())
         n = 0
         while self.link.commands and n < 50:
             self.handle(self.link.commands.popleft(), scene)
@@ -5453,6 +6045,10 @@ class LiveSession:
             self.on_frame(msg, scene)
         if self.mode == "playing" and self.take is not None:
             self.update_playback(now)
+        st = self.stereo
+        if (st.frames and now - self.last_state > 0.5) or st.state != getattr(self, "_stereo_state", st.state):
+            self._stereo_state = st.state
+            self.send_state()            # keeps the web page's second-camera status current
 
 
 LIVE = LiveSession()
@@ -5536,7 +6132,7 @@ class ASL_OT_live_action(Operator):
     bl_options = {'REGISTER'}
     action: EnumProperty(items=[(k, k, "") for k in ("calibrate", "record", "stop", "retry", "discard",
                                                       "play", "pause", "gif", "snapshot",
-                                                      "arrow_path", "arrows_clear")])
+                                                      "arrow_path", "arrows_clear", "stereo_recal")])
 
     @classmethod
     def description(cls, context, props):
@@ -5550,6 +6146,7 @@ class ASL_OT_live_action(Operator):
                 "arrow_path": "Add an arrow that traces the right index fingertip's movement "
                               "(adjust it in the web app's Review panel)",
                 "arrows_clear": "Remove all arrows from this recording",
+                "stereo_recal": "Work out the phone camera's position again (then move your arms around for a few seconds)",
                 }.get(props.action, "")
 
     def execute(self, context):
@@ -5568,6 +6165,8 @@ class ASL_OT_live_action(Operator):
         elif a == "discard":
             LIVE.drop_take()
             LIVE.mode = "live"
+        elif a == "stereo_recal":
+            LIVE.stereo.recalibrate()
         elif a in ("arrow_path", "arrows_clear") and LIVE.take is not None:
             LIVE.edit_arrows("arrow_add" if a == "arrow_path" else "arrows_clear", {"arrow": {"kind": "path"}}, scene)
         elif a == "play" and LIVE.take is not None:
@@ -5694,6 +6293,19 @@ class ASL_PT_live(_ASLPanel, Panel):
             box.label(text=f"Moving: {LIVE.fig.name}")
         if LIVE.rt.calibrating:
             box.label(text="Calibrating: face the camera and hold still", icon='VIEW_CAMERA')
+        st = LIVE.stereo
+        if st.frames:
+            ss = st.status()
+            if not ss["connected"]:
+                box.label(text="Phone camera: no recent frames", icon='ERROR')
+            elif ss["state"] == "ready":
+                box.label(text=f"Phone camera: in use, {ss.get('angle', 0)}° from the webcam, "
+                               f"{ss.get('lag_ms', 0)} ms behind", icon='CHECKMARK')
+            elif ss["state"] in ("collecting", "moved"):
+                pre = "Phone moved: " if ss["state"] == "moved" else "Phone camera: "
+                box.label(text=pre + f"move your arms around ({int(ss['progress'] * 100)}%)", icon='TIME')
+            row = box.row(align=True)
+            row.operator("asl.live_action", text="Recalibrate Phone", icon='FILE_REFRESH').action = "stereo_recal"
         touching = [("right" if sd == "R" else "left") for sd, v in LIVE.rt.depth.info.items() if v.get("touch", 0) > 0.5]
         if touching and LIVE.mode in ("live", "recording"):
             box.label(text=f"Touching: {' and '.join(touching)} hand", icon='HAND')

@@ -6,11 +6,15 @@ import { BlenderLink } from "./link.js";
 import { loadLandmarkers, MP_VERSION } from "./mediapipe.js";
 import { Tracker, assignSides, drawOverlay } from "./tracker.js";
 import { createArrowEditor } from "./arrows.js";
+import { PhoneHub } from "./phonelink.js";
+
+const QR_URL = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+const PUBLIC_SITE = "https://cjlittle7.github.io/ASL-Study-Tool/";
 
 const SETTINGS_KEY = "asl-study-tool:record-settings";
 const defaults = { port: 8766, mirrorPreview: true, mirrorFigure: false, autoStop: true, countdown: 3,
                    smoothing: 0.5, face: "auto", category: "phrase", quality: "FAST", fps: 15, size: 480,
-                   useDepth: true, fov: 60 };
+                   useDepth: true, fov: 60, phoneSite: "" };
 
 function loadSettings() {
   try {
@@ -51,6 +55,25 @@ function createSession() {
     dom: null,
   };
 
+  // --- the phone as a second camera --------------------------------------------------------
+  const phone = new PhoneHub({
+    onFrame: (m) => link.send(m),                  // straight on to Blender, no waiting
+    onStatus: () => {
+      sendPhoneInfo();
+      renderPhone();
+    },
+  });
+  function sendPhoneInfo() {
+    link.send({ type: "cam2_info", phone: phone.receiving, phone_fps: phone.fps,
+                rtt_ms: Math.round(phone.rtt || 0), phone_ms: phone.phoneMs });
+  }
+  setInterval(() => {
+    if (phone.state === "connected" || phone.state === "waiting") {
+      sendPhoneInfo();
+      renderPhone();
+    }
+  }, 1000);
+
   const link = new BlenderLink({
     onStatus: (s) => {
       st.linkStatus = s;
@@ -82,6 +105,7 @@ function createSession() {
       if (m.mode === "live" && prevMode && prevMode !== "live" && prevMode !== "rendering") clearSnaps();
       if (m.mode !== "playing") st.playhead = null;
       render();
+      renderPhone();
     } else if (m.type === "playhead") {
       st.playhead = m.t;
       st.viewT = m.t;
@@ -254,6 +278,7 @@ function createSession() {
     }
     wire(root);
     render();
+    renderPhone();
   }
 
   function template() {
@@ -283,6 +308,7 @@ function createSession() {
             <h2>Status</h2>
             <dl class="status-list" id="status"></dl>
           </section>
+          <section class="side-box" id="phone-box"></section>
           <section class="side-box">
             <h2>Settings</h2>
             <label class="check"><input type="checkbox" id="s-mirror-preview" ${s.mirrorPreview ? "checked" : ""}> Show the camera like a mirror</label>
@@ -304,7 +330,7 @@ function createSession() {
           <details class="side-box">
             <summary>How to connect Blender</summary>
             <ol class="steps">
-              <li>Install the ASL Flashcard Editor add-on (version 0.6 or newer).</li>
+              <li>Install the ASL Flashcard Editor add-on (version 0.7 or newer).</li>
               <li>In Blender press <kbd>N</kbd>, open <b>ASL Cards</b>, click <b>New Card Scene</b> if needed.</li>
               <li>In <b>Live Tracking &amp; Recording</b>, click <b>Start Live Link</b>.</li>
               <li>Click <b>Start camera</b> on this page. The status turns green when they find each other.</li>
@@ -377,6 +403,14 @@ function createSession() {
     };
 
     root.addEventListener("click", (e) => {
+      const pb = e.target.closest("[data-phone]");
+      if (pb) {
+        const a = pb.dataset.phone;
+        if (a === "start") phone.start();
+        else if (a === "stop") phone.stop();
+        else if (a === "recal") link.send({ type: "stereo", action: "recalibrate" });
+        return;
+      }
       const b = e.target.closest("[data-act]");
       if (!b || b.disabled) return;
       const a = b.dataset.act;
@@ -400,6 +434,94 @@ function createSession() {
           act.play();
         }
       } else if (e.key === "Escape" && mode === "countdown") act.stop();
+    };
+  }
+
+  function phoneSiteUrl() {
+    if (st.settings.phoneSite) return st.settings.phoneSite;
+    const local = /^(localhost|127\.|\[::1\])/.test(location.hostname);
+    return location.protocol === "https:" && !local ? location.origin + location.pathname : PUBLIC_SITE;
+  }
+  function phoneLink() {
+    const base = phoneSiteUrl().replace(/#.*$/, "");
+    const test = /[?&](peer=[^&#]+)/.exec(location.href);           // self-hosted pairing server (tests)
+    return `${base}#/phone/${phone.code}${test ? "?" + test[1] : ""}`;
+  }
+
+  let qrLoading = null;
+  function drawQr(el, text) {
+    const make = () => {
+      const qr = window.qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      el.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      el.querySelector("svg")?.setAttribute("aria-label", "QR code: open this on your phone");
+    };
+    if (window.qrcode) return make();
+    qrLoading = qrLoading || new Promise((res, rej) => {
+      const sc = document.createElement("script");
+      sc.src = QR_URL;
+      sc.onload = res;
+      sc.onerror = rej;
+      document.head.appendChild(sc);
+    });
+    qrLoading.then(make, () => (el.textContent = "(QR code unavailable offline: type the address below on the phone)"));
+  }
+
+  function renderPhone() {
+    const box = st.dom?.root.querySelector("#phone-box");
+    if (!box || !st.dom.root.isConnected) return;
+    const ps = phone.state;
+    const stereo = st.blender?.stereo || {};
+    let html = `<h2>Phone camera</h2>`;
+    if (ps === "off" || ps === "error") {
+      html += `<p class="muted small">Use your phone as a second camera at another angle. With two views,
+        Blender measures how far away your hands are instead of estimating it.</p>
+        ${ps === "error" ? `<p class="error small">${esc(phone.error)}</p>` : ""}
+        <button type="button" class="btn secondary" data-phone="start">Connect a phone</button>`;
+    } else if (ps === "starting") {
+      html += `<p class="muted">Getting a pairing code...</p>`;
+    } else if (ps === "waiting") {
+      html += `<p class="small">On your phone, scan this code or open the address below, then tap <b>Start phone camera</b>.</p>
+        <div class="qr" id="phone-qr"></div>
+        <p class="pair-code" aria-label="Pairing code">${esc(phone.code)}</p>
+        <p class="small break"><a href="${esc(phoneLink())}" target="_blank" rel="noopener">${esc(phoneLink())}</a></p>
+        <details class="small"><summary>Phone page address</summary>
+          <p class="muted">The phone needs the web app from an https address (GitHub Pages).</p>
+          <input type="url" id="phone-site" value="${esc(phoneSiteUrl())}" style="width:100%"></details>
+        <button type="button" class="btn secondary" data-phone="stop">Cancel</button>`;
+    } else if (ps === "connected") {
+      const rec = phone.receiving;
+      const stateText = !rec ? ["Connected, waiting for tracking frames...", "warn"]
+        : stereo.state === "ready" ? [`In use: ${stereo.angle ?? "?"}° from the laptop camera`, "ok"]
+        : stereo.state === "moved" ? [`The phone moved. Move your arms around (${Math.round((stereo.progress || 0) * 100)}%)`, "warn"]
+        : stereo.state === "off" ? ["Turned off", ""]
+        : [`Finding the phone: move your arms around (${Math.round((stereo.progress || 0) * 100)}%)`, "warn"];
+      const rows = [
+        ["Phone", rec ? `${phone.fps} fps, tracking ${phone.phoneMs || "-"} ms` : "No frames", rec ? "ok" : "warn"],
+        ["Link", `${Math.round(phone.rtt || 0)} ms round trip`, phone.rtt < 60 ? "ok" : "warn"],
+        ["Status", stateText[0], stateText[1]],
+      ];
+      if (stereo.lag_ms != null && stereo.state === "ready") rows.push(["Behind", `${stereo.lag_ms} ms (filled in by prediction)`, stereo.lag_ms < 80 ? "ok" : "warn"]);
+      if (stereo.live_error_px != null) rows.push(["Match", `${stereo.live_error_px} px`, stereo.live_error_px < 8 ? "ok" : "warn"]);
+      html += `<dl class="status-list">${rows.map(([k, v, c]) => `<dt>${esc(k)}</dt><dd class="${c}">${esc(v)}</dd>`).join("")}</dl>
+        <div class="row">
+          <button type="button" class="btn secondary" data-phone="recal" title="Then move your arms around for a few seconds">Find the phone again</button>
+          <button type="button" class="btn secondary" data-phone="stop">Disconnect</button>
+        </div>`;
+    }
+    const sig = html;
+    if (box.dataset.sig === sig) return;           // don't redraw (keeps the QR and inputs still)
+    box.dataset.sig = sig;
+    box.innerHTML = html;
+    const qr = box.querySelector("#phone-qr");
+    if (qr) drawQr(qr, phoneLink());
+    const site = box.querySelector("#phone-site");
+    if (site) site.onchange = () => {
+      st.settings.phoneSite = site.value.trim() === PUBLIC_SITE ? "" : site.value.trim();
+      saveSettings(st.settings);
+      box.dataset.sig = "";
+      renderPhone();
     };
   }
 
@@ -689,7 +811,7 @@ function createSession() {
 
   // connect automatically; the link retries quietly until Blender is listening
   link.connect(st.settings.port);
-  return { mount, link, st };
+  return { mount, link, st, phone };
 }
 
 let keyHandler = null;

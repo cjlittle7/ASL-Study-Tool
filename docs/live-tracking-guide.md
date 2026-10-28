@@ -14,7 +14,7 @@ No video leaves your computer. The browser sends Blender only numbers (about 4 K
 
 ## What you need
 
-- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.6 or newer**.
+- Blender 4.2 or newer with the ASL Flashcard Editor add-on **version 0.7 or newer**.
 - Chrome, Edge or Firefox, and a webcam.
 - The web app opened from `http://localhost:8000` (see the README) or from GitHub Pages.
   Browsers only allow the camera on `localhost` or `https` addresses.
@@ -65,6 +65,50 @@ only the arm directions.
 
 When a hand touches the face, the add-on also learns how far off MediaPipe's hand size is for
 you, which makes hand distance more accurate for the rest of the session.
+
+## Your phone as a second camera
+
+With one camera, how far away your hands are has to be estimated. A phone set up at another
+angle sees the same points from the side, so Blender can measure it instead (triangulation).
+This helps most with signs that move toward or away from the body, and with a hand hidden from
+the laptop camera by the other hand.
+
+What you need: the web app published on **GitHub Pages** (or another `https` address), because
+phone browsers only allow the camera on `https` pages. The phone and laptop should be on the same
+Wi-Fi.
+
+1. On the laptop, in the Record tab, click **Connect a phone** (in the Phone camera box). A QR
+   code and a 6-letter code appear.
+2. On the phone, scan the QR code (or open the web app and go to `#/phone`, then type the code).
+   Tap **Start phone camera** and allow the camera.
+3. Stand the phone up 1 to 2 meters away, about a quarter turn (45-90°) from the laptop
+   camera, where it sees your head and both hands. The back camera is sharper if you can
+   see the screen some other way; the front camera lets you check the picture.
+4. Move your arms around for a few seconds. Blender works out where the phone is and what its
+   lens is from your movements; you don't measure anything. The box then says **In use**, with
+   the angle between the cameras.
+
+If the phone gets moved, its points stop lining up with the laptop's; Blender notices within a
+couple of seconds and finds it again (move your arms around). **Find the phone again** forces this.
+
+How the delay is kept low:
+
+- The phone does its own tracking and sends only point positions (about 2 KB per frame), never video.
+- The phone and laptop talk directly (WebRTC). A free public server is used only to introduce
+  them with the code.
+- Phone frames travel on a channel that never re-sends or queues: a late frame is dropped
+  instead of holding up newer ones.
+- The phone's clock is matched to the laptop's with quick time checks, and Blender
+  interpolates the phone's points to the exact moment of each laptop frame, or predicts them a
+  few hundredths of a second ahead. **Nothing waits for the phone**: the laptop camera still
+  drives the figure at its own speed, and the phone corrects the depth.
+- If the phone's frames stop or fall too far behind, Blender goes back to one camera smoothly.
+
+Recordings keep the phone's points, so a take recorded with two cameras is solved with two
+cameras again if you change the figure's body.
+
+Later, with a second USB webcam: the same combining works for a second camera on the laptop
+itself, without pairing. That option isn't in the app yet.
 
 ## Eyebrows
 
@@ -193,6 +237,10 @@ making the GIF, so a fingertip that touched the nose still touches the (new) nos
 - **Eyebrows look raised or furrowed when relaxed**: click **Calibrate** with a relaxed face.
 - **A hand near the face lands in front of or inside the figure's face**: change **Camera field
   of view** in the Record tab's Settings (or in Blender's panel).
+- **The phone won't pair**: both devices need internet for the pairing step. Make sure the laptop
+  still shows the code, and that the phone opened the address from the QR code (an `https` address).
+- **Phone connected but "Finding the phone" never finishes**: the phone must see your face and
+  hands at the same time as the laptop does. Move your arms through a big area for a few seconds.
 - **High delay**: the Status box shows whether tracking or Blender is slow. Close other
   camera apps, set Face tracking to Automatic, and use Solid shading in Blender.
 
