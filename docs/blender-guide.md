@@ -40,9 +40,13 @@ To change a card later, click **Open Sign Recipe** and pick its file from `cards
 
 **Right Hand / Left Hand panels**
 
-- Pick a starting **Handshape** (A, B, C, 5, L, Y...) and click **Apply**, then fine-tune.
+- Pick a starting **Handshape** and click **Apply**, then fine-tune. There is a preset for every
+  fingerspelled letter (P uses the K shape and Q the G shape, turned to point down), plus 5, 1,
+  flat O, bent B and claw.
 - Each finger has *Knuckle*, *Middle joint* and *Tip joint* bend sliders, plus *Side* to spread it.
-- The thumb has *Across palm*, *Away from palm*, *Roll* and two joint bends.
+- The thumb has *Across the front of the palm*, *Out to the side / toward pinky*, *Roll* and two
+  joint bends. Its first bone sits inside the fleshy pad of the palm, as on a real hand, so the
+  visible thumb starts about halfway up the palm.
 - **Copy to left hand** copies the finger positions to the other hand.
 - **Save** (at the bottom of the Right Hand panel) adds the current hand to your own handshape
   list, marked with ★ in the drop-down.
@@ -58,37 +62,102 @@ A good fingerspelling position to start from: Right Arm *Raise sideways* 22, *El
 
 ## Showing movement
 
-### Ghosts (where the movement starts)
+### Start and End Position
 
-1. Pose the figure in the **starting** position.
-2. Click **Snapshot as Ghost**. A faded copy stays behind.
-3. Now move the solid figure to the **ending** position.
+Use the **Start & End Position** panel:
 
-You can add several ghosts for multi-step movements. In **Figures & Ghosts**, click a figure's
-name to edit it, change its **Opacity**, or use the **Show** buttons to include or leave out
-the head, body, each arm and each hand. New ghosts show only the right arm; tick
-**Ghost both arms** first for two-handed movements.
+1. Pose the figure where the sign **starts**, then click **Set Start Position**.
+   A faded copy stays there. **Start Position Opacity** sets how faded it is.
+2. Move the figure to where the sign **ends**, then click **Set End Position**.
+   - The faded start now shows only the arm(s) that actually moved.
+   - If **Draw movement arrow automatically** is on, a curved arrow is drawn from the start
+     hand position to the end. Clicking Set End Position again replaces that arrow.
+   - If the hand only twists in place, no arrow is drawn; add an attached **Around** arrow instead.
+3. To fix either position later, use **Sliders change: Start / End**, adjust, and click
+   **Set End Position** again to refresh the arrow.
 
-### Arrows
+Tick **Start shows both arms** before Set Start Position for two-handed movements.
+For movements with extra steps, **Add Middle Position** leaves another faded copy.
+
+In **Figures & Ghosts** you can pick any figure to edit, change its **Opacity**, or use the
+**Show** buttons to include or leave out the head, body, each arm and each hand.
+
+### Arrows attached to a body part
+
+These arrows follow the figure: change the pose and they move with it.
+
+1. In **Movement Arrows → Attach an arrow to a body part**, choose the side (Right/Left),
+   the **body part** (wrist, palm, forearm, elbow, shoulder, any fingertip, forehead, chin)
+   and the type:
+   - **Along**: a straight arrow pointing along the body part (for example, out from a fingertip).
+   - **Around**: a circular arrow around the body part (for example, circling the wrist for a twist).
+2. Click **Add Attached Arrow**. Its settings appear under **Selected**:
+   - **Axis**: along the bone, toward the front/palm side, or sideways.
+   - **Position**: nudge the arrow along the part's own directions.
+   - **Size**: length for Along arrows; radius and how far around for Around arrows.
+   - **Direction**: turn it around the axis, tilt it, or **Reverse** it.
+   - **Always draw on top**: on keeps it in front of the body; off lets an Around arrow wrap
+     behind the wrist in 3D.
+   - **Detach** turns it into a normal arrow you can edit by hand.
+
+The arrow attaches to the figure you're editing at the time, so you can attach one to the
+start position as well.
+
+### Free arrows
 
 Click an arrow type in **Movement Arrows** (Straight, Arc, Back and forth, Circle, Zigzag).
 It appears near the right hand.
 
 - Move it: select it and press **G**, then click to drop it.
 - Reshape it: press **Tab**, select a point, press **G** to move it, then **Tab** again.
-- **Flip Direction** points it the other way.
+- **Flip Direction** points the selected arrows the other way (attached arrows too).
 - Arrow color and thickness apply to every arrow on the card.
 
-Arrows always draw on top of the figure.
+Free arrows always draw on top of the figure.
+
+## Proportions
+
+The **Proportions** panel changes the figure's build. It applies to every figure on the card
+and is saved with each card.
+
+- **Neck length**.
+- **Finger sections**: base, middle and tip length for every finger and the thumb, in millimeters.
+  The thumb's base section is the part inside the palm.
+- **Mirror left and right hands** (on by default): changing one hand changes the other.
+  Turn it off to give each hand its own lengths; both hands' sliders then appear.
+- **Thumb base position**: move where the thumb joins the hand (toward the fingers, toward the
+  pinky, or out of the palm), in millimeters.
+- **Shoulder position**: move each shoulder up, away from the body, or forward.
+- The mirror setting applies to the thumb and shoulder positions too.
+- **Reset Proportions** returns everything to the defaults.
+
+Figures made with an older version of the add-on are rebuilt automatically when you open the
+file (their poses are kept), so the length sliders work on them too. If the Card panel ever
+shows "Figures from an older version", click **Update Figures**.
 
 ## Framing and look
 
-**Framing & Look** has presets for the upper body, face plus hands, and a hand close-up.
+**Fit Hands** and **Fit Hands + Face** (in the Card panel and in **Framing & Look**) zoom and
+center the picture so every raised hand, every faded start position and every arrow is fully
+visible above the label. Hands resting down by the hip are ignored. Use **Fit Hands + Face** for
+signs made near the face or that need the facial expression (question words, for example).
+Click it again after changing the pose.
+
+**Framing & Look** also has fixed presets for the upper body, face plus hands, and a hand close-up.
 The label is scaled with the camera, so the English term is the **same size on every card**
 no matter how far you zoom. Label size is set in the Card panel.
 
 Also here: **View angle** (turn the figure for a 3/4 view), skin and shirt colors, outlines,
 transparent background, picture size and renderer (EEVEE is fast; Cycles is slower but softer).
+
+## Live tracking and recording
+
+The **Live Tracking & Recording** panel connects the figure to your webcam through the web
+app's Record tab, so you can pose it by signing, and record signs as animated GIF cards.
+See [live-tracking-guide.md](live-tracking-guide.md).
+
+The **Body & Face** panel now also has face sliders for non-manual markers: mouth open,
+smile/frown, pucker (OO), puffed cheeks, and closing each eye.
 
 ## Re-render every card from the command line
 

@@ -5,23 +5,46 @@
       "title": "How a sign is built",
       "summary": "The five building blocks every sign uses, and how to read the cards.",
       "blocks": [
-        { "type": "p", "text": "Every sign is made from a few [[parameters]]. If you learn to notice them, new signs get much easier to remember." },
-        { "type": "list", "items": [
-          "[[Handshape|handshape]]: the shape your hand makes.",
-          "[[Palm orientation|palm-orientation]]: which way your palm faces.",
-          "[[Location|location]]: where the sign happens, like the forehead or in front of the chest.",
-          "[[Movement|movement]]: how the hand travels.",
-          "[[Non-manual markers|non-manual-marker]]: what your face, head and body do."
-        ]},
-        { "type": "h", "text": "Reading the cards" },
-        { "type": "p", "text": "Each card shows the signer from the front, so their right hand appears on your left. The signer uses the right hand as the [[dominant hand|dominant-hand]]." },
-        { "type": "list", "items": [
-          "A faded copy of the hand shows where a movement starts.",
-          "The solid hand shows where it ends.",
-          "Red arrows show the path between them."
-        ]},
-        { "type": "cards", "ids": ["word-hello"] },
-        { "type": "p", "text": "In HELLO above, the faded hand starts near the forehead and the arrow shows it moving outward." }
+        {
+          "type": "p",
+          "text": "Every sign is made from a few [[parameters]]. If you learn to notice them, new signs get much easier to remember."
+        },
+        {
+          "type": "list",
+          "items": [
+            "[[Handshape|handshape]]: the shape your hand makes.",
+            "[[Palm orientation|palm-orientation]]: which way your palm faces.",
+            "[[Location|location]]: where the sign happens, like the forehead or in front of the chest.",
+            "[[Movement|movement]]: how the hand travels.",
+            "[[Non-manual markers|non-manual-marker]]: what your face, head and body do."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Reading the cards"
+        },
+        {
+          "type": "p",
+          "text": "Each card shows the signer from the front, so their right hand appears on your left. The signer uses the right hand as the [[dominant hand|dominant-hand]]."
+        },
+        {
+          "type": "list",
+          "items": [
+            "A faded copy of the hand shows where a movement starts.",
+            "The solid hand shows where it ends.",
+            "Red arrows show the path between them."
+          ]
+        },
+        {
+          "type": "cards",
+          "ids": [
+            "word-hello"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "In HELLO above, the faded hand starts near the forehead and the arrow shows it moving outward."
+        }
       ]
     },
     {
@@ -29,15 +52,30 @@
       "title": "The manual alphabet",
       "summary": "Letters for fingerspelling names and words that don't have a sign.",
       "blocks": [
-        { "type": "p", "text": "[[Fingerspelling|fingerspelling]] uses one [[handshape]] per letter. Hold your dominant hand near your shoulder with the palm facing out, and keep it steady while your fingers change shape." },
-        { "type": "p", "text": "Most letters hold still. J and Z are the two that move: J is drawn in the air with the pinky, and Z is drawn with the index finger." },
-        { "type": "cards", "category": "letter" },
-        { "type": "h", "text": "Tips" },
-        { "type": "list", "items": [
-          "Don't bounce your hand for each letter. Let the shapes flow into each other.",
-          "Say the word, not the letters. Practice reading whole words by shape.",
-          "For a double letter, slide the hand slightly sideways instead of making the shape twice."
-        ]}
+        {
+          "type": "p",
+          "text": "[[Fingerspelling|fingerspelling]] uses one [[handshape]] per letter. Hold your dominant hand near your shoulder with the palm facing out, and keep it steady while your fingers change shape."
+        },
+        {
+          "type": "p",
+          "text": "Most letters hold still. J and Z are the two that move: J is drawn in the air with the pinky, and Z is drawn with the index finger."
+        },
+        {
+          "type": "cards",
+          "category": "letter"
+        },
+        {
+          "type": "h",
+          "text": "Tips"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Don't bounce your hand for each letter. Let the shapes flow into each other.",
+            "Say the word, not the letters. Practice reading whole words by shape.",
+            "For a double letter, slide the hand slightly sideways instead of making the shape twice."
+          ]
+        }
       ]
     },
     {
@@ -45,25 +83,93 @@
       "title": "How ASL sentences are ordered",
       "summary": "Time first, topic next, and what happens to English words like \"the\" and \"is\".",
       "blocks": [
-        { "type": "p", "text": "ASL is its own language with its own grammar, not English on the hands. When we write signs down we use a [[gloss]]: English words in capitals that name each sign." },
-        { "type": "h", "text": "Time comes first" },
-        { "type": "p", "text": "ASL verbs don't change [[tense]]. Instead a time sign opens the [[sentence]] and sets the time for everything after it." },
-        { "type": "example", "gloss": "YESTERDAY STORE I GO", "english": "I went to the store yesterday." },
-        { "type": "h", "text": "Topic, then comment" },
-        { "type": "p", "text": "A very common pattern is [[topic-comment]]: name what you're talking about, then say something about it. The topic is marked with raised eyebrows, a [[non-manual marker|non-manual-marker]]." },
-        { "type": "example", "gloss": "BOOK, I READ FINISH", "english": "I already read the book." },
-        { "type": "p", "text": "Here the [[object]] BOOK moved to the front as the topic." },
-        { "type": "h", "text": "Words ASL leaves out" },
-        { "type": "list", "items": [
-          "There are no signs for the [[articles|article]] a, an and the.",
-          "\"Is\", \"am\" and \"are\" are usually not signed.",
-          "\"And\" is often shown with a pause or body shift instead of a [[conjunction]] sign."
-        ]},
-        { "type": "h", "text": "Questions use your face" },
-        { "type": "p", "text": "For a [[yes/no question|yes-no-question]], raise your eyebrows. For a [[wh-question]], lower and draw your eyebrows together, and put the question sign at the end." },
-        { "type": "example", "gloss": "YOU DEAF?", "english": "Are you Deaf? (eyebrows raised)" },
-        { "type": "example", "gloss": "YOUR NAME WHAT?", "english": "What is your name? (eyebrows lowered)" },
-        { "type": "p", "text": "[[Pronouns|pronoun]] are made by pointing, and [[adjectives|adjective]] can come before or after the [[noun]]. Many [[adverbs|adverb]] are shown by changing how the [[verb]] moves." }
+        {
+          "type": "p",
+          "text": "ASL is its own language with its own grammar, not English on the hands. When we write signs down we use a [[gloss]]: English words in capitals that name each sign."
+        },
+        {
+          "type": "h",
+          "text": "Time comes first"
+        },
+        {
+          "type": "p",
+          "text": "ASL verbs don't change [[tense]]. Instead a time sign opens the [[sentence]] and sets the time for everything after it."
+        },
+        {
+          "type": "example",
+          "gloss": "YESTERDAY STORE I GO",
+          "english": "I went to the store yesterday."
+        },
+        {
+          "type": "h",
+          "text": "Topic, then comment"
+        },
+        {
+          "type": "p",
+          "text": "A very common pattern is [[topic-comment]]: name what you're talking about, then say something about it. The topic is marked with raised eyebrows, a [[non-manual marker|non-manual-marker]]."
+        },
+        {
+          "type": "example",
+          "gloss": "BOOK, I READ FINISH",
+          "english": "I already read the book."
+        },
+        {
+          "type": "p",
+          "text": "Here the [[object]] BOOK moved to the front as the topic."
+        },
+        {
+          "type": "h",
+          "text": "Words ASL leaves out"
+        },
+        {
+          "type": "list",
+          "items": [
+            "There are no signs for the [[articles|article]] a, an and the.",
+            "\"Is\", \"am\" and \"are\" are usually not signed.",
+            "\"And\" is often shown with a pause or body shift instead of a [[conjunction]] sign."
+          ]
+        },
+        {
+          "type": "h",
+          "text": "Questions use your face"
+        },
+        {
+          "type": "p",
+          "text": "For a [[yes/no question|yes-no-question]], raise your eyebrows. For a [[wh-question]], lower and draw your eyebrows together, and put the question sign at the end."
+        },
+        {
+          "type": "example",
+          "gloss": "YOU DEAF?",
+          "english": "Are you Deaf? (eyebrows raised)"
+        },
+        {
+          "type": "example",
+          "gloss": "YOUR NAME WHAT?",
+          "english": "What is your name? (eyebrows lowered)"
+        },
+        {
+          "type": "p",
+          "text": "The six question words, all signed with lowered eyebrows:"
+        },
+        {
+          "type": "cards",
+          "ids": [
+            "word-who",
+            "word-what",
+            "word-when",
+            "word-where",
+            "word-why",
+            "word-how"
+          ]
+        },
+        {
+          "type": "p",
+          "text": "[[Pronouns|pronoun]] are made by pointing, and [[adjectives|adjective]] can come before or after the [[noun]]. Many [[adverbs|adverb]] are shown by changing how the [[verb]] moves."
+        },
+        {
+          "type": "p",
+          "text": "Ready to try it? The Sentences tab has 300 practice sentences from the Lifeprint practice sheets, lessons 1 to 15. Start with Gloss to English while the cards are still being drawn."
+        }
       ]
     }
   ]

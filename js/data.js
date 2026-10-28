@@ -41,7 +41,39 @@ export async function getDictionary() {
 }
 
 export async function getSentences() {
-  return (await load("data/sentences.json")).sentences;
+  const sets = await getSentenceSets();
+  return sets.filter((s) => !s.combined).flatMap((s) => s.sentences);
+}
+
+/** Practice sets for the Sentences tab: the starter set plus one per Lifeprint lesson. */
+export async function getSentenceSets() {
+  const starter = (await load("data/sentences.json")).sentences;
+  let lifeprint = [];
+  try {
+    lifeprint = (await load("data/lifeprint-practice.json")).sentences;
+  } catch {
+    /* optional file */
+  }
+  const sets = [];
+  const lessons = [...new Set(lifeprint.map((s) => s.lesson))].sort((a, b) => a - b);
+  for (const n of lessons) {
+    sets.push({ id: `lifeprint-${String(n).padStart(2, "0")}`, title: `Lifeprint lesson ${n}`,
+      sentences: lifeprint.filter((s) => s.lesson === n) });
+  }
+  if (lifeprint.length) {
+    sets.push({ id: "lifeprint-all", title: "All Lifeprint lessons", sentences: lifeprint, combined: true });
+  }
+  sets.unshift({ id: "starter", title: "Starter sentences", sentences: starter });
+  return sets;
+}
+
+/** Every card the course needs, drawn or not (data/card-plan.json). */
+export async function getCardPlan() {
+  try {
+    return (await load("data/card-plan.json")).cards;
+  } catch {
+    return [];
+  }
 }
 
 // Turn a card id like "word-my" into a readable fallback label ("MY").

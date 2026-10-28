@@ -1,10 +1,11 @@
 # ASL Study Tool
 
 A web app for learning American Sign Language with illustrated flashcards, short grammar
-lessons and self-checked practice, plus a Blender add-on for drawing the flashcards.
+lessons and self-checked practice, plus a Blender add-on for drawing the flashcards and for
+recording signs with live webcam tracking.
 
-**Status:** early prototype. The sample cards are drafts drawn with the editor and should be
-checked by a fluent signer before anyone relies on them.
+**Status:** early prototype. The cards (all 26 letters, the six question words, 5 and HELLO) are
+drafts drawn with the editor and should be checked by a fluent signer before anyone relies on them.
 
 ## What's here
 
@@ -12,19 +13,28 @@ checked by a fluent signer before anyone relies on them.
 | --- | --- |
 | `index.html`, `css/`, `js/` | The web app (plain HTML, CSS and JavaScript, no build step) |
 | `data/` | Lessons, the grammar dictionary and practice sentences, as JSON you can edit |
+| `data/lifeprint-practice.json` | 300 practice sentences from the Lifeprint practice sheets (lessons 1-15), with English and the cards each one uses |
+| `data/card-plan.json` | Every card the course needs; the Cards tab lists the ones not drawn yet |
 | `cards/` | Exported flashcards. `manifest.json` lists them; `quiz/` has copies without the English label; `signs/` has the "recipe" for each card so it can be re-rendered |
 | `blender/asl_flashcard_editor.py` | The Blender add-on that makes the cards |
 | `docs/blender-guide.md` | Step-by-step guide to the editor |
+| `docs/live-tracking-guide.md` | Live webcam tracking and recording signs as animated GIFs |
+| `js/record/` | The Record tab: webcam tracking (MediaPipe) and the link to Blender |
 
 ## Web app features
 
 - **Learn:** lessons on how signs are built, the alphabet and ASL sentence order. Highlighted
   grammar words (noun, adverb, article...) open the dictionary in the bottom-right corner.
-- **Cards:** browse every exported card with notes on how to make the sign.
+- **Cards:** browse every exported card with notes on how to make the sign, plus a checklist of the
+  cards still to draw, ordered by lesson and by how many sentences use each sign.
 - **Practice:** self-checked flashcards, sign to English or English to sign. Cards you miss
   come back first.
-- **Sentences:** translate a row of sign cards into English, or an English sentence into signs.
+- **Sentences:** practice sets for the starter sentences and each Lifeprint lesson (1-15). Three
+  directions: signs to English, gloss to English (works before cards are drawn), and English to signs.
 - **Progress:** answers per day, percent correct over time, and a success rate for every sign.
+- **Record:** your webcam moves the Blender figure in real time (fingers, arms, head and facial
+  expression). Record a sign, trim it, describe it, retry with one key, and save it as an
+  animated GIF card. See [docs/live-tracking-guide.md](docs/live-tracking-guide.md).
 - **Profiles:** a nickname plus a recovery code. Saved in the browser for now; online sync
   between devices is the next planned step.
 
@@ -58,9 +68,17 @@ To re-render every card after changing the look (colors, outline width, size):
 blender -b -P blender/asl_flashcard_editor.py -- --rebuild cards
 ```
 
+## Credits and permissions
+
+The practice sentences in `data/lifeprint-practice.json` come from Dr. Bill Vicars' practice sheets on
+[Lifeprint.com](https://www.lifeprint.com/) (ASL University). About a third had no English on the
+sheet; those translations were written for this project and are marked `englishAdded`. Lifeprint's
+material is copyrighted, so check its terms of use, or ask Dr. Vicars, before publishing this file in
+a public repository. The sign illustrations are this project's own.
+
 ## Roadmap
 
 - Online profiles that sync between devices (Supabase free tier works with GitHub Pages)
-- More cards: the rest of the alphabet, numbers and about 100 common words
+- Word cards for the Lifeprint practice sentences (the Cards tab lists them in order)
 - Search for outside tutorials (YouTube and free ASL sites)
-- Camera practice: recognize fingerspelling from the webcam, then whole signs
+- Camera practice: use the Record tab's tracking to check your fingerspelling, then whole signs

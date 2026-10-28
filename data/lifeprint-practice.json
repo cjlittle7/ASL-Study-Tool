@@ -1,0 +1,4940 @@
+{
+ "title": "Lifeprint ASL practice sheets, lessons 1-15",
+ "source": "Practice sentences from Dr. Bill Vicars' Lifeprint.com ASL University practice sheets (Level 1). English marked englishAdded was written for this app.",
+ "sourceUrl": "https://www.lifeprint.com/",
+ "sentences": [
+  {
+   "id": "lp-01a-01",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.A",
+   "number": 1,
+   "gloss": "YOU what-NAME?",
+   "english": "What is your name?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-01a-02",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.A",
+   "number": 2,
+   "gloss": "DEAF YOU?",
+   "english": "Are you Deaf?",
+   "englishAdded": false,
+   "cards": [
+    "word-deaf",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-01a-03",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.A",
+   "number": 3,
+   "gloss": "STUDENT YOU?",
+   "english": "Are you a student?",
+   "englishAdded": false,
+   "cards": [
+    "word-student",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-01a-04",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.A",
+   "number": 4,
+   "gloss": "YOUR TEACHER what-NAME?",
+   "english": "What is your teacher's name?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-teacher",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-01a-05",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.A",
+   "number": 5,
+   "gloss": "YOU UNDERSTAND HE/SHE?",
+   "english": "Do you understand him/her?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-understand",
+    "word-he-she"
+   ]
+  },
+  {
+   "id": "lp-02a-01",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.A",
+   "number": 1,
+   "gloss": "HEY, YOU what-NAME?",
+   "english": "Hey, what's your name?",
+   "englishAdded": true,
+   "cards": [
+    "word-hey",
+    "word-you",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-02a-02",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.A",
+   "number": 2,
+   "gloss": "YOU MARRIED are-YOU?",
+   "english": "Are you married?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-married",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02a-03",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.A",
+   "number": 3,
+   "gloss": "YOU CHILDREN YOU?",
+   "english": "Do you have children?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-children",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02a-04",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.A",
+   "number": 4,
+   "gloss": "SISTER YOU how-MANY?",
+   "english": "How-many sisters do you have?",
+   "englishAdded": false,
+   "cards": [
+    "word-sister",
+    "word-you",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-02a-05",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.A",
+   "number": 5,
+   "gloss": "YOUR MOM what-NAME?",
+   "english": "What is your mom's name?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-mom",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-01b-06",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.B",
+   "number": 6,
+   "gloss": "INDEX-[that-person] WHO?",
+   "english": "Who is that?",
+   "englishAdded": false,
+   "cards": [
+    "word-he-she",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-01b-07",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.B",
+   "number": 7,
+   "gloss": "AGAIN, NAME-what YOU?",
+   "english": "What is your name again?",
+   "englishAdded": false,
+   "cards": [
+    "word-again",
+    "word-name",
+    "word-what",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-01b-08",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.B",
+   "number": 8,
+   "gloss": "S/HE STUDENT S/HE? [point at teacher]",
+   "english": "Is she or he a student?",
+   "englishAdded": false,
+   "cards": [
+    "word-he-she",
+    "word-student",
+    "word-he-she"
+   ]
+  },
+  {
+   "id": "lp-01b-09",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.B",
+   "number": 9,
+   "gloss": "THIS YOUR? [point at any object]",
+   "english": "Is this yours?",
+   "englishAdded": false,
+   "cards": [
+    "word-this",
+    "word-your"
+   ]
+  },
+  {
+   "id": "lp-01b-10",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.B",
+   "number": 10,
+   "gloss": "____ WHERE?",
+   "english": "Where is ____?",
+   "englishAdded": false,
+   "note": "Spell the name of a person in the room, then sign WHERE?",
+   "hasBlank": true,
+   "cards": [
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-02b-06",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.B",
+   "number": 6,
+   "gloss": "YOUR DAD DEAF?",
+   "english": "Is your dad Deaf?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-dad",
+    "word-deaf"
+   ]
+  },
+  {
+   "id": "lp-02b-07",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.B",
+   "number": 7,
+   "gloss": "YOU WORK WHERE?",
+   "english": "Where do you work?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-work",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-02b-08",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.B",
+   "number": 8,
+   "gloss": "YOU LIVE WHERE?",
+   "english": "Where do you live?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-02b-09",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.B",
+   "number": 9,
+   "gloss": "THIS HIS/HERS/theirs? [point at object]",
+   "english": "Is this his/hers?",
+   "englishAdded": false,
+   "cards": [
+    "word-this",
+    "word-his-her"
+   ]
+  },
+  {
+   "id": "lp-02b-10",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.B",
+   "number": 10,
+   "gloss": "[spell we] W-E how-SIGN?",
+   "english": "How do you sign the word 'we'?",
+   "englishAdded": false,
+   "cards": [
+    "letter-w",
+    "letter-e",
+    "word-how",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-01c-11",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.C",
+   "number": 11,
+   "gloss": "NICE MEET-you.",
+   "english": "It is nice to meet you.",
+   "englishAdded": false,
+   "cards": [
+    "word-nice",
+    "word-meet"
+   ]
+  },
+  {
+   "id": "lp-01c-12",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.C",
+   "number": 12,
+   "gloss": "HEARING are-YOU?",
+   "english": "Are you a hearing person?",
+   "englishAdded": false,
+   "cards": [
+    "word-hearing",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-01c-13",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.C",
+   "number": 13,
+   "gloss": "ASL TEACHER are-YOU?",
+   "english": "Are you a teacher?",
+   "englishAdded": false,
+   "cards": [
+    "word-asl",
+    "word-teacher",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-01c-14",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.C",
+   "number": 14,
+   "gloss": "YOU LEARN SIGN, WHERE?",
+   "english": "Where are you learning sign?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-learn",
+    "word-sign",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-01c-15",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.C",
+   "number": 15,
+   "gloss": "YOU LEARN SIGN, WHY?",
+   "english": "Why are you learning sign?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-learn",
+    "word-sign",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-02c-11",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.C",
+   "number": 11,
+   "gloss": "YOU NAME B-O-B, YOU?",
+   "english": "Is your name Bob?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-name",
+    "letter-b",
+    "letter-o",
+    "letter-b",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02c-12",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.C",
+   "number": 12,
+   "gloss": "YOU DIVORCED YOU?",
+   "english": "Are you divorced?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-divorce",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02c-13",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.C",
+   "number": 13,
+   "gloss": "BROTHER YOU how-MANY?",
+   "english": "How many brothers do you have?",
+   "englishAdded": true,
+   "cards": [
+    "word-brother",
+    "word-you",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-02c-14",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.C",
+   "number": 14,
+   "gloss": "YOU HAVE SISTER?",
+   "english": "Do you have a sister?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-have",
+    "word-sister"
+   ]
+  },
+  {
+   "id": "lp-02c-15",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.C",
+   "number": 15,
+   "gloss": "YOUR DAD NAME, SPELL SLOW.",
+   "english": "Spell your dad's name slowly.",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-dad",
+    "word-name",
+    "word-spell",
+    "word-slow"
+   ]
+  },
+  {
+   "id": "lp-01d-16",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.D",
+   "number": 16,
+   "gloss": "how-SIGN ____?",
+   "english": "How do you sign ____?",
+   "englishAdded": false,
+   "note": "Fill in the blank.",
+   "hasBlank": true,
+   "cards": [
+    "word-how",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-01d-17",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.D",
+   "number": 17,
+   "gloss": "STUDENT, HE/SHE?",
+   "english": "Is she or he a student?",
+   "englishAdded": false,
+   "cards": [
+    "word-student",
+    "word-he-she"
+   ]
+  },
+  {
+   "id": "lp-01d-18",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.D",
+   "number": 18,
+   "gloss": "THEY LEARN SIGN?",
+   "english": "Are they learning sign language?",
+   "englishAdded": false,
+   "cards": [
+    "word-they",
+    "word-learn",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-01d-19",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.D",
+   "number": 19,
+   "gloss": "YOUR TEACHER, WHO?",
+   "english": "Who is your teacher?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-teacher",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-01d-20",
+   "set": "lifeprint-01",
+   "lesson": 1,
+   "sheet": "1.D",
+   "number": 20,
+   "gloss": "YOU LIKE LEARN SIGN do-YOU?",
+   "english": "Do you like learning sign language?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-learn",
+    "word-sign",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02d-16",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.D",
+   "number": 16,
+   "gloss": "You-MEET MY BROTHER YOU?",
+   "english": "Have you met my brother?",
+   "englishAdded": false,
+   "cards": [
+    "word-meet",
+    "word-my",
+    "word-brother",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-02d-17",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.D",
+   "number": 17,
+   "gloss": "YOUR WIFE what-NAME",
+   "english": "What is your wife's name?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-wife",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-02d-18",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.D",
+   "number": 18,
+   "gloss": "YOUR SISTER SINGLE?",
+   "english": "Is your sister single?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-sister",
+    "word-single"
+   ]
+  },
+  {
+   "id": "lp-02d-19",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.D",
+   "number": 19,
+   "gloss": "YOUR GRANDMA what-NAME?",
+   "english": "What is your grandma's name?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-grandma",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-02d-20",
+   "set": "lifeprint-02",
+   "lesson": 2,
+   "sheet": "2.D",
+   "number": 20,
+   "gloss": "[spell they] T-H-E-Y how-SIGN?",
+   "english": "How do you sign 'they'?",
+   "englishAdded": false,
+   "cards": [
+    "letter-t",
+    "letter-h",
+    "letter-e",
+    "letter-y",
+    "word-how",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-03a-01",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.A",
+   "number": 1,
+   "gloss": "ASK-to-[that-person] NAME.",
+   "english": "Ask that person their name.",
+   "englishAdded": true,
+   "cards": [
+    "word-ask",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-03a-02",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.A",
+   "number": 2,
+   "gloss": "YOU LIVE what-CITY?",
+   "english": "What city do you live in?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-what",
+    "word-city"
+   ]
+  },
+  {
+   "id": "lp-03a-03",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.A",
+   "number": 3,
+   "gloss": "LEARN SIGN, YOU LIKE?",
+   "english": "Do you like learning sign language?",
+   "englishAdded": true,
+   "cards": [
+    "word-learn",
+    "word-sign",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-03a-04",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.A",
+   "number": 4,
+   "gloss": "YOUR HOUSE BIG?",
+   "english": "Is your house big?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-big"
+   ]
+  },
+  {
+   "id": "lp-03a-05",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.A",
+   "number": 5,
+   "gloss": "CHILDREN YOU how-MANY?",
+   "english": "How many children do you have?",
+   "englishAdded": true,
+   "cards": [
+    "word-children",
+    "word-you",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-04a-01",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.A",
+   "number": 1,
+   "gloss": "YOU FEEL HAPPY WHEN?",
+   "english": "When do you feel happy?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-feel",
+    "word-happy",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-04a-02",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.A",
+   "number": 2,
+   "gloss": "UNCLE YOU, HOW-MANY?",
+   "english": "How many uncles do you have?",
+   "englishAdded": true,
+   "cards": [
+    "word-uncle",
+    "word-you",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-04a-03",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.A",
+   "number": 3,
+   "gloss": "YOUR FATHER, HOW-MANY SONS?",
+   "english": "How many sons does your father have?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-father",
+    "word-how-many",
+    "word-son"
+   ]
+  },
+  {
+   "id": "lp-04a-04",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.A",
+   "number": 4,
+   "gloss": "HAVE BABY YOU?",
+   "english": "Do you have a baby?",
+   "englishAdded": true,
+   "cards": [
+    "word-have",
+    "word-baby",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-04a-05",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.A",
+   "number": 5,
+   "gloss": "YOUR BEDROOM BIG?",
+   "english": "Is your bedroom big?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-bedroom",
+    "word-big"
+   ]
+  },
+  {
+   "id": "lp-03b-06",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.B",
+   "number": 6,
+   "gloss": "YOUR HOUSE, BATHROOM how-MANY?",
+   "english": "How many bathrooms are in your house?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-bathroom",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-03b-07",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.B",
+   "number": 7,
+   "gloss": "YOU WORK WHERE?",
+   "english": "Where do you work?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-work",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-03b-08",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.B",
+   "number": 8,
+   "gloss": "YOU LIKE YOUR WORK do-YOU?",
+   "english": "Do you like your work?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-your",
+    "word-work",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03b-09",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.B",
+   "number": 9,
+   "gloss": "YOU THINK I SIGN GOOD?",
+   "english": "Do you think I sign well?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-i",
+    "word-sign",
+    "word-good"
+   ]
+  },
+  {
+   "id": "lp-03b-10",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.B",
+   "number": 10,
+   "gloss": "A-L-L how-SIGN?",
+   "english": "How do you sign 'all'?",
+   "englishAdded": true,
+   "cards": [
+    "letter-a",
+    "letter-l",
+    "letter-l",
+    "word-how",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-04b-06",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.B",
+   "number": 6,
+   "gloss": "I NEED BRUSH-TEETH?",
+   "english": "Do I need to brush my teeth?",
+   "englishAdded": true,
+   "cards": [
+    "word-i",
+    "word-need",
+    "word-brush-teeth"
+   ]
+  },
+  {
+   "id": "lp-04b-07",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.B",
+   "number": 7,
+   "gloss": "YOU FEEL WANT CRY YOU?",
+   "english": "Do you feel like crying?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-feel",
+    "word-want",
+    "word-cry",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-04b-08",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.B",
+   "number": 8,
+   "gloss": "YOUR BOY/GIRL-FRIEND NAME?",
+   "english": "What is your boyfriend's or girlfriend's name?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-boyfriend-girlfriend",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-04b-09",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.B",
+   "number": 9,
+   "gloss": "YOUR TEACHER HAVE DAUGHTER?",
+   "english": "Does your teacher have a daughter?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-teacher",
+    "word-have",
+    "word-daughter"
+   ]
+  },
+  {
+   "id": "lp-04b-10",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.B",
+   "number": 10,
+   "gloss": "LEARN SIGN, NEED HELP YOU?",
+   "english": "Do you need help learning sign language?",
+   "englishAdded": true,
+   "cards": [
+    "word-learn",
+    "word-sign",
+    "word-need",
+    "word-help",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03c-11",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.C",
+   "number": 11,
+   "gloss": "HE/SHE WHO?",
+   "english": "Who is that?",
+   "englishAdded": false,
+   "cards": [
+    "word-he-she",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-03c-12",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.C",
+   "number": 12,
+   "gloss": "YOU FROM-where?",
+   "english": "Where are you from?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-from",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-03c-13",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.C",
+   "number": 13,
+   "gloss": "YOU LIVE HERE do-YOU?",
+   "english": "Do you live here?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-here",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03c-14",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.C",
+   "number": 14,
+   "gloss": "FAMILY DEAF?",
+   "english": "Is anyone in your family Deaf?",
+   "englishAdded": false,
+   "cards": [
+    "word-family",
+    "word-deaf"
+   ]
+  },
+  {
+   "id": "lp-03c-15",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.C",
+   "number": 15,
+   "gloss": "YOUR HOUSE SMALL?",
+   "english": "Is your house small?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-small"
+   ]
+  },
+  {
+   "id": "lp-04c-11",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.C",
+   "number": 11,
+   "gloss": "YOU HURT WHERE?",
+   "english": "Where does it hurt?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-hurt",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-04c-12",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.C",
+   "number": 12,
+   "gloss": "IF-[suppose] TEACHER SPELL SLOW, YOU UNDERSTAND S/HE?",
+   "english": "If the teacher fingerspells slowly, do you understand?",
+   "englishAdded": true,
+   "cards": [
+    "word-suppose",
+    "word-teacher",
+    "word-spell",
+    "word-slow",
+    "word-you",
+    "word-understand",
+    "word-he-she"
+   ]
+  },
+  {
+   "id": "lp-04c-13",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.C",
+   "number": 13,
+   "gloss": "YOU LOVE WHO?",
+   "english": "Who do you love?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-love",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-04c-14",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.C",
+   "number": 14,
+   "gloss": "YOU SAD, WHY?",
+   "english": "Why are you sad?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-sad",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-04c-15",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.C",
+   "number": 15,
+   "gloss": "YOU SORRY COME CLASS YOU?",
+   "english": "Are you sorry you came to class?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-sorry",
+    "word-come",
+    "word-class",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03d-16",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.D",
+   "number": 16,
+   "gloss": "YOU WANT MORE CHILDREN do-YOU?",
+   "english": "Do you want more children?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-more",
+    "word-children",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03d-17",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.D",
+   "number": 17,
+   "gloss": "YOU GO SCHOOL?",
+   "english": "Do you go to school?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-go",
+    "word-school"
+   ]
+  },
+  {
+   "id": "lp-03d-18",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.D",
+   "number": 18,
+   "gloss": "YOU NEED BATHROOM do-YOU?",
+   "english": "Do you need the bathroom?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-need",
+    "word-bathroom",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-03d-19",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.D",
+   "number": 19,
+   "gloss": "YOU THINK I SIGN BAD?",
+   "english": "Do you think I sign badly?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-i",
+    "word-sign",
+    "word-bad"
+   ]
+  },
+  {
+   "id": "lp-03d-20",
+   "set": "lifeprint-03",
+   "lesson": 3,
+   "sheet": "3.D",
+   "number": 20,
+   "gloss": "how-SIGN F-I-N-E?",
+   "english": "How do you sign 'fine'?",
+   "englishAdded": true,
+   "cards": [
+    "word-how",
+    "word-sign",
+    "letter-f",
+    "letter-i",
+    "letter-n",
+    "letter-e"
+   ]
+  },
+  {
+   "id": "lp-04d-16",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.D",
+   "number": 16,
+   "gloss": "YOU WANT STOP LEARN SIGN?",
+   "english": "Do you want to stop learning sign language?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-stop",
+    "word-learn",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-04d-17",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.D",
+   "number": 17,
+   "gloss": "W-A-S-H how-SIGN?",
+   "english": "How do you sign 'wash'?",
+   "englishAdded": true,
+   "cards": [
+    "letter-w",
+    "letter-a",
+    "letter-s",
+    "letter-h",
+    "word-how",
+    "word-sign"
+   ]
+  },
+  {
+   "id": "lp-04d-18",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.D",
+   "number": 18,
+   "gloss": "YOUR EXCUSE WHAT?",
+   "english": "What's your excuse?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-excuse",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-04d-19",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.D",
+   "number": 19,
+   "gloss": "AUNT, YOU HOW-MANY?",
+   "english": "How many aunts do you have?",
+   "englishAdded": true,
+   "cards": [
+    "word-aunt",
+    "word-you",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-04d-20",
+   "set": "lifeprint-04",
+   "lesson": 4,
+   "sheet": "4.D",
+   "number": 20,
+   "gloss": "YOU WANT BABY?",
+   "english": "Do you want a baby?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-baby"
+   ]
+  },
+  {
+   "id": "lp-05a-01",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.A",
+   "number": 1,
+   "gloss": "YOU UNDERSTAND S/HE?",
+   "english": "Do you understand him or her?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-understand",
+    "word-he-she"
+   ]
+  },
+  {
+   "id": "lp-05a-02",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.A",
+   "number": 2,
+   "gloss": "YOU COME HERE HOW?",
+   "english": "How did you get here?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-come",
+    "word-here",
+    "word-how"
+   ]
+  },
+  {
+   "id": "lp-05a-03",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.A",
+   "number": 3,
+   "gloss": "MOVIE, YOUR FAVORITE WHAT?",
+   "english": "What is your favorite movie?",
+   "englishAdded": true,
+   "cards": [
+    "word-movie",
+    "word-your",
+    "word-favorite",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-05a-04",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.A",
+   "number": 4,
+   "gloss": "YOUR MOM what-DO?",
+   "english": "What does your mom do?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-mom",
+    "word-do-do"
+   ]
+  },
+  {
+   "id": "lp-05a-05",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.A",
+   "number": 5,
+   "gloss": "WRISTWATCH, WHO GIVE-you?",
+   "english": "Who gave you your watch?",
+   "englishAdded": true,
+   "cards": [
+    "word-wristwatch",
+    "word-who",
+    "word-give"
+   ]
+  },
+  {
+   "id": "lp-06a-01",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.A",
+   "number": 1,
+   "gloss": "YOUR FAVORITE COLOR, WHAT?",
+   "english": "What is your favorite color?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-favorite",
+    "word-color",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-06a-02",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.A",
+   "number": 2,
+   "gloss": "NAME SOMETHING ITSELF BLACK WHITE.",
+   "english": "Name something that is black and white.",
+   "englishAdded": false,
+   "cards": [
+    "word-name",
+    "word-something",
+    "word-itself",
+    "word-black",
+    "word-white"
+   ]
+  },
+  {
+   "id": "lp-06a-03",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.A",
+   "number": 3,
+   "gloss": "YOU LIKE COLOR BROWN YOU?",
+   "english": "Do you like the color brown?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-color",
+    "word-brown",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-06a-04",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.A",
+   "number": 4,
+   "gloss": "YOU DRAW GOOD do-YOU?",
+   "english": "Do you draw well?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-draw",
+    "word-good",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-06a-05",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.A",
+   "number": 5,
+   "gloss": "YOUR PARENTS DIVORCED?",
+   "english": "Are your parents divorced?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-parents",
+    "word-divorce"
+   ]
+  },
+  {
+   "id": "lp-05b-06",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.B",
+   "number": 6,
+   "gloss": "INTERNET S-I-T-E YOUR FAVORITE WHAT?",
+   "english": "What is your favorite website?",
+   "englishAdded": true,
+   "cards": [
+    "word-internet",
+    "letter-s",
+    "letter-i",
+    "letter-t",
+    "letter-e",
+    "word-your",
+    "word-favorite",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-05b-07",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.B",
+   "number": 7,
+   "gloss": "YOU WALK SCHOOL YOU?",
+   "english": "Do you walk to school?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-walk",
+    "word-school",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-05b-08",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.B",
+   "number": 8,
+   "gloss": "_____ SIT WHERE?",
+   "english": "Spell name of student.",
+   "englishAdded": false,
+   "hasBlank": true,
+   "cards": [
+    "word-sit",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-05b-09",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.B",
+   "number": 9,
+   "gloss": "YOU WANT GO WHERE?",
+   "english": "Where do you want to go?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-go",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-05b-10",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.B",
+   "number": 10,
+   "gloss": "YOU LIKE SIGN WITH WHO?",
+   "english": "Who do you like to sign with?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-sign",
+    "word-with",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-06b-06",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.B",
+   "number": 6,
+   "gloss": "YOU FINISH WATCH MOVIE __________?",
+   "english": "Have you seen the movie ____? (spell a popular movie)",
+   "englishAdded": false,
+   "hasBlank": true,
+   "cards": [
+    "word-you",
+    "word-finish",
+    "word-watch",
+    "word-movie"
+   ]
+  },
+  {
+   "id": "lp-06b-07",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.B",
+   "number": 7,
+   "gloss": "YOU THINK FUTURE YOU TEACH ASL?",
+   "english": "Do you think that someday you will teach ASL?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-future",
+    "word-you",
+    "word-teach",
+    "word-asl"
+   ]
+  },
+  {
+   "id": "lp-06b-08",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.B",
+   "number": 8,
+   "gloss": "YOUR CHAIR GREEN?",
+   "english": "Is your chair green?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-chair",
+    "word-green"
+   ]
+  },
+  {
+   "id": "lp-06b-09",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.B",
+   "number": 9,
+   "gloss": "how-OLD YOU?",
+   "english": "How old are you?",
+   "englishAdded": false,
+   "cards": [
+    "word-how-old",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-06b-10",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.B",
+   "number": 10,
+   "gloss": "how-SIGN W-A-I-T?",
+   "english": "How do you sign wait?",
+   "englishAdded": false,
+   "cards": [
+    "word-how",
+    "word-sign",
+    "letter-w",
+    "letter-a",
+    "letter-i",
+    "letter-t"
+   ]
+  },
+  {
+   "id": "lp-05c-11",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.C",
+   "number": 11,
+   "gloss": "CAN YOU DRIVE YOU?",
+   "english": "Can you drive?",
+   "englishAdded": true,
+   "cards": [
+    "word-can",
+    "word-you",
+    "word-drive",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-05c-12",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.C",
+   "number": 12,
+   "gloss": "YOU DRIVE HERE FROM HOME?",
+   "english": "Did you drive here from home?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-drive",
+    "word-here",
+    "word-from",
+    "word-home"
+   ]
+  },
+  {
+   "id": "lp-05c-13",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.C",
+   "number": 13,
+   "gloss": "YOUR COMPUTER HAVE WEB-CAM?",
+   "english": "Does your computer have a webcam?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-computer",
+    "word-have",
+    "word-web-cam"
+   ]
+  },
+  {
+   "id": "lp-05c-14",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.C",
+   "number": 14,
+   "gloss": "YOU NEED GO DOCTOR?",
+   "english": "Do you need to go to the doctor?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-need",
+    "word-go",
+    "word-doctor"
+   ]
+  },
+  {
+   "id": "lp-05c-15",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.C",
+   "number": 15,
+   "gloss": "YOUR EMAIL ADDRESS, WHAT?",
+   "english": "What is your email address?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-email",
+    "word-address",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-06c-11",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.C",
+   "number": 11,
+   "gloss": "YOU LIVE what-CITY?",
+   "english": "In what city do you live?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-what",
+    "word-city"
+   ]
+  },
+  {
+   "id": "lp-06c-12",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.C",
+   "number": 12,
+   "gloss": "YOU LIVE INDEX-there HOW-LONG?",
+   "english": "How long have you lived there?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-there",
+    "word-how-long"
+   ]
+  },
+  {
+   "id": "lp-06c-13",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.C",
+   "number": 13,
+   "gloss": "YOU WANT GO HOME NOW do-YOU?",
+   "english": "Do you want to go home now?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-go",
+    "word-home",
+    "word-now",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-06c-14",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.C",
+   "number": 14,
+   "gloss": "YOUR PAPER what-COLOR?",
+   "english": "What color is your paper?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-paper",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-06c-15",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.C",
+   "number": 15,
+   "gloss": "YOU LIVE BIG CITY PAST YOU?",
+   "english": "Have you ever lived in a big city?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-big",
+    "word-city",
+    "word-past",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-05d-16",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.D",
+   "number": 16,
+   "gloss": "YOUR HOME, WHERE?",
+   "english": "Where is your home?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-home",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-05d-17",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.D",
+   "number": 17,
+   "gloss": "PLAY, YOU LIKE what-DO?",
+   "english": "What do you like to do for fun?",
+   "englishAdded": true,
+   "cards": [
+    "word-play",
+    "word-you",
+    "word-like",
+    "word-do-do"
+   ]
+  },
+  {
+   "id": "lp-05d-18",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.D",
+   "number": 18,
+   "gloss": "YOU how-FEEL?",
+   "english": "How do you feel?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-how",
+    "word-feel"
+   ]
+  },
+  {
+   "id": "lp-05d-19",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.D",
+   "number": 19,
+   "gloss": "YOUR FAVORITE STORE, WHAT?",
+   "english": "What is your favorite store?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-favorite",
+    "word-store",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-05d-20",
+   "set": "lifeprint-05",
+   "lesson": 5,
+   "sheet": "5.D",
+   "number": 20,
+   "gloss": "SIGN WITH FRIEND, YOU LIKE?",
+   "english": "Do you like signing with friends?",
+   "englishAdded": true,
+   "cards": [
+    "word-sign",
+    "word-with",
+    "word-friend",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-06d-16",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.D",
+   "number": 16,
+   "gloss": "CAR, YOU LIKE RED YOU?",
+   "english": "Do you like red cars?",
+   "englishAdded": false,
+   "cards": [
+    "word-car",
+    "word-you",
+    "word-like",
+    "word-red",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-06d-17",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.D",
+   "number": 17,
+   "gloss": "TOMORROW YOU GO SCHOOL?",
+   "english": "Are you going to school tomorrow?",
+   "englishAdded": false,
+   "cards": [
+    "word-tomorrow",
+    "word-you",
+    "word-go",
+    "word-school"
+   ]
+  },
+  {
+   "id": "lp-06d-18",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.D",
+   "number": 18,
+   "gloss": "YOU GO DOCTOR, WAIT-[long], YOU SIT-anxious?",
+   "english": "Do you get anxious when you wait a long time at the doctors office?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-go",
+    "word-doctor",
+    "word-wait",
+    "word-you",
+    "word-sit"
+   ]
+  },
+  {
+   "id": "lp-06d-19",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.D",
+   "number": 19,
+   "gloss": "YOU MOVE-here WHEN?",
+   "english": "When did you move here?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-move",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-06d-20",
+   "set": "lifeprint-06",
+   "lesson": 6,
+   "sheet": "6.D",
+   "number": 20,
+   "gloss": "YOU LIVE HERE HOW-MANY YEAR?",
+   "english": "How many years have you lived here?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-here",
+    "word-how-many",
+    "word-year"
+   ]
+  },
+  {
+   "id": "lp-07a-01",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.A",
+   "number": 1,
+   "gloss": "APPLE, GREEN, YOU LIKE EAT?",
+   "english": "Do you like to eat green apples?",
+   "englishAdded": false,
+   "cards": [
+    "word-apple",
+    "word-green",
+    "word-you",
+    "word-like",
+    "word-eat"
+   ]
+  },
+  {
+   "id": "lp-07a-02",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.A",
+   "number": 2,
+   "gloss": "CANDY, YOU LIKE WHAT-KIND?",
+   "english": "What kind of candy do you like?",
+   "englishAdded": true,
+   "cards": [
+    "word-candy",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-07a-03",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.A",
+   "number": 3,
+   "gloss": "CEREAL YOU LIKE WHAT-KIND?",
+   "english": "What type of cereal do you like?",
+   "englishAdded": false,
+   "cards": [
+    "word-cereal",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-07a-04",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.A",
+   "number": 4,
+   "gloss": "COOKIES YOU LIKE WITH MILK?",
+   "english": "Do you like cookies and milk?",
+   "englishAdded": false,
+   "cards": [
+    "word-cookie",
+    "word-you",
+    "word-like",
+    "word-with",
+    "word-milk"
+   ]
+  },
+  {
+   "id": "lp-07a-05",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.A",
+   "number": 5,
+   "gloss": "EVERYDAY YOU DRINK WATER CUP HOW-MANY?",
+   "english": "How many cups of water do you drink daily?",
+   "englishAdded": false,
+   "cards": [
+    "word-everyday",
+    "word-you",
+    "word-drink",
+    "word-water",
+    "word-cup",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-08a-01",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.A",
+   "number": 1,
+   "gloss": "BACKPACK, HAVE YOU?",
+   "english": "Do you have a backpack?",
+   "englishAdded": false,
+   "cards": [
+    "word-backpack",
+    "word-have",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-08a-02",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.A",
+   "number": 2,
+   "gloss": "YOUR HOUSE, CLOTHES DIRTY, PUT-in BASKET WHO?",
+   "english": "Who picks up dirty clothes at your house?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-clothes",
+    "word-dirty",
+    "word-put",
+    "word-basket",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-08a-03",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.A",
+   "number": 3,
+   "gloss": "YOUR HEARING-AID, BATTERY, WHAT-KIND?",
+   "english": "What kind of hearing-aid battery do you use?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-hearing-aid",
+    "word-battery",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-08a-04",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.A",
+   "number": 4,
+   "gloss": "YOUR BELT, what-COLOR?",
+   "english": "What color is your belt?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-belt",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-08a-05",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.A",
+   "number": 5,
+   "gloss": "CLOTHES, YOU CHANGE WHEN?",
+   "english": "When do you change clothes?",
+   "englishAdded": false,
+   "cards": [
+    "word-clothes",
+    "word-you",
+    "word-change",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-07b-06",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.B",
+   "number": 6,
+   "gloss": "YOUR FAVORITE FOOD WHAT?",
+   "english": "What is your favorite food?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-favorite",
+    "word-food",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-07b-07",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.B",
+   "number": 7,
+   "gloss": "YOU LIKE GREEN EGG AND H-A-M?",
+   "english": "Do you like green eggs and ham?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-green",
+    "word-egg",
+    "word-and",
+    "letter-h",
+    "letter-a",
+    "letter-m"
+   ]
+  },
+  {
+   "id": "lp-07b-08",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.B",
+   "number": 8,
+   "gloss": "ORANGES, YOU LIKE EAT YOU?",
+   "english": "Do you like to eat oranges?",
+   "englishAdded": true,
+   "cards": [
+    "word-orange",
+    "word-you",
+    "word-like",
+    "word-eat",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-07b-09",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.B",
+   "number": 9,
+   "gloss": "YOU FULL-[flat hand under chin version] YOU?",
+   "english": "Are you full?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-full",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-07b-10",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.B",
+   "number": 10,
+   "gloss": "YOU PREFER HAMBURGER OR HOTDOG?",
+   "english": "Do you prefer hamburgers or hotdogs?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-hamburger",
+    "word-or",
+    "word-hotdog"
+   ]
+  },
+  {
+   "id": "lp-08b-06",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.B",
+   "number": 6,
+   "gloss": "DOCTOR L-A-B COAT, what-COLOR?",
+   "english": "What color is a doctor's lab coat?",
+   "englishAdded": false,
+   "cards": [
+    "word-doctor",
+    "letter-l",
+    "letter-a",
+    "letter-b",
+    "word-coat",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-08b-07",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.B",
+   "number": 7,
+   "gloss": "CLOTHES DIRTY, SHOULD PUT WHERE?",
+   "english": "Where should we put dirty clothes?",
+   "englishAdded": false,
+   "cards": [
+    "word-clothes",
+    "word-dirty",
+    "word-should",
+    "word-put",
+    "word-where"
+   ]
+  },
+  {
+   "id": "lp-08b-08",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.B",
+   "number": 8,
+   "gloss": "THIS ROOM, HAVE GLASSES, WHO?",
+   "english": "Who in this room has glasses?",
+   "englishAdded": false,
+   "cards": [
+    "word-this",
+    "word-room",
+    "word-have",
+    "word-glasses",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-08b-09",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.B",
+   "number": 9,
+   "gloss": "HAVE HEARING-AID, WHO?",
+   "english": "Who has a hearing aid?",
+   "englishAdded": false,
+   "cards": [
+    "word-have",
+    "word-hearing-aid",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-08b-10",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.B",
+   "number": 10,
+   "gloss": "YOU LIKE WASHING-MACHINE CLOTHES YOU?",
+   "english": "Do you like doing laundry?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-washing-machine",
+    "word-clothes",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-07c-11",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.C",
+   "number": 11,
+   "gloss": "HUNGRY YOU?",
+   "english": "Are you hungry?",
+   "englishAdded": false,
+   "cards": [
+    "word-hungry",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-07c-12",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.C",
+   "number": 12,
+   "gloss": "PIZZA YOU LIKE WHAT-KIND?",
+   "english": "What type of pizza do you like?",
+   "englishAdded": false,
+   "cards": [
+    "word-pizza",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-07c-13",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.C",
+   "number": 13,
+   "gloss": "SUPPOSE YOU GO MOVIE, YOU LIKE EAT POPCORN?",
+   "english": "Do you like to eat popcorn at the movies?",
+   "englishAdded": false,
+   "cards": [
+    "word-suppose",
+    "word-you",
+    "word-go",
+    "word-movie",
+    "word-you",
+    "word-like",
+    "word-eat",
+    "word-popcorn"
+   ]
+  },
+  {
+   "id": "lp-07c-14",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.C",
+   "number": 14,
+   "gloss": "SOUP. YOU LIKE WHAT-KIND?",
+   "english": "What kind of soup do you like?",
+   "englishAdded": false,
+   "cards": [
+    "word-soup",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-07c-15",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.C",
+   "number": 15,
+   "gloss": "APPLE, RED, YOU LIKE EAT YOU?",
+   "english": "Do you like to eat red apples?",
+   "englishAdded": false,
+   "cards": [
+    "word-apple",
+    "word-red",
+    "word-you",
+    "word-like",
+    "word-eat",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-08c-11",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.C",
+   "number": 11,
+   "gloss": "SUPPOSE YOU GO CHURCH, PANTS OR-[bodyshift] DRESS YOU WHICH?",
+   "english": "If you go to church, do you wear pants or do you wear a dress?",
+   "englishAdded": false,
+   "cards": [
+    "word-suppose",
+    "word-you",
+    "word-go",
+    "word-church",
+    "word-pants",
+    "word-or",
+    "word-dress",
+    "word-you",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-08c-12",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.C",
+   "number": 12,
+   "gloss": "SPELL PANTS.",
+   "english": "Spell the word pants.",
+   "englishAdded": false,
+   "cards": [
+    "word-spell",
+    "word-pants"
+   ]
+  },
+  {
+   "id": "lp-08c-13",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.C",
+   "number": 13,
+   "gloss": "SCHOOL FINISH, YOUR MOM PICK-UP YOU, what-TIME?",
+   "english": "What time does your mom pick you up after school?",
+   "englishAdded": false,
+   "cards": [
+    "word-school",
+    "word-finish",
+    "word-your",
+    "word-mom",
+    "word-pick-up",
+    "word-you",
+    "word-what",
+    "word-time"
+   ]
+  },
+  {
+   "id": "lp-08c-14",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.C",
+   "number": 14,
+   "gloss": "YOUR SHIRT, what-COLOR?",
+   "english": "What color is your shirt?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-shirt",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-08c-15",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.C",
+   "number": 15,
+   "gloss": "SHOES YOU HAVE, HOW-MANY?",
+   "english": "How many pairs of shoes do you have?",
+   "englishAdded": false,
+   "cards": [
+    "word-shoes",
+    "word-you",
+    "word-have",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-07d-16",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.D",
+   "number": 16,
+   "gloss": "COOKIE YOU LIKE, WHAT-KIND?",
+   "english": "What kind of cookies do you like?",
+   "englishAdded": true,
+   "cards": [
+    "word-cookie",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-07d-17",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.D",
+   "number": 17,
+   "gloss": "YOU FAVORITE APPLE OR-[bodyshift] ORANGES?",
+   "english": "Do you prefer apples or oranges?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-favorite",
+    "word-apple",
+    "word-or",
+    "word-orange"
+   ]
+  },
+  {
+   "id": "lp-07d-18",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.D",
+   "number": 18,
+   "gloss": "YOUR SISTER LIKE EGG?",
+   "english": "Does your sister like eggs?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-sister",
+    "word-like",
+    "word-egg"
+   ]
+  },
+  {
+   "id": "lp-07d-19",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.D",
+   "number": 19,
+   "gloss": "SUPPOSE YOU EAT 3 HAMBURGERS, WILL FULL YOU?",
+   "english": "If you ate 3 hamburgers, would you be full?",
+   "englishAdded": true,
+   "cards": [
+    "word-suppose",
+    "word-you",
+    "word-eat",
+    "number-3",
+    "word-hamburger",
+    "word-will",
+    "word-full",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-07d-20",
+   "set": "lifeprint-07",
+   "lesson": 7,
+   "sheet": "7.D",
+   "number": 20,
+   "gloss": "YOU DON'T-LIKE CANDY?!?",
+   "english": "What!?! You don't you like candy!?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-don-t-like",
+    "word-candy"
+   ]
+  },
+  {
+   "id": "lp-08d-16",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.D",
+   "number": 16,
+   "gloss": "YOUR SOCKS, what-COLOR?",
+   "english": "What color are your socks?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-socks",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-08d-17",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.D",
+   "number": 17,
+   "gloss": "YOU THINK CHILDREN SHOULD CHANGE UNDERWEAR DAILY?",
+   "english": "Do you think children should change their underwear everyday?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-children",
+    "word-should",
+    "word-change",
+    "word-underwear",
+    "word-daily"
+   ]
+  },
+  {
+   "id": "lp-08d-18",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.D",
+   "number": 18,
+   "gloss": "YOU PREFER PIZZA OR-[bodyshift] HAMBURGER WHICH?",
+   "english": "Which do you prefer, pizza or hamburgers?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-pizza",
+    "word-or",
+    "word-hamburger",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-08d-19",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.D",
+   "number": 19,
+   "gloss": "YOUR BACKPACK HAVE ZIPPER?",
+   "english": "Does your backpack have a zipper?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-backpack",
+    "word-have",
+    "word-zipper"
+   ]
+  },
+  {
+   "id": "lp-08d-20",
+   "set": "lifeprint-08",
+   "lesson": 8,
+   "sheet": "8.D",
+   "number": 20,
+   "gloss": "YOU WANT GO GALLAUDET FUTURE-[someday]?",
+   "english": "Do you want to go to Gallaudet University someday?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-want",
+    "word-go",
+    "word-gallaudet",
+    "word-future"
+   ]
+  },
+  {
+   "id": "lp-09a-01",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.A",
+   "number": 1,
+   "gloss": "YOU LIVE BASEMENT A-P-T?",
+   "english": "Do you live in a basement apartment?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-live",
+    "word-basement",
+    "letter-a",
+    "letter-p",
+    "letter-t"
+   ]
+  },
+  {
+   "id": "lp-09a-02",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.A",
+   "number": 2,
+   "gloss": "YOU PREFER BATH, SHOWER, WHICH?",
+   "english": "Which do you prefer, taking a bath or taking a shower?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-bath",
+    "word-shower",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-09a-03",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.A",
+   "number": 3,
+   "gloss": "YOUR BATHROOM HAVE T-U-B?",
+   "english": "Does your bathroom have a tub?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-bathroom",
+    "word-have",
+    "letter-t",
+    "letter-u",
+    "letter-b"
+   ]
+  },
+  {
+   "id": "lp-09a-04",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.A",
+   "number": 4,
+   "gloss": "YOU TOGETHER-steady SOMEONE?",
+   "english": "Are you going steady with someone?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-go-steady",
+    "word-someone"
+   ]
+  },
+  {
+   "id": "lp-09a-05",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.A",
+   "number": 5,
+   "gloss": "YOUR COUCH, what-COLOR?",
+   "english": "What color is your couch?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-couch",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-10a-01",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.A",
+   "number": 1,
+   "gloss": "CAT LIKE EAT BIRD?",
+   "english": "Do cats like to eat birds?",
+   "englishAdded": false,
+   "cards": [
+    "word-cat",
+    "word-like",
+    "word-eat",
+    "word-bird"
+   ]
+  },
+  {
+   "id": "lp-10a-02",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.A",
+   "number": 2,
+   "gloss": "BOOK YOU LIKE READ WHAT-KIND?",
+   "english": "What type of books do you like to read?",
+   "englishAdded": false,
+   "cards": [
+    "word-book",
+    "word-you",
+    "word-like",
+    "word-read",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-10a-03",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.A",
+   "number": 3,
+   "gloss": "FISH LIKE EAT BUG?",
+   "english": "Do fish like to eat bugs?",
+   "englishAdded": false,
+   "cards": [
+    "word-fish",
+    "word-like",
+    "word-eat",
+    "word-bug"
+   ]
+  },
+  {
+   "id": "lp-10a-04",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.A",
+   "number": 4,
+   "gloss": "MILK, WHERE FROM, HOW GET?",
+   "english": "How and/or where do we get milk?",
+   "englishAdded": false,
+   "note": "Possible answers: STORE / COW",
+   "cards": [
+    "word-milk",
+    "word-where",
+    "word-from",
+    "word-how",
+    "word-get"
+   ]
+  },
+  {
+   "id": "lp-10a-05",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.A",
+   "number": 5,
+   "gloss": "NAME SOMETHING DOG LIKE CHASE.",
+   "english": "What do dogs like to chase?",
+   "englishAdded": false,
+   "note": "Possible answers: CAR / CAT / BIKE",
+   "cards": [
+    "word-name",
+    "word-something",
+    "word-dog",
+    "word-like",
+    "word-chase"
+   ]
+  },
+  {
+   "id": "lp-09b-06",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.B",
+   "number": 6,
+   "gloss": "GARAGE HAVE?",
+   "english": "Do you have a garage?",
+   "englishAdded": false,
+   "cards": [
+    "word-garage",
+    "word-have"
+   ]
+  },
+  {
+   "id": "lp-09b-07",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.B",
+   "number": 7,
+   "gloss": "CAR HAVE? DOORS how-MANY?",
+   "english": "Do you have a car?--if so--How many doors?",
+   "englishAdded": false,
+   "cards": [
+    "word-car",
+    "word-have",
+    "word-door",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-09b-08",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.B",
+   "number": 8,
+   "gloss": "YOUR HOUSE, GARBAGE, throw out-[mime throw out] WHO?",
+   "english": "Who takes out the garbage in your house?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-garbage",
+    "word-throw-out",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-09b-09",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.B",
+   "number": 9,
+   "gloss": "YOUR DRYER, G-A-S, E-L-E-C-T-R-I-C WHICH?",
+   "english": "Is your clothes dryer gas or electric?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-dryer",
+    "letter-g",
+    "letter-a",
+    "letter-s",
+    "letter-e",
+    "letter-l",
+    "letter-e",
+    "letter-c",
+    "letter-t",
+    "letter-r",
+    "letter-i",
+    "letter-c",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-09b-10",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.B",
+   "number": 10,
+   "gloss": "THAT TABLE, what-COLOR",
+   "english": "What color is that table?",
+   "englishAdded": false,
+   "cards": [
+    "word-that",
+    "word-table",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-10b-06",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.B",
+   "number": 6,
+   "gloss": "A-S-L CLASS, YOU PAST TAKE-up YOU?",
+   "english": "Have you ever taken an ASL class?",
+   "englishAdded": false,
+   "cards": [
+    "letter-a",
+    "letter-s",
+    "letter-l",
+    "word-class",
+    "word-you",
+    "word-past",
+    "word-take-up",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-10b-07",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.B",
+   "number": 7,
+   "gloss": "TEACHER HIS/HER WIFE/HUSBAND, YOU KNOW NAME?",
+   "english": "Do you know the teacher's wife's/husband's name?",
+   "englishAdded": false,
+   "cards": [
+    "word-teacher",
+    "word-his-her",
+    "word-wife-husband",
+    "word-you",
+    "word-know",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-10b-08",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.B",
+   "number": 8,
+   "gloss": "HAVE PET YOU? (if so) what-NAME?",
+   "english": "Do you have a pet? What is its name?",
+   "englishAdded": false,
+   "cards": [
+    "word-have",
+    "word-pet",
+    "word-you",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-10b-09",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.B",
+   "number": 9,
+   "gloss": "SOME CAT LIKE WATER?",
+   "english": "Do some cats like water?",
+   "englishAdded": false,
+   "note": "All cats drink water, and panthers will swim in it.",
+   "cards": [
+    "word-some",
+    "word-cat",
+    "word-like",
+    "word-water"
+   ]
+  },
+  {
+   "id": "lp-10b-10",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.B",
+   "number": 10,
+   "gloss": "HORSE, YOU WANT?",
+   "english": "Do you want a horse?",
+   "englishAdded": true,
+   "cards": [
+    "word-horse",
+    "word-you",
+    "word-want"
+   ]
+  },
+  {
+   "id": "lp-09c-11",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.C",
+   "number": 11,
+   "gloss": "TOOTHPASTE YOU WHAT-KIND?",
+   "english": "What kind of toothpaste do you use?",
+   "englishAdded": false,
+   "cards": [
+    "word-toothpaste",
+    "word-you",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-09c-12",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.C",
+   "number": 12,
+   "gloss": "YOU PREFER STOVE, MICROWAVE, WHICH?",
+   "english": "Would you rather cook using a stove or a microwave?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-stove",
+    "word-microwave",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-09c-13",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.C",
+   "number": 13,
+   "gloss": "YOUR REFRIGERATOR, what-COLOR?",
+   "english": "What color is your fridge?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-refrigerator",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-09c-14",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.C",
+   "number": 14,
+   "gloss": "AMBULANCE, BEFORE YOU?",
+   "english": "Have you ever been in an ambulance?",
+   "englishAdded": false,
+   "cards": [
+    "word-ambulance",
+    "word-before",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-09c-15",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.C",
+   "number": 15,
+   "gloss": "DEAF PREFER KITCHEN WHY?",
+   "english": "Why do Deaf people tend to gather in the kitchen?",
+   "englishAdded": false,
+   "note": "Answer: good light.",
+   "cards": [
+    "word-deaf",
+    "word-prefer",
+    "word-kitchen",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-10c-11",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.C",
+   "number": 11,
+   "gloss": "YOU LOOK-LIKE YOUR DAD?",
+   "english": "Do you look like your father?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-look-like",
+    "word-your",
+    "word-dad"
+   ]
+  },
+  {
+   "id": "lp-10c-12",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.C",
+   "number": 12,
+   "gloss": "YOU PREFER, READ OR-[bodyshift] TV WATCH-casual, WHICH?",
+   "english": "Which would you rather do, read or watch TV?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-read",
+    "word-or",
+    "word-tv",
+    "word-watch",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-10c-13",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.C",
+   "number": 13,
+   "gloss": "COOK CLASS, YOU PAST TAKE-up?",
+   "english": "Have you ever taken a cooking class?",
+   "englishAdded": false,
+   "cards": [
+    "word-cook",
+    "word-class",
+    "word-you",
+    "word-past",
+    "word-take-up"
+   ]
+  },
+  {
+   "id": "lp-10c-14",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.C",
+   "number": 14,
+   "gloss": "YOU GO ASL CLASS, what-TIME?",
+   "english": "What time to you go to your ASL class?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-go",
+    "word-asl",
+    "word-class",
+    "word-what",
+    "word-time"
+   ]
+  },
+  {
+   "id": "lp-10c-15",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.C",
+   "number": 15,
+   "gloss": "BIRD LIKE EAT FISH?",
+   "english": "Do birds like to eat fish?",
+   "englishAdded": false,
+   "cards": [
+    "word-bird",
+    "word-like",
+    "word-eat",
+    "word-fish"
+   ]
+  },
+  {
+   "id": "lp-09d-16",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.D",
+   "number": 16,
+   "gloss": "TOMORROW YOU SHOWER?",
+   "english": "Are you going to shower tomorrow?",
+   "englishAdded": true,
+   "cards": [
+    "word-tomorrow",
+    "word-you",
+    "word-shower"
+   ]
+  },
+  {
+   "id": "lp-09d-17",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.D",
+   "number": 17,
+   "gloss": "YOUR S-I-N-K, what-COLOR?",
+   "english": "What color is your sink?",
+   "englishAdded": false,
+   "note": "Fingerspell S-I-N-K.",
+   "cards": [
+    "word-your",
+    "letter-s",
+    "letter-i",
+    "letter-n",
+    "letter-k",
+    "word-what",
+    "word-color"
+   ]
+  },
+  {
+   "id": "lp-09d-18",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.D",
+   "number": 18,
+   "gloss": "YOUR PANTS, YOU PUT DRESSER, HANG-UP WHICH?",
+   "english": "Do you keep your pants in a dresser or do you hang them up?",
+   "englishAdded": false,
+   "note": "Mime hanging up: an X-hand is the hanger and an index finger is the bar.",
+   "cards": [
+    "word-your",
+    "word-pants",
+    "word-you",
+    "word-put",
+    "word-dresser",
+    "word-hang-up",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-09d-19",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.D",
+   "number": 19,
+   "gloss": "YOUR BATHROOM HAVE WINDOW?",
+   "english": "Is there a window in your bathroom?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-bathroom",
+    "word-have",
+    "word-window"
+   ]
+  },
+  {
+   "id": "lp-09d-20",
+   "set": "lifeprint-09",
+   "lesson": 9,
+   "sheet": "9.D",
+   "number": 20,
+   "gloss": "YOUR HOUSE BATHROOM how-MANY",
+   "english": "How many bathrooms are in your house?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-house",
+    "word-bathroom",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-10d-16",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.D",
+   "number": 16,
+   "gloss": "HORSE LIKE EAT FISH?",
+   "english": "Do horses like to eat fish?",
+   "englishAdded": false,
+   "cards": [
+    "word-horse",
+    "word-like",
+    "word-eat",
+    "word-fish"
+   ]
+  },
+  {
+   "id": "lp-10d-17",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.D",
+   "number": 17,
+   "gloss": "YOUR BEDROOM UPSTAIRS?",
+   "english": "Is your bedroom upstairs?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-bedroom",
+    "word-upstairs"
+   ]
+  },
+  {
+   "id": "lp-10d-18",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.D",
+   "number": 18,
+   "gloss": "TELL-to-me HOW YOU FEEL.",
+   "english": "Tell me how you feel.",
+   "englishAdded": false,
+   "cards": [
+    "word-tell",
+    "word-how",
+    "word-you",
+    "word-feel"
+   ]
+  },
+  {
+   "id": "lp-10d-19",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.D",
+   "number": 19,
+   "gloss": "YOU THINK COW GOOD PET?",
+   "english": "Do you think a cow would make a good pet?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-cow",
+    "word-good",
+    "word-pet"
+   ]
+  },
+  {
+   "id": "lp-10d-20",
+   "set": "lifeprint-10",
+   "lesson": 10,
+   "sheet": "10.D",
+   "number": 20,
+   "gloss": "YOUR FAVORITE BOOK, what-NAME?",
+   "english": "What is your favorite book?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-favorite",
+    "word-book",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-11a-01",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.A",
+   "number": 1,
+   "gloss": "TELL-to-me ABOUT YOUR TEACHER",
+   "english": "Tell me about your teacher.",
+   "englishAdded": false,
+   "cards": [
+    "word-tell",
+    "word-about",
+    "word-your",
+    "word-teacher"
+   ]
+  },
+  {
+   "id": "lp-11a-02",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.A",
+   "number": 2,
+   "gloss": "YOU GO CLASS on-TIME ALWAYS?",
+   "english": "Do you always go to class on time?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-go",
+    "word-class",
+    "word-on-time",
+    "word-always"
+   ]
+  },
+  {
+   "id": "lp-11a-03",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.A",
+   "number": 3,
+   "gloss": "YOU HAVE DOG AND CAT YOU?",
+   "english": "Do you have a cat and a dog?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-have",
+    "word-dog",
+    "word-and",
+    "word-cat",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11a-04",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.A",
+   "number": 4,
+   "gloss": "ANY YOUR FAMILY DEAF?",
+   "english": "Is anyone in your family Deaf?",
+   "englishAdded": false,
+   "cards": [
+    "word-any",
+    "word-your",
+    "word-family",
+    "word-deaf"
+   ]
+  },
+  {
+   "id": "lp-11a-05",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.A",
+   "number": 5,
+   "gloss": "CLASS FINISH, #BACK HOME YOU?",
+   "english": "Are you going back home after class?",
+   "englishAdded": false,
+   "cards": [
+    "word-class",
+    "word-finish",
+    "word-back",
+    "word-home",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-12a-01",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.A",
+   "number": 1,
+   "gloss": "AFTERNOON WORK YOU?",
+   "english": "Do you work in the afternoon?",
+   "englishAdded": false,
+   "cards": [
+    "word-afternoon",
+    "word-work",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-12a-02",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.A",
+   "number": 2,
+   "gloss": "TODAY YOU FINISH BRUSH-TEETH YOU?",
+   "english": "Did you brush your teeth today?",
+   "englishAdded": false,
+   "cards": [
+    "word-today",
+    "word-you",
+    "word-finish",
+    "word-brush-teeth",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-12a-03",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.A",
+   "number": 3,
+   "gloss": "YOU THINK LIFE FAIR-EQUAL ALL PEOPLE?",
+   "english": "Do you think life is fair for all people?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-life",
+    "word-fair-equal",
+    "word-all",
+    "word-people"
+   ]
+  },
+  {
+   "id": "lp-12a-04",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.A",
+   "number": 4,
+   "gloss": "EVERYDAY YOU _________ YOU?",
+   "english": "Every day, do you ____? (go to school, shower, eat cereal, study ASL...)",
+   "englishAdded": false,
+   "hasBlank": true,
+   "cards": [
+    "word-everyday",
+    "word-you",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-12a-05",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.A",
+   "number": 5,
+   "gloss": "Every-FRIDAY YOU EAT FISH?",
+   "english": "Do you eat fish every Friday?",
+   "englishAdded": false,
+   "cards": [
+    "word-every-friday",
+    "word-you",
+    "word-eat",
+    "word-fish"
+   ]
+  },
+  {
+   "id": "lp-11b-06",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.B",
+   "number": 6,
+   "gloss": "How-FEEL YOU?",
+   "english": "How do you feel?",
+   "englishAdded": true,
+   "cards": [
+    "word-how",
+    "word-feel",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11b-07",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.B",
+   "number": 7,
+   "gloss": "CAN PHONE YOU?",
+   "english": "Are you able to use the phone?",
+   "englishAdded": false,
+   "cards": [
+    "word-can",
+    "word-phone",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11b-08",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.B",
+   "number": 8,
+   "gloss": "YOU CAN'T UNDERSTAND HE/SHE TEACHER, WHY?",
+   "english": "Why can't you understand the teacher?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-can-t",
+    "word-understand",
+    "word-he-she",
+    "word-teacher",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-11b-09",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.B",
+   "number": 9,
+   "gloss": "YOU TAKE-UP ASL what-FOR?",
+   "english": "Why are you taking ASL?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-take-up",
+    "word-asl",
+    "word-for-for"
+   ]
+  },
+  {
+   "id": "lp-11b-10",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.B",
+   "number": 10,
+   "gloss": "NAME BOOK YOU THINK WONDERFUL.",
+   "english": "Name a book that you think is wonderful.",
+   "englishAdded": false,
+   "cards": [
+    "word-name",
+    "word-book",
+    "word-you",
+    "word-think",
+    "word-wonderful"
+   ]
+  },
+  {
+   "id": "lp-12b-06",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.B",
+   "number": 6,
+   "gloss": "HABIT ANY YOU? (if so) WHAT-huh?",
+   "english": "What habits do you have, if any?",
+   "englishAdded": false,
+   "cards": [
+    "word-habit",
+    "word-any",
+    "word-you",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-12b-07",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.B",
+   "number": 7,
+   "gloss": "1 DAY EQUAL HOW-MANY HOUR?",
+   "english": "How-many hours are in a day?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-day",
+    "word-equal",
+    "word-how-many",
+    "word-hour"
+   ]
+  },
+  {
+   "id": "lp-12b-08",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.B",
+   "number": 8,
+   "gloss": "1 HOUR EQUAL HOW-MANY MINUTE?",
+   "english": "How-many minutes are in an hour?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-hour",
+    "word-equal",
+    "word-how-many",
+    "word-minute"
+   ]
+  },
+  {
+   "id": "lp-12b-09",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.B",
+   "number": 9,
+   "gloss": "1 MONTH EQUAL HOW-MANY DAY?",
+   "english": "How-many days are in a month?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-month",
+    "word-equal",
+    "word-how-many",
+    "word-day"
+   ]
+  },
+  {
+   "id": "lp-12b-10",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.B",
+   "number": 10,
+   "gloss": "1 YEAR EQUAL HOW-MANY MONTH?",
+   "english": "How-many months are in a year?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-year",
+    "word-equal",
+    "word-how-many",
+    "word-month"
+   ]
+  },
+  {
+   "id": "lp-11c-11",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.C",
+   "number": 11,
+   "gloss": "YOUR BEDROOM DIRTY LITTLE-BIT?",
+   "english": "Is your bedroom a little bit dirty?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-bedroom",
+    "word-dirty",
+    "word-little-bit"
+   ]
+  },
+  {
+   "id": "lp-11c-12",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.C",
+   "number": 12,
+   "gloss": "SOUP, YOU KNOW HOW MAKE?",
+   "english": "Do you know how to make soup?",
+   "englishAdded": false,
+   "cards": [
+    "word-soup",
+    "word-you",
+    "word-know",
+    "word-how",
+    "word-make"
+   ]
+  },
+  {
+   "id": "lp-11c-13",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.C",
+   "number": 13,
+   "gloss": "YOU NEVER EAT CANDY YOU?",
+   "english": "You never eat candy!?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-never",
+    "word-eat",
+    "word-candy",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11c-14",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.C",
+   "number": 14,
+   "gloss": "NEW CAR HAVE YOU?",
+   "english": "Do you have a new car?",
+   "englishAdded": false,
+   "cards": [
+    "word-new",
+    "word-car",
+    "word-have",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11c-15",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.C",
+   "number": 15,
+   "gloss": "YOU PREFER PIZZA OR HAMBURGER?",
+   "english": "Would you rather have pizza or a hamburger?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-prefer",
+    "word-pizza",
+    "word-or",
+    "word-hamburger"
+   ]
+  },
+  {
+   "id": "lp-12c-11",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.C",
+   "number": 11,
+   "gloss": "YOU LIKE MONDAY?",
+   "english": "Do you like Mondays?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-monday"
+   ]
+  },
+  {
+   "id": "lp-12c-12",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.C",
+   "number": 12,
+   "gloss": "MOVIE, GO TUESDAY NIGHT, GOOD WHY?",
+   "english": "Why are Tuesday nights a good time to go to the movies?",
+   "englishAdded": false,
+   "cards": [
+    "word-movie",
+    "word-go",
+    "word-tuesday",
+    "word-night",
+    "word-good",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-12c-13",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.C",
+   "number": 13,
+   "gloss": "SATURDAY NIGHT, I GO PARTY, WANT ACCOMPANY-me?",
+   "english": "I'm going to a party Saturday night. Do you want to go with me?",
+   "englishAdded": false,
+   "cards": [
+    "word-saturday",
+    "word-night",
+    "word-i",
+    "word-go",
+    "word-party",
+    "word-want",
+    "word-accompany"
+   ]
+  },
+  {
+   "id": "lp-12c-14",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.C",
+   "number": 14,
+   "gloss": "1 MINUTE HAVE HOW-MANY S-E-C?",
+   "english": "How many seconds are in a minute?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-minute",
+    "word-have",
+    "word-how-many",
+    "letter-s",
+    "letter-e",
+    "letter-c"
+   ]
+  },
+  {
+   "id": "lp-12c-15",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.C",
+   "number": 15,
+   "gloss": "1 WEEK HAVE HOW-MANY DAYS?",
+   "english": "How many days are in a week?",
+   "englishAdded": false,
+   "cards": [
+    "number-1",
+    "word-week",
+    "word-have",
+    "word-how-many",
+    "word-day"
+   ]
+  },
+  {
+   "id": "lp-11d-16",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.D",
+   "number": 16,
+   "gloss": "YOU LIKE MEET NEW PEOPLE YOU?",
+   "english": "Do you like to meet new people?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-meet",
+    "word-new",
+    "word-people",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-11d-17",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.D",
+   "number": 17,
+   "gloss": "YOU FEEL ANXIOUS WHEN?",
+   "english": "When do you feel nervous?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-feel",
+    "word-anxious",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-11d-18",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.D",
+   "number": 18,
+   "gloss": "CHAT-WITH DEAF, YOU LIKE?",
+   "english": "Do you like to chat with Deaf people?",
+   "englishAdded": false,
+   "cards": [
+    "word-chat-with",
+    "word-deaf",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-11d-19",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.D",
+   "number": 19,
+   "gloss": "PEOPLE, YOU LIKE WHAT-KIND?",
+   "english": "What type of people do you like?",
+   "englishAdded": false,
+   "cards": [
+    "word-people",
+    "word-you",
+    "word-like",
+    "word-what-kind"
+   ]
+  },
+  {
+   "id": "lp-11d-20",
+   "set": "lifeprint-11",
+   "lesson": 11,
+   "sheet": "11.D",
+   "number": 20,
+   "gloss": "LEARN NEW THING YOU LIKE?",
+   "english": "Do you like to learn new things?",
+   "englishAdded": false,
+   "cards": [
+    "word-learn",
+    "word-new",
+    "word-thing",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-12d-16",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.D",
+   "number": 16,
+   "gloss": "YOU SCHOOL WHICH DAY?",
+   "english": "Which days are you in school?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-school",
+    "word-which",
+    "word-day"
+   ]
+  },
+  {
+   "id": "lp-12d-17",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.D",
+   "number": 17,
+   "gloss": "PEOPLE GO CHURCH WHICH DAY?",
+   "english": "On which day do people go to church.",
+   "englishAdded": false,
+   "cards": [
+    "word-people",
+    "word-go",
+    "word-church",
+    "word-which",
+    "word-day"
+   ]
+  },
+  {
+   "id": "lp-12d-18",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.D",
+   "number": 18,
+   "gloss": "PAST WEEKEND YOU GO MOVIE YOU?",
+   "english": "Did you go to the movies last weekend?",
+   "englishAdded": false,
+   "cards": [
+    "word-past",
+    "word-weekend",
+    "word-you",
+    "word-go",
+    "word-movie",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-12d-19",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.D",
+   "number": 19,
+   "gloss": "YESTERDAY, YOU EAT HOW-MANY TIME?",
+   "english": "How-many times did you eat yesterday?",
+   "englishAdded": false,
+   "cards": [
+    "word-yesterday",
+    "word-you",
+    "word-eat",
+    "word-how-many",
+    "word-time"
+   ]
+  },
+  {
+   "id": "lp-12d-20",
+   "set": "lifeprint-12",
+   "lesson": 12,
+   "sheet": "12.D",
+   "number": 20,
+   "gloss": "Next-WEEK YOU COME SCHOOL?",
+   "english": "Are you coming to school next week?",
+   "englishAdded": false,
+   "cards": [
+    "word-next-week",
+    "word-you",
+    "word-come",
+    "word-school"
+   ]
+  },
+  {
+   "id": "lp-13a-01",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.A",
+   "number": 1,
+   "gloss": "RESEARCH ARTICLE, YOU LIKE READ?",
+   "english": "Do you like to read research articles?",
+   "englishAdded": false,
+   "cards": [
+    "word-research",
+    "word-article",
+    "word-you",
+    "word-like",
+    "word-read"
+   ]
+  },
+  {
+   "id": "lp-13a-02",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.A",
+   "number": 2,
+   "gloss": "YOUR TV CLOSE-CAPTIONED?",
+   "english": "Is your television close-captioned?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-tv",
+    "word-close-captioned"
+   ]
+  },
+  {
+   "id": "lp-13a-03",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.A",
+   "number": 3,
+   "gloss": "YOUR DAD COLLEGE?",
+   "english": "Did your dad go to college?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-dad",
+    "word-college"
+   ]
+  },
+  {
+   "id": "lp-13a-04",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.A",
+   "number": 4,
+   "gloss": "YOU GALLAUDET YOU?",
+   "english": "Did you go to Gallaudet? / Are you attending Gallaudet?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-gallaudet",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-13a-05",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.A",
+   "number": 5,
+   "gloss": "WANT BECOME INTERPRETER YOU?",
+   "english": "Do you want to be an interpreter?",
+   "englishAdded": false,
+   "cards": [
+    "word-want",
+    "word-become",
+    "word-interpreter",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14a-01",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.A",
+   "number": 1,
+   "gloss": "SUMMER [bodyshift]-OR WINTER, YOU LIKE BETTER WHICH?",
+   "english": "Which do you like better, summer or winter?",
+   "englishAdded": false,
+   "cards": [
+    "word-summer",
+    "word-or",
+    "word-winter",
+    "word-you",
+    "word-like",
+    "word-better",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-14a-02",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.A",
+   "number": 2,
+   "gloss": "YOU LIKE COLD WEATHER YOU?",
+   "english": "Do you like cold weather?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-cold",
+    "word-weather",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14a-03",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.A",
+   "number": 3,
+   "gloss": "AUTUMN, WIND (light), COOL, YOU LIKE CL:1-go for a stroll?",
+   "english": "Do you like going for a stroll in a cool autumn breeze?",
+   "englishAdded": false,
+   "cards": [
+    "word-autumn",
+    "word-wind",
+    "word-cool",
+    "word-you",
+    "word-like",
+    "word-cl-1-walk"
+   ]
+  },
+  {
+   "id": "lp-14a-04",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.A",
+   "number": 4,
+   "gloss": "SUMMER VACATION, YOU WAKE UP what-TIME?",
+   "english": "What time do you wake up during summer vacation?",
+   "englishAdded": true,
+   "cards": [
+    "word-summer",
+    "word-vacation",
+    "word-you",
+    "word-wake-up",
+    "word-what",
+    "word-time"
+   ]
+  },
+  {
+   "id": "lp-14a-05",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.A",
+   "number": 5,
+   "gloss": "WINTER HERE SNOW?",
+   "english": "Does it snow here in the winter?",
+   "englishAdded": false,
+   "cards": [
+    "word-winter",
+    "word-here",
+    "word-snow"
+   ]
+  },
+  {
+   "id": "lp-13b-06",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.B",
+   "number": 6,
+   "gloss": "DEAF OR-[bodyshift] HEARING YOU?",
+   "english": "Are you Deaf or hearing?",
+   "englishAdded": false,
+   "cards": [
+    "word-deaf",
+    "word-or",
+    "word-hearing",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-13b-07",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.B",
+   "number": 7,
+   "gloss": "YOU THINK HARD-OF-HEARING SHOULD MARRY DEAF O-R HEARING?",
+   "english": "Do you think hard-of-hearing people should marry Deaf or hearing people?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-hard-of-hearing",
+    "word-should",
+    "word-marry",
+    "word-deaf",
+    "letter-o",
+    "letter-r",
+    "word-hearing"
+   ]
+  },
+  {
+   "id": "lp-13b-08",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.B",
+   "number": 8,
+   "gloss": "HIGH-SCHOOL, YOU GRADUATE WHEN?",
+   "english": "When did you graduate high school?",
+   "englishAdded": false,
+   "cards": [
+    "word-high-school",
+    "word-you",
+    "word-graduate",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-13b-09",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.B",
+   "number": 9,
+   "gloss": "YOU THINK THIS CLASS HARD?",
+   "english": "Do you think this class is hard?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-this",
+    "word-class",
+    "word-hard"
+   ]
+  },
+  {
+   "id": "lp-13b-10",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.B",
+   "number": 10,
+   "gloss": "DEAF COLLEGE STUDENT USE NOTE-put-down+AGENT WHY?",
+   "english": "Why do Deaf college students use note-takers?",
+   "englishAdded": false,
+   "cards": [
+    "word-deaf",
+    "word-college",
+    "word-student",
+    "word-use",
+    "word-note-taker",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-14b-06",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.B",
+   "number": 6,
+   "gloss": "YOU THINK TONIGHT FREEZE?",
+   "english": "Do you think it will freeze tonight?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-tonight",
+    "word-freeze"
+   ]
+  },
+  {
+   "id": "lp-14b-07",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.B",
+   "number": 7,
+   "gloss": "SUPPOSE RAIN, CL:1-GO OUT PLAY+, WILL SICK YOU?",
+   "english": "If you play in the rain, will you get sick?",
+   "englishAdded": false,
+   "cards": [
+    "word-suppose",
+    "word-rain",
+    "word-cl-1-walk",
+    "word-play",
+    "word-will",
+    "word-sick",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14b-08",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.B",
+   "number": 8,
+   "gloss": "YOU LIKE MAKE SNOW+MAN?",
+   "english": "Do you like making snowmen?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-make",
+    "word-snowman"
+   ]
+  },
+  {
+   "id": "lp-14b-09",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.B",
+   "number": 9,
+   "gloss": "WORK YOU? SICK CAN YOU VACATION HOW-MANY DAY?",
+   "english": "If you work, how many days of sick-leave do you get?",
+   "englishAdded": false,
+   "cards": [
+    "word-work",
+    "word-you",
+    "word-sick",
+    "word-can",
+    "word-you",
+    "word-vacation",
+    "word-how-many",
+    "word-day"
+   ]
+  },
+  {
+   "id": "lp-14b-10",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.B",
+   "number": 10,
+   "gloss": "WARM COOKIE AND MILK, YOU LIKE?",
+   "english": "Do you like warm cookies and milk?",
+   "englishAdded": true,
+   "cards": [
+    "word-warm",
+    "word-cookie",
+    "word-and",
+    "word-milk",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-13c-11",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.C",
+   "number": 11,
+   "gloss": "CLOSE-CAPTIONED MOVIE, YOU LIKE WATCH?",
+   "english": "Do you like to watch close-captioned movies?",
+   "englishAdded": false,
+   "cards": [
+    "word-close-captioned",
+    "word-movie",
+    "word-you",
+    "word-like",
+    "word-watch"
+   ]
+  },
+  {
+   "id": "lp-13c-12",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.C",
+   "number": 12,
+   "gloss": "YOU LIKE TRUE FALSE TEST?",
+   "english": "Do you like TRUE/FALSE tests?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-true",
+    "word-false",
+    "word-test"
+   ]
+  },
+  {
+   "id": "lp-13c-13",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.C",
+   "number": 13,
+   "gloss": "RESEARCH PAPER, YOU LIKE WRITE?",
+   "english": "Do you like to write research papers?",
+   "englishAdded": false,
+   "cards": [
+    "word-research",
+    "word-paper",
+    "word-you",
+    "word-like",
+    "word-write"
+   ]
+  },
+  {
+   "id": "lp-13c-14",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.C",
+   "number": 14,
+   "gloss": "TEACHER FLASH-LIGHTS, WHY?",
+   "english": "Why does the teacher flash the lights?",
+   "englishAdded": false,
+   "cards": [
+    "word-teacher",
+    "word-flash-lights",
+    "word-why"
+   ]
+  },
+  {
+   "id": "lp-13c-15",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.C",
+   "number": 15,
+   "gloss": "INTERPRETER LIST, YOU HAVE?",
+   "english": "Do you have a list of interpreters?",
+   "englishAdded": false,
+   "cards": [
+    "word-interpreter",
+    "word-list",
+    "word-you",
+    "word-have"
+   ]
+  },
+  {
+   "id": "lp-14c-11",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.C",
+   "number": 11,
+   "gloss": "YOU LIKE SLEEP-IN?",
+   "english": "Do you like to sleep in?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-sleep-in"
+   ]
+  },
+  {
+   "id": "lp-14c-12",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.C",
+   "number": 12,
+   "gloss": "YESTERDAY what-TIME YOU WAKE-UP?",
+   "english": "What time did you wake up yesterday?",
+   "englishAdded": true,
+   "cards": [
+    "word-yesterday",
+    "word-what",
+    "word-time",
+    "word-you",
+    "word-wake-up"
+   ]
+  },
+  {
+   "id": "lp-14c-13",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.C",
+   "number": 13,
+   "gloss": "YOU LIKE HOT WEATHER YOU?",
+   "english": "Do you like hot weather?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-hot",
+    "word-weather",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14c-14",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.C",
+   "number": 14,
+   "gloss": "SUMMER VACATION, YOU GO-TO-BED, what-TIME?",
+   "english": "What time do you go to bed during summer vacation?",
+   "englishAdded": true,
+   "cards": [
+    "word-summer",
+    "word-vacation",
+    "word-you",
+    "word-go-to-bed",
+    "word-what",
+    "word-time"
+   ]
+  },
+  {
+   "id": "lp-14c-15",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.C",
+   "number": 15,
+   "gloss": "SUPPOSE SICK, YOU THINK GO-TO-BED WILL HELP?",
+   "english": "If you're sick, do you think going to bed will help?",
+   "englishAdded": true,
+   "cards": [
+    "word-suppose",
+    "word-sick",
+    "word-you",
+    "word-think",
+    "word-go-to-bed",
+    "word-will",
+    "word-help"
+   ]
+  },
+  {
+   "id": "lp-13d-16",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.D",
+   "number": 16,
+   "gloss": "SQUARE-[white-board], YOU THINK HE/SHE TEACHER SHOULD WRITE MORE?",
+   "english": "Do you think the teacher should write more on the whiteboard?",
+   "englishAdded": true,
+   "cards": [
+    "word-whiteboard",
+    "word-you",
+    "word-think",
+    "word-he-she",
+    "word-teacher",
+    "word-should",
+    "word-write",
+    "word-more"
+   ]
+  },
+  {
+   "id": "lp-13d-17",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.D",
+   "number": 17,
+   "gloss": "PAST TEST THIS CLASS YOU WRONG how-MANY?",
+   "english": "How many did you get wrong on the last test in this class?",
+   "englishAdded": true,
+   "cards": [
+    "word-past",
+    "word-test",
+    "word-this",
+    "word-class",
+    "word-you",
+    "word-wrong",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-13d-18",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.D",
+   "number": 18,
+   "gloss": "COLLEGE, YOU GRADUATE WHEN?",
+   "english": "When will you graduate from college?",
+   "englishAdded": true,
+   "cards": [
+    "word-college",
+    "word-you",
+    "word-graduate",
+    "word-when"
+   ]
+  },
+  {
+   "id": "lp-13d-19",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.D",
+   "number": 19,
+   "gloss": "YOU THINK THIS CLASS EASY YOU?",
+   "english": "Do you think this class is easy?",
+   "englishAdded": true,
+   "cards": [
+    "word-you",
+    "word-think",
+    "word-this",
+    "word-class",
+    "word-easy",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-13d-20",
+   "set": "lifeprint-13",
+   "lesson": 13,
+   "sheet": "13.D",
+   "number": 20,
+   "gloss": "DEAF-SCHOOL YOU?",
+   "english": "Did you attend a residential school for the Deaf?",
+   "englishAdded": false,
+   "cards": [
+    "word-deaf-school",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14d-16",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.D",
+   "number": 16,
+   "gloss": "YOU USE DEODORANT-[mime rubbing deodorant under your arm] YOU?",
+   "english": "Do you use deodorant?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-use",
+    "word-deodorant",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14d-17",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.D",
+   "number": 17,
+   "gloss": "YOUR FAVORITE TIME YEAR WHAT?",
+   "english": "What is your favorite time of year?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-favorite",
+    "word-time",
+    "word-year",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-14d-18",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.D",
+   "number": 18,
+   "gloss": "FEEL SICK YOU?",
+   "english": "Do you feel sick?",
+   "englishAdded": true,
+   "cards": [
+    "word-feel",
+    "word-sick",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-14d-19",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.D",
+   "number": 19,
+   "gloss": "YOUR REFRIGERATOR FULL?",
+   "english": "Is your refrigerator full?",
+   "englishAdded": true,
+   "cards": [
+    "word-your",
+    "word-refrigerator",
+    "word-full"
+   ]
+  },
+  {
+   "id": "lp-14d-20",
+   "set": "lifeprint-14",
+   "lesson": 14,
+   "sheet": "14.D",
+   "number": 20,
+   "gloss": "COLD PIZZA, YOU LIKE?",
+   "english": "Do you like cold pizza?",
+   "englishAdded": true,
+   "cards": [
+    "word-cold",
+    "word-pizza",
+    "word-you",
+    "word-like"
+   ]
+  },
+  {
+   "id": "lp-15a-01",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.A",
+   "number": 1,
+   "gloss": "YOUR MAJOR WHAT?",
+   "english": "What are you majoring in?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-major",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-15a-02",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.A",
+   "number": 2,
+   "gloss": "YOUR TEACHER HAVE AIDE?",
+   "english": "Does you teacher have an aide?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-teacher",
+    "word-have",
+    "word-aide"
+   ]
+  },
+  {
+   "id": "lp-15a-03",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.A",
+   "number": 3,
+   "gloss": "YOU USE BABYSITTER YOU?",
+   "english": "Do you use a babysitter?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-use",
+    "word-babysitter",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-15a-04",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.A",
+   "number": 4,
+   "gloss": "YOUR BOSS what-NAME?",
+   "english": "What is your boss's name?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-boss",
+    "word-what",
+    "word-name"
+   ]
+  },
+  {
+   "id": "lp-15a-05",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.A",
+   "number": 5,
+   "gloss": "YOU LIKE COOK?",
+   "english": "Do you like to cook?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-like",
+    "word-cook"
+   ]
+  },
+  {
+   "id": "lp-15b-06",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.B",
+   "number": 6,
+   "gloss": "YOUR GRANDPA FARMER?",
+   "english": "Is or was your grandpa a farmer?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-grandpa",
+    "word-farmer"
+   ]
+  },
+  {
+   "id": "lp-15b-07",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.B",
+   "number": 7,
+   "gloss": "PAST-[long-ago] YOURSELF LITTLE-GIRL/BOY WANT GROW-UP FUTURE what-DO?",
+   "english": "When you were a little girl/boy what did you want to be?",
+   "englishAdded": false,
+   "cards": [
+    "word-past",
+    "word-yourself",
+    "word-little-girl-boy",
+    "word-want",
+    "word-grow-up",
+    "word-future",
+    "word-do-do"
+   ]
+  },
+  {
+   "id": "lp-15b-08",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.B",
+   "number": 8,
+   "gloss": "SUPPOSE YOUR DAD DIVORCE, MARRY NEW WOMAN, SHE YOUR WHAT?",
+   "english": "If your dad divorced and married a new woman, what would she be to you?",
+   "englishAdded": true,
+   "cards": [
+    "word-suppose",
+    "word-your",
+    "word-dad",
+    "word-divorce",
+    "word-marry",
+    "word-new",
+    "word-woman",
+    "word-he-she",
+    "word-your",
+    "word-what"
+   ]
+  },
+  {
+   "id": "lp-15b-09",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.B",
+   "number": 9,
+   "gloss": "YOUR FAMILY ANY LIBRARY-PERSON?",
+   "english": "Is anyone in your family a librarian?",
+   "englishAdded": false,
+   "cards": [
+    "word-your",
+    "word-family",
+    "word-any",
+    "word-library-person"
+   ]
+  },
+  {
+   "id": "lp-15b-10",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.B",
+   "number": 10,
+   "gloss": "YOU KNOW YOUR NEIGHBOR NAME YOU?",
+   "english": "Do you know your neighbor's name?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-know",
+    "word-your",
+    "word-neighbor",
+    "word-name",
+    "word-you"
+   ]
+  },
+  {
+   "id": "lp-15c-11",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.C",
+   "number": 11,
+   "gloss": "PICTURE YOUR FAMILY YOU HAVE?",
+   "english": "Do you have a picture of your family?",
+   "englishAdded": false,
+   "cards": [
+    "word-picture",
+    "word-your",
+    "word-family",
+    "word-you",
+    "word-have"
+   ]
+  },
+  {
+   "id": "lp-15c-12",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.C",
+   "number": 12,
+   "gloss": "U-S, PRESIDENT WHO?",
+   "english": "Who is president of the United States?",
+   "englishAdded": false,
+   "cards": [
+    "letter-u",
+    "letter-s",
+    "word-president",
+    "word-who"
+   ]
+  },
+  {
+   "id": "lp-15c-13",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.C",
+   "number": 13,
+   "gloss": "STEPFATHER, MEANING?",
+   "english": "What does the sign stepfather mean?",
+   "englishAdded": false,
+   "cards": [
+    "word-stepfather",
+    "word-meaning"
+   ]
+  },
+  {
+   "id": "lp-15c-14",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.C",
+   "number": 14,
+   "gloss": "BROTHER-IN-LAW YOU HAVE HOW-MANY?",
+   "english": "How-many brothers-in-law do you have?",
+   "englishAdded": false,
+   "cards": [
+    "word-brother-in-law",
+    "word-you",
+    "word-have",
+    "word-how-many"
+   ]
+  },
+  {
+   "id": "lp-15c-15",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.C",
+   "number": 15,
+   "gloss": "SERVER-[waiter/waitress], SHOULD TIP HOW-MUCH?",
+   "english": "How much should you tip the server?",
+   "englishAdded": false,
+   "cards": [
+    "word-server",
+    "word-should",
+    "word-tip",
+    "word-how-much"
+   ]
+  },
+  {
+   "id": "lp-15d-16",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.D",
+   "number": 16,
+   "gloss": "NEWSPAPER, YOU LIKE READ?",
+   "english": "Do you like to read the newspaper?",
+   "englishAdded": false,
+   "cards": [
+    "word-newspaper",
+    "word-you",
+    "word-like",
+    "word-read"
+   ]
+  },
+  {
+   "id": "lp-15d-17",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.D",
+   "number": 17,
+   "gloss": "COMPUTER PROGRAM YOU USE WHICH?",
+   "english": "Which computer program (or programs) do you use?",
+   "englishAdded": false,
+   "cards": [
+    "word-computer",
+    "word-program",
+    "word-you",
+    "word-use",
+    "word-which"
+   ]
+  },
+  {
+   "id": "lp-15d-18",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.D",
+   "number": 18,
+   "gloss": "YOU WISH HAVE YOURSELF SECRETARY",
+   "english": "Do you wish you had your own secretary?",
+   "englishAdded": false,
+   "cards": [
+    "word-you",
+    "word-wish",
+    "word-have",
+    "word-yourself",
+    "word-secretary"
+   ]
+  },
+  {
+   "id": "lp-15d-19",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.D",
+   "number": 19,
+   "gloss": "How-SIGN S-C-I-E-N-T-I-S-T?",
+   "english": "What is the sign for scientist?",
+   "englishAdded": false,
+   "cards": [
+    "word-how",
+    "word-sign",
+    "letter-s",
+    "letter-c",
+    "letter-i",
+    "letter-e",
+    "letter-n",
+    "letter-t",
+    "letter-i",
+    "letter-s",
+    "letter-t"
+   ]
+  },
+  {
+   "id": "lp-15d-20",
+   "set": "lifeprint-15",
+   "lesson": 15,
+   "sheet": "15.D",
+   "number": 20,
+   "gloss": "POLICE he/she-HELP-you BEFORE?",
+   "english": "Have you ever been helped by a police officer?",
+   "englishAdded": false,
+   "cards": [
+    "word-police",
+    "word-help",
+    "word-before"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,3641 @@
+{
+ "title": "Cards to make",
+ "cards": [
+  {
+   "id": "letter-a",
+   "term": "A",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 8
+  },
+  {
+   "id": "letter-b",
+   "term": "B",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 4
+  },
+  {
+   "id": "letter-c",
+   "term": "C",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 4
+  },
+  {
+   "id": "letter-d",
+   "term": "D",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "letter-e",
+   "term": "E",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 8
+  },
+  {
+   "id": "letter-f",
+   "term": "F",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-g",
+   "term": "G",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-h",
+   "term": "H",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 3
+  },
+  {
+   "id": "letter-i",
+   "term": "I",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 7
+  },
+  {
+   "id": "letter-j",
+   "term": "J",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "letter-k",
+   "term": "K",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-l",
+   "term": "L",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 5
+  },
+  {
+   "id": "letter-m",
+   "term": "M",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-n",
+   "term": "N",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 3
+  },
+  {
+   "id": "letter-o",
+   "term": "O",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 2
+  },
+  {
+   "id": "letter-p",
+   "term": "P",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-q",
+   "term": "Q",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "letter-r",
+   "term": "R",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 2
+  },
+  {
+   "id": "letter-s",
+   "term": "S",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 9
+  },
+  {
+   "id": "letter-t",
+   "term": "T",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 8
+  },
+  {
+   "id": "letter-u",
+   "term": "U",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 2
+  },
+  {
+   "id": "letter-v",
+   "term": "V",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "letter-w",
+   "term": "W",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 3
+  },
+  {
+   "id": "letter-x",
+   "term": "X",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "letter-y",
+   "term": "Y",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 1
+  },
+  {
+   "id": "letter-z",
+   "term": "Z",
+   "category": "letter",
+   "sources": [
+    "Alphabet"
+   ],
+   "firstLesson": null,
+   "uses": 0
+  },
+  {
+   "id": "word-who",
+   "term": "Who",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 11
+  },
+  {
+   "id": "word-what",
+   "term": "What",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 37
+  },
+  {
+   "id": "word-when",
+   "term": "When",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 6
+  },
+  {
+   "id": "word-where",
+   "term": "Where",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 12
+  },
+  {
+   "id": "word-why",
+   "term": "Why",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 7
+  },
+  {
+   "id": "word-how",
+   "term": "How",
+   "category": "word",
+   "sources": [
+    "Question words",
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 14
+  },
+  {
+   "id": "word-you",
+   "term": "YOU",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 228
+  },
+  {
+   "id": "word-name",
+   "term": "NAME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 19
+  },
+  {
+   "id": "word-deaf",
+   "term": "DEAF",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 9
+  },
+  {
+   "id": "word-student",
+   "term": "STUDENT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 4
+  },
+  {
+   "id": "word-your",
+   "term": "YOUR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 66
+  },
+  {
+   "id": "word-teacher",
+   "term": "TEACHER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 11
+  },
+  {
+   "id": "word-understand",
+   "term": "UNDERSTAND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 4
+  },
+  {
+   "id": "word-he-she",
+   "term": "HE/SHE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 11
+  },
+  {
+   "id": "word-hey",
+   "term": "HEY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-married",
+   "term": "MARRIED",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-children",
+   "term": "CHILDREN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 4
+  },
+  {
+   "id": "word-sister",
+   "term": "SISTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 4
+  },
+  {
+   "id": "word-how-many",
+   "term": "HOW MANY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 22
+  },
+  {
+   "id": "word-mom",
+   "term": "MOM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 3
+  },
+  {
+   "id": "word-again",
+   "term": "AGAIN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 1
+  },
+  {
+   "id": "word-this",
+   "term": "THIS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 6
+  },
+  {
+   "id": "word-dad",
+   "term": "DAD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 5
+  },
+  {
+   "id": "word-work",
+   "term": "WORK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 5
+  },
+  {
+   "id": "word-live",
+   "term": "LIVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 8
+  },
+  {
+   "id": "word-his-her",
+   "term": "HIS/HER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 2
+  },
+  {
+   "id": "word-sign",
+   "term": "SIGN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 19
+  },
+  {
+   "id": "word-nice",
+   "term": "NICE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 1
+  },
+  {
+   "id": "word-meet",
+   "term": "MEET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 3
+  },
+  {
+   "id": "word-hearing",
+   "term": "HEARING",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 3
+  },
+  {
+   "id": "word-asl",
+   "term": "ASL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 4
+  },
+  {
+   "id": "word-learn",
+   "term": "LEARN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 8
+  },
+  {
+   "id": "word-divorce",
+   "term": "DIVORCE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 3
+  },
+  {
+   "id": "word-brother",
+   "term": "BROTHER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 2
+  },
+  {
+   "id": "word-have",
+   "term": "HAVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 23
+  },
+  {
+   "id": "word-spell",
+   "term": "SPELL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 3
+  },
+  {
+   "id": "word-slow",
+   "term": "SLOW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 2
+  },
+  {
+   "id": "word-they",
+   "term": "THEY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 1
+  },
+  {
+   "id": "word-like",
+   "term": "LIKE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 1,
+   "uses": 47
+  },
+  {
+   "id": "word-my",
+   "term": "MY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-wife",
+   "term": "WIFE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-single",
+   "term": "SINGLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-grandma",
+   "term": "GRANDMA",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 2,
+   "uses": 1
+  },
+  {
+   "id": "word-ask",
+   "term": "ASK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 1
+  },
+  {
+   "id": "word-city",
+   "term": "CITY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 3
+  },
+  {
+   "id": "word-house",
+   "term": "HOUSE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 6
+  },
+  {
+   "id": "word-big",
+   "term": "BIG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 3
+  },
+  {
+   "id": "word-feel",
+   "term": "FEEL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 7
+  },
+  {
+   "id": "word-happy",
+   "term": "HAPPY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-uncle",
+   "term": "UNCLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-father",
+   "term": "FATHER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-son",
+   "term": "SON",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-baby",
+   "term": "BABY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 2
+  },
+  {
+   "id": "word-bedroom",
+   "term": "BEDROOM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 3
+  },
+  {
+   "id": "word-bathroom",
+   "term": "BATHROOM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 5
+  },
+  {
+   "id": "word-think",
+   "term": "THINK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 13
+  },
+  {
+   "id": "word-i",
+   "term": "I",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 4
+  },
+  {
+   "id": "word-good",
+   "term": "GOOD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 4
+  },
+  {
+   "id": "word-need",
+   "term": "NEED",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 4
+  },
+  {
+   "id": "word-brush-teeth",
+   "term": "BRUSH TEETH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 2
+  },
+  {
+   "id": "word-want",
+   "term": "WANT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 11
+  },
+  {
+   "id": "word-cry",
+   "term": "CRY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-boyfriend-girlfriend",
+   "term": "BOYFRIEND/GIRLFRIEND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-daughter",
+   "term": "DAUGHTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-help",
+   "term": "HELP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 3
+  },
+  {
+   "id": "word-from",
+   "term": "FROM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 3
+  },
+  {
+   "id": "word-here",
+   "term": "HERE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 5
+  },
+  {
+   "id": "word-family",
+   "term": "FAMILY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 4
+  },
+  {
+   "id": "word-small",
+   "term": "SMALL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 1
+  },
+  {
+   "id": "word-hurt",
+   "term": "HURT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-suppose",
+   "term": "SUPPOSE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 7
+  },
+  {
+   "id": "word-love",
+   "term": "LOVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-sad",
+   "term": "SAD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-sorry",
+   "term": "SORRY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-come",
+   "term": "COME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 3
+  },
+  {
+   "id": "word-class",
+   "term": "CLASS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 9
+  },
+  {
+   "id": "word-more",
+   "term": "MORE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 2
+  },
+  {
+   "id": "word-go",
+   "term": "GO",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 15
+  },
+  {
+   "id": "word-school",
+   "term": "SCHOOL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 6
+  },
+  {
+   "id": "word-bad",
+   "term": "BAD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 3,
+   "uses": 1
+  },
+  {
+   "id": "word-stop",
+   "term": "STOP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-excuse",
+   "term": "EXCUSE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-aunt",
+   "term": "AUNT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 4,
+   "uses": 1
+  },
+  {
+   "id": "word-movie",
+   "term": "MOVIE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 6
+  },
+  {
+   "id": "word-favorite",
+   "term": "FAVORITE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 8
+  },
+  {
+   "id": "word-do-do",
+   "term": "DO DO",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 3
+  },
+  {
+   "id": "word-wristwatch",
+   "term": "WRISTWATCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-give",
+   "term": "GIVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-color",
+   "term": "COLOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 11
+  },
+  {
+   "id": "word-something",
+   "term": "SOMETHING",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 2
+  },
+  {
+   "id": "word-itself",
+   "term": "ITSELF",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-black",
+   "term": "BLACK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-white",
+   "term": "WHITE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-brown",
+   "term": "BROWN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-draw",
+   "term": "DRAW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-parents",
+   "term": "PARENTS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-internet",
+   "term": "INTERNET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-walk",
+   "term": "WALK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-sit",
+   "term": "SIT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 2
+  },
+  {
+   "id": "word-with",
+   "term": "WITH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 3
+  },
+  {
+   "id": "word-finish",
+   "term": "FINISH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 4
+  },
+  {
+   "id": "word-watch",
+   "term": "WATCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 3
+  },
+  {
+   "id": "word-future",
+   "term": "FUTURE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 3
+  },
+  {
+   "id": "word-teach",
+   "term": "TEACH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-chair",
+   "term": "CHAIR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-green",
+   "term": "GREEN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 3
+  },
+  {
+   "id": "word-how-old",
+   "term": "HOW OLD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-can",
+   "term": "CAN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 3
+  },
+  {
+   "id": "word-drive",
+   "term": "DRIVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 2
+  },
+  {
+   "id": "word-home",
+   "term": "HOME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 4
+  },
+  {
+   "id": "word-computer",
+   "term": "COMPUTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 2
+  },
+  {
+   "id": "word-web-cam",
+   "term": "WEB CAM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-doctor",
+   "term": "DOCTOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 3
+  },
+  {
+   "id": "word-email",
+   "term": "EMAIL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-address",
+   "term": "ADDRESS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-there",
+   "term": "THERE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-how-long",
+   "term": "HOW LONG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-now",
+   "term": "NOW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-paper",
+   "term": "PAPER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 2
+  },
+  {
+   "id": "word-past",
+   "term": "PAST",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 6
+  },
+  {
+   "id": "word-play",
+   "term": "PLAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 2
+  },
+  {
+   "id": "word-store",
+   "term": "STORE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-friend",
+   "term": "FRIEND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 5,
+   "uses": 1
+  },
+  {
+   "id": "word-car",
+   "term": "CAR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 3
+  },
+  {
+   "id": "word-red",
+   "term": "RED",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 2
+  },
+  {
+   "id": "word-tomorrow",
+   "term": "TOMORROW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 2
+  },
+  {
+   "id": "word-wait",
+   "term": "WAIT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-move",
+   "term": "MOVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 1
+  },
+  {
+   "id": "word-year",
+   "term": "YEAR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 6,
+   "uses": 3
+  },
+  {
+   "id": "word-apple",
+   "term": "APPLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-eat",
+   "term": "EAT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 12
+  },
+  {
+   "id": "word-candy",
+   "term": "CANDY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-what-kind",
+   "term": "WHAT KIND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 9
+  },
+  {
+   "id": "word-cereal",
+   "term": "CEREAL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-cookie",
+   "term": "COOKIE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-milk",
+   "term": "MILK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-everyday",
+   "term": "EVERYDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 2
+  },
+  {
+   "id": "word-drink",
+   "term": "DRINK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-water",
+   "term": "WATER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 2
+  },
+  {
+   "id": "word-cup",
+   "term": "CUP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-backpack",
+   "term": "BACKPACK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 2
+  },
+  {
+   "id": "word-clothes",
+   "term": "CLOTHES",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 4
+  },
+  {
+   "id": "word-dirty",
+   "term": "DIRTY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 3
+  },
+  {
+   "id": "word-put",
+   "term": "PUT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 3
+  },
+  {
+   "id": "word-basket",
+   "term": "BASKET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-hearing-aid",
+   "term": "HEARING AID",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 2
+  },
+  {
+   "id": "word-battery",
+   "term": "BATTERY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-belt",
+   "term": "BELT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-change",
+   "term": "CHANGE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 2
+  },
+  {
+   "id": "word-food",
+   "term": "FOOD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-egg",
+   "term": "EGG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 2
+  },
+  {
+   "id": "word-and",
+   "term": "AND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-orange",
+   "term": "ORANGE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 2
+  },
+  {
+   "id": "word-full",
+   "term": "FULL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-prefer",
+   "term": "PREFER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 7
+  },
+  {
+   "id": "word-hamburger",
+   "term": "HAMBURGER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 4
+  },
+  {
+   "id": "word-or",
+   "term": "OR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 8
+  },
+  {
+   "id": "word-hotdog",
+   "term": "HOTDOG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-coat",
+   "term": "COAT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-should",
+   "term": "SHOULD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 5
+  },
+  {
+   "id": "word-room",
+   "term": "ROOM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-glasses",
+   "term": "GLASSES",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-washing-machine",
+   "term": "WASHING MACHINE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-hungry",
+   "term": "HUNGRY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-pizza",
+   "term": "PIZZA",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 4
+  },
+  {
+   "id": "word-popcorn",
+   "term": "POPCORN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-soup",
+   "term": "SOUP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 2
+  },
+  {
+   "id": "word-church",
+   "term": "CHURCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 2
+  },
+  {
+   "id": "word-pants",
+   "term": "PANTS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 3
+  },
+  {
+   "id": "word-dress",
+   "term": "DRESS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-which",
+   "term": "WHICH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 11
+  },
+  {
+   "id": "word-pick-up",
+   "term": "PICK UP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-time",
+   "term": "TIME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 7
+  },
+  {
+   "id": "word-shirt",
+   "term": "SHIRT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-shoes",
+   "term": "SHOES",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "number-3",
+   "term": "3",
+   "category": "number",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-will",
+   "term": "WILL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 3
+  },
+  {
+   "id": "word-don-t-like",
+   "term": "DON'T LIKE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 7,
+   "uses": 1
+  },
+  {
+   "id": "word-socks",
+   "term": "SOCKS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-underwear",
+   "term": "UNDERWEAR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-daily",
+   "term": "DAILY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-zipper",
+   "term": "ZIPPER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 1
+  },
+  {
+   "id": "word-gallaudet",
+   "term": "GALLAUDET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 8,
+   "uses": 2
+  },
+  {
+   "id": "word-basement",
+   "term": "BASEMENT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-bath",
+   "term": "BATH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-shower",
+   "term": "SHOWER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 2
+  },
+  {
+   "id": "word-go-steady",
+   "term": "GO STEADY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-someone",
+   "term": "SOMEONE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-couch",
+   "term": "COUCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-cat",
+   "term": "CAT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 3
+  },
+  {
+   "id": "word-bird",
+   "term": "BIRD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-book",
+   "term": "BOOK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 3
+  },
+  {
+   "id": "word-read",
+   "term": "READ",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 4
+  },
+  {
+   "id": "word-fish",
+   "term": "FISH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 4
+  },
+  {
+   "id": "word-bug",
+   "term": "BUG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-get",
+   "term": "GET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-dog",
+   "term": "DOG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-chase",
+   "term": "CHASE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-garage",
+   "term": "GARAGE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-door",
+   "term": "DOOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-garbage",
+   "term": "GARBAGE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-throw-out",
+   "term": "THROW OUT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-dryer",
+   "term": "DRYER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-that",
+   "term": "THAT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-table",
+   "term": "TABLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-take-up",
+   "term": "TAKE UP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 3
+  },
+  {
+   "id": "word-wife-husband",
+   "term": "WIFE/HUSBAND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-know",
+   "term": "KNOW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 3
+  },
+  {
+   "id": "word-pet",
+   "term": "PET",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-some",
+   "term": "SOME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-horse",
+   "term": "HORSE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-toothpaste",
+   "term": "TOOTHPASTE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-stove",
+   "term": "STOVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-microwave",
+   "term": "MICROWAVE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-refrigerator",
+   "term": "REFRIGERATOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 2
+  },
+  {
+   "id": "word-ambulance",
+   "term": "AMBULANCE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-before",
+   "term": "BEFORE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 2
+  },
+  {
+   "id": "word-kitchen",
+   "term": "KITCHEN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-look-like",
+   "term": "LOOK LIKE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-tv",
+   "term": "TV",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-cook",
+   "term": "COOK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-dresser",
+   "term": "DRESSER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-hang-up",
+   "term": "HANG UP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-window",
+   "term": "WINDOW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 9,
+   "uses": 1
+  },
+  {
+   "id": "word-upstairs",
+   "term": "UPSTAIRS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-tell",
+   "term": "TELL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 2
+  },
+  {
+   "id": "word-cow",
+   "term": "COW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 10,
+   "uses": 1
+  },
+  {
+   "id": "word-about",
+   "term": "ABOUT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-on-time",
+   "term": "ON TIME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-always",
+   "term": "ALWAYS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-any",
+   "term": "ANY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 3
+  },
+  {
+   "id": "word-back",
+   "term": "BACK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-afternoon",
+   "term": "AFTERNOON",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-today",
+   "term": "TODAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-life",
+   "term": "LIFE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-fair-equal",
+   "term": "FAIR EQUAL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-all",
+   "term": "ALL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-people",
+   "term": "PEOPLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 4
+  },
+  {
+   "id": "word-every-friday",
+   "term": "EVERY FRIDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-phone",
+   "term": "PHONE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-can-t",
+   "term": "CAN'T",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-for-for",
+   "term": "FOR FOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-wonderful",
+   "term": "WONDERFUL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-habit",
+   "term": "HABIT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "number-1",
+   "term": "1",
+   "category": "number",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 6
+  },
+  {
+   "id": "word-day",
+   "term": "DAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 6
+  },
+  {
+   "id": "word-equal",
+   "term": "EQUAL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 4
+  },
+  {
+   "id": "word-hour",
+   "term": "HOUR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 2
+  },
+  {
+   "id": "word-minute",
+   "term": "MINUTE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 2
+  },
+  {
+   "id": "word-month",
+   "term": "MONTH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 2
+  },
+  {
+   "id": "word-little-bit",
+   "term": "LITTLE BIT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-make",
+   "term": "MAKE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 2
+  },
+  {
+   "id": "word-never",
+   "term": "NEVER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-new",
+   "term": "NEW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 4
+  },
+  {
+   "id": "word-monday",
+   "term": "MONDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-tuesday",
+   "term": "TUESDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-night",
+   "term": "NIGHT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 2
+  },
+  {
+   "id": "word-saturday",
+   "term": "SATURDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-party",
+   "term": "PARTY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-accompany",
+   "term": "ACCOMPANY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-week",
+   "term": "WEEK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-anxious",
+   "term": "ANXIOUS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-chat-with",
+   "term": "CHAT WITH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-thing",
+   "term": "THING",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 11,
+   "uses": 1
+  },
+  {
+   "id": "word-weekend",
+   "term": "WEEKEND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-yesterday",
+   "term": "YESTERDAY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 2
+  },
+  {
+   "id": "word-next-week",
+   "term": "NEXT WEEK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 12,
+   "uses": 1
+  },
+  {
+   "id": "word-research",
+   "term": "RESEARCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-article",
+   "term": "ARTICLE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-close-captioned",
+   "term": "CLOSE CAPTIONED",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-college",
+   "term": "COLLEGE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 3
+  },
+  {
+   "id": "word-become",
+   "term": "BECOME",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-interpreter",
+   "term": "INTERPRETER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-summer",
+   "term": "SUMMER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 3
+  },
+  {
+   "id": "word-winter",
+   "term": "WINTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-better",
+   "term": "BETTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-cold",
+   "term": "COLD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-weather",
+   "term": "WEATHER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-autumn",
+   "term": "AUTUMN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-wind",
+   "term": "WIND",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-cool",
+   "term": "COOL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-cl-1-walk",
+   "term": "CL:1 WALK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-vacation",
+   "term": "VACATION",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 3
+  },
+  {
+   "id": "word-wake-up",
+   "term": "WAKE UP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-snow",
+   "term": "SNOW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-hard-of-hearing",
+   "term": "HARD OF HEARING",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-marry",
+   "term": "MARRY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-high-school",
+   "term": "HIGH SCHOOL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-graduate",
+   "term": "GRADUATE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-hard",
+   "term": "HARD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-use",
+   "term": "USE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 4
+  },
+  {
+   "id": "word-note-taker",
+   "term": "NOTE TAKER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-tonight",
+   "term": "TONIGHT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-freeze",
+   "term": "FREEZE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-rain",
+   "term": "RAIN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-sick",
+   "term": "SICK",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 4
+  },
+  {
+   "id": "word-snowman",
+   "term": "SNOWMAN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-warm",
+   "term": "WARM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-true",
+   "term": "TRUE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-false",
+   "term": "FALSE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-test",
+   "term": "TEST",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-write",
+   "term": "WRITE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 2
+  },
+  {
+   "id": "word-flash-lights",
+   "term": "FLASH LIGHTS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-list",
+   "term": "LIST",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-sleep-in",
+   "term": "SLEEP IN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-hot",
+   "term": "HOT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-go-to-bed",
+   "term": "GO TO BED",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 2
+  },
+  {
+   "id": "word-whiteboard",
+   "term": "WHITEBOARD",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-wrong",
+   "term": "WRONG",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-easy",
+   "term": "EASY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-deaf-school",
+   "term": "DEAF SCHOOL",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 13,
+   "uses": 1
+  },
+  {
+   "id": "word-deodorant",
+   "term": "DEODORANT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 14,
+   "uses": 1
+  },
+  {
+   "id": "word-major",
+   "term": "MAJOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-aide",
+   "term": "AIDE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-babysitter",
+   "term": "BABYSITTER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-boss",
+   "term": "BOSS",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-grandpa",
+   "term": "GRANDPA",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-farmer",
+   "term": "FARMER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-yourself",
+   "term": "YOURSELF",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 2
+  },
+  {
+   "id": "word-little-girl-boy",
+   "term": "LITTLE GIRL/BOY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-grow-up",
+   "term": "GROW UP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-woman",
+   "term": "WOMAN",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-library-person",
+   "term": "LIBRARY PERSON",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-neighbor",
+   "term": "NEIGHBOR",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-picture",
+   "term": "PICTURE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-president",
+   "term": "PRESIDENT",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-stepfather",
+   "term": "STEPFATHER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-meaning",
+   "term": "MEANING",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-brother-in-law",
+   "term": "BROTHER IN LAW",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-server",
+   "term": "SERVER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-tip",
+   "term": "TIP",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-how-much",
+   "term": "HOW MUCH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-newspaper",
+   "term": "NEWSPAPER",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-program",
+   "term": "PROGRAM",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-wish",
+   "term": "WISH",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-secretary",
+   "term": "SECRETARY",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  },
+  {
+   "id": "word-police",
+   "term": "POLICE",
+   "category": "word",
+   "sources": [
+    "Lifeprint practice"
+   ],
+   "firstLesson": 15,
+   "uses": 1
+  }
+ ]
+}

@@ -6,6 +6,7 @@ import { renderLesson, renderLessonList } from "./lessons.js";
 import { renderPractice } from "./practice.js";
 import { initProfile } from "./profile.js";
 import { renderProgress } from "./progress.js";
+import { renderRecord } from "./record/page.js";
 import { renderSentences } from "./sentences.js";
 import { esc } from "./ui.js";
 
@@ -17,6 +18,7 @@ const routes = {
   practice: () => renderPractice(main),
   sentences: () => renderSentences(main),
   progress: () => renderProgress(main),
+  record: () => renderRecord(main),
 };
 
 async function route() {
